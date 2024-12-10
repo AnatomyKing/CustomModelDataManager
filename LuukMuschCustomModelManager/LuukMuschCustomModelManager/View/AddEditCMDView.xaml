@@ -1,0 +1,106 @@
+﻿<UserControl x:Class="LuukMuschCustomModelManager.View.AddEditCMDView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d">
+    <Grid Margin="20">
+        <StackPanel>
+            <!-- Existing Fields -->
+            <TextBox Text="{Binding Name}" 
+                     materialDesign:HintAssist.Hint="Model Name" 
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                     Margin="0,10" Width="300" />
+            <TextBox Text="{Binding ModelPath}" 
+                     materialDesign:HintAssist.Hint="Model Path" 
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                     Margin="0,10" Width="300" />
+            <TextBox Text="{Binding CustomModelNumber}" 
+                     materialDesign:HintAssist.Hint="Custom Model Number" 
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                     Margin="0,10" Width="150" />
+            <CheckBox IsChecked="{Binding Status}" 
+                      Content="Used" 
+                      Margin="0,10" />
+
+            <!-- Parent Item Selection -->
+            <ComboBox ItemsSource="{Binding ParentItems}" 
+                      SelectedItem="{Binding SelectedParentItem}" 
+                      DisplayMemberPath="Name" 
+                      materialDesign:HintAssist.Hint="Select Parent Item" 
+                      Margin="0,10" Width="300" />
+
+            <!-- Block Info Section -->
+            <GroupBox Margin="0,20">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Block Info" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,5,0" 
+                                   Foreground="White" />
+
+                        <!-- Clear Button as Icon -->
+                        <Button Command="{Binding ClearBlockInfoCommand}" 
+                                ToolTip="Clear Block Info"
+                                Style="{StaticResource MaterialDesignToolButton}">
+                            <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
+                        </Button>
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Text="{Binding NewBlockData}" 
+                                 materialDesign:HintAssist.Hint="Block Data" 
+                                 Width="200" Margin="0,10" />
+
+                        <TextBox Text="{Binding NewVariationNumber}" 
+                                 materialDesign:HintAssist.Hint="Variation Number" 
+                                 Width="100" Margin="10,10,0,10" />
+
+                        <ComboBox ItemsSource="{Binding BlockTypes}" 
+                                  SelectedItem="{Binding SelectedBlockType}" 
+                                  DisplayMemberPath="Name" 
+                                  materialDesign:HintAssist.Hint="Block Type" 
+                                  Width="150" Margin="10,10,0,10" />
+                    </StackPanel>
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Shader Armor Info Section -->
+            <GroupBox Margin="0,20">
+                <GroupBox.Header>
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock Text="Shader Armor Info" 
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,5,0"
+                                   Foreground="White"
+                                   />
+
+                        <!-- Clear Button as Icon -->
+                        <Button Command="{Binding ClearShaderArmorInfoCommand}" 
+                                ToolTip="Clear Selection"
+                                Style="{StaticResource MaterialDesignToolButton}">
+                            <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
+                        </Button>
+                    </StackPanel>
+                </GroupBox.Header>
+
+                <StackPanel>
+                    <ComboBox ItemsSource="{Binding ShaderArmorColorInfos}" 
+                              SelectedItem="{Binding SelectedShaderArmorColorInfo}" 
+                              DisplayMemberPath="Name" 
+                              materialDesign:HintAssist.Hint="Select Shader Armor Info" 
+                              Margin="0,10" Width="300" />
+                </StackPanel>
+            </GroupBox>
+
+            <!-- Save/Cancel Buttons -->
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
+                <Button Content="Cancel" Width="75" Margin="5" Command="{Binding CancelCommand}" />
+                <Button Content="Save" Width="75" Margin="5" Command="{Binding SaveCommand}" />
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</UserControl>

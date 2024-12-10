@@ -1,0 +1,79 @@
+﻿<Window x:Class="LuukMuschCustomModelManager.View.MainView"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:LuukMuschCustomModelManager.View"
+        xmlns:viewmodels="clr-namespace:LuukMuschCustomModelManager.ViewModels.Views"
+        xmlns:mainvm="clr-namespace:LuukMuschCustomModelManager.ViewModels"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+        Style="{StaticResource MaterialDesignWindow}"
+        mc:Ignorable="d"
+        Title="Custom Model Manager" Height="700" Width="1000">
+
+    <Window.Resources>
+        <DataTemplate
+        DataType="{x:Type viewmodels:MainViewContentViewModel}"
+        >
+            <local:MainViewContentView/>
+        </DataTemplate>
+
+        <DataTemplate
+        DataType="{x:Type viewmodels:AddEditCMDViewModel}"
+        >
+            <local:AddEditCMDView/>
+        </DataTemplate>
+
+        <DataTemplate 
+        DataType="{x:Type viewmodels:ParentItemViewModel}"
+        >
+            <local:ParentItemView/>
+        </DataTemplate>
+
+        <DataTemplate 
+        DataType="{x:Type viewmodels:BlockTypeViewModel}"
+        >
+            <local:BlockTypeView/>
+        </DataTemplate>
+
+        <DataTemplate 
+        DataType="{x:Type viewmodels:ArmorInfoViewModel}"
+        >
+            <local:ArmorInfoView/>
+        </DataTemplate>
+
+        <DataTemplate 
+        DataType="{x:Type viewmodels:UnusedViewModel}"
+        >
+            <local:UnusedView/>
+        </DataTemplate>
+
+        <DataTemplate 
+        DataType="{x:Type viewmodels:ExportViewModel}"
+        >
+            <local:ExportView/>
+        </DataTemplate>
+
+
+    </Window.Resources>
+
+    <Window.DataContext>
+        <mainvm:MainViewModel/>
+    </Window.DataContext>
+    
+
+    <DockPanel>
+        <!-- Navigation Menu -->
+        <StackPanel DockPanel.Dock="Left" Background="#2C3E50" Width="200">
+            <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="MainViewContentViewModel" Margin="10"/>
+            <Button Content="Parent Items" Command="{Binding NavigateCommand}" CommandParameter="ParentItemViewModel" Margin="10"/>
+            <Button Content="Block Types" Command="{Binding NavigateCommand}" CommandParameter="BlockTypeViewModel" Margin="10"/>
+            <Button Content="Armor Info" Command="{Binding NavigateCommand}" CommandParameter="ArmorInfoViewModel" Margin="10"/>
+            <Button Content="Unused Items" Command="{Binding NavigateCommand}" CommandParameter="UnusedViewModel" Margin="10"/>
+            <Button Content="Export" Command="{Binding NavigateCommand}" CommandParameter="ExportViewModel" Margin="10"/>
+        </StackPanel>
+
+        <!-- Dynamic Content -->
+        <ContentControl Content="{Binding CurrentView}" Margin="10"/>
+    </DockPanel>
+</Window>

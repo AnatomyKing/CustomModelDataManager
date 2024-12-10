@@ -1,0 +1,49 @@
+﻿<UserControl x:Class="LuukMuschCustomModelManager.View.UnusedView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:LuukMuschCustomModelManager.ViewModels.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d">
+
+    <UserControl.DataContext>
+        <viewmodels:UnusedViewModel/>
+    </UserControl.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="Unused Items" FontSize="24" Margin="0,0,0,10"/>
+
+        <!-- List of Unused Items -->
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding UnusedItems}"
+                 SelectedItem="{Binding SelectedUnusedItem, Mode=TwoWay}"
+                 Margin="10">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card Padding="10" Margin="5" Background="{DynamicResource PrimaryHueLightBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Model Name -->
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <TextBlock Text=" =" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <!-- Custom Model Data Number -->
+                            <TextBlock Text="{Binding CustomModelNumber}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                        </StackPanel>
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- DialogHost for Edit -->
+        <materialDesign:DialogHost Identifier="UnusedDialog" Grid.Row="1">
+            <materialDesign:DialogHost.DialogContent>
+                <ContentControl Content="{Binding AddEditDialogViewModel}" />
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>

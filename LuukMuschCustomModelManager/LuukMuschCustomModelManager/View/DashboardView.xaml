@@ -1,0 +1,115 @@
+﻿<UserControl x:Class="LuukMuschCustomModelManager.View.MainViewContentView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:viewmodels="clr-namespace:LuukMuschCustomModelManager.ViewModels.Views"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
+             mc:Ignorable="d"
+             >
+
+    <UserControl.DataContext>
+        <viewmodels:MainViewContentViewModel />
+    </UserControl.DataContext>
+
+    <Grid Margin="20">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <!-- Top Bar -->
+        <DockPanel Grid.Row="0" Margin="10">
+            <!-- Search Bar -->
+            <TextBox DockPanel.Dock="Left" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                     materialDesign:HintAssist.Hint="Search Custom Models"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                     Width="300" Margin="0,0,10,0" />
+
+            <!-- Spacer to push content to the right -->
+            <StackPanel DockPanel.Dock="Left" Width="Auto"/>
+
+            <!-- Highest CMD Display -->
+            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
+                <TextBlock Text="Highest CMD:" 
+                           VerticalAlignment="Center"
+                           Margin="0,0,5,0"
+                           FontSize="14"
+                           Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                <Border Background="{DynamicResource PrimaryHueLightBrush}" 
+                        CornerRadius="4" 
+                        Padding="5,2" 
+                        VerticalAlignment="Center">
+                    <TextBlock Text="{Binding HighestCustomModelNumber}" 
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                               FontSize="16" />
+                </Border>
+            </StackPanel>
+        </DockPanel>
+
+        <!-- List of Items -->
+        <ListBox Grid.Row="1"
+                 ItemsSource="{Binding GroupedCustomModels}"
+                 SelectedItem="{Binding SelectedCustomModelData, Mode=TwoWay}"
+                 Margin="10">
+            <!-- Define the Group Style -->
+            <ListBox.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <!-- Group Header displaying ParentItem.Name -->
+                            <TextBlock Text="{Binding Name}"
+                                       FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                       Margin="0,5"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListBox.GroupStyle>
+
+            <!-- Item Template -->
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <materialDesign:Card Padding="10" Margin="5" Background="{DynamicResource PrimaryHueLightBrush}">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Model Name -->
+                            <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <TextBlock Text=" =" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <!-- Custom Model Data Number -->
+                            <TextBlock Text="{Binding CustomModelNumber}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+                            <!-- Block Type and Variation -->
+                            <ItemsControl ItemsSource="{Binding CustomVariations}" Margin="10,0,0,0">
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="#" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                            <TextBlock Text="{Binding BlockType.Name}" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                            <TextBlock Text="{Binding Variation}" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </materialDesign:Card>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
+
+        <!-- Floating Add Button -->
+        <Button Grid.Row="2" Content="+" Command="{Binding AddCommand}" 
+                HorizontalAlignment="Right" VerticalAlignment="Bottom" 
+                Width="50" Height="50" Margin="10" 
+                Style="{StaticResource MaterialDesignFloatingActionButton}" />
+
+        <!-- DialogHost for Add/Edit -->
+        <materialDesign:DialogHost Identifier="RootDialog" Grid.Row="1">
+            <materialDesign:DialogHost.DialogContent>
+                <ContentControl Content="{Binding AddEditDialogViewModel}" />
+            </materialDesign:DialogHost.DialogContent>
+        </materialDesign:DialogHost>
+    </Grid>
+</UserControl>
