@@ -85,7 +85,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
 
-        public ICollectionView GroupedCustomModels { get; private set; }
+        public ICollectionView? GroupedCustomModels { get; private set; }
 
         #endregion
 
@@ -207,7 +207,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
                     _context.SaveChanges();
                     UpdateHighestCustomModelNumber();
-                    GroupedCustomModels.Refresh();
+                    GroupedCustomModels?.Refresh();
                 }
             }
             finally

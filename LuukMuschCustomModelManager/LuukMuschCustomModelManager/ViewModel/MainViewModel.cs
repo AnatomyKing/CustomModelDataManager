@@ -34,7 +34,7 @@ namespace LuukMuschCustomModelManager.ViewModels
 
         private void Navigate(object? parameter)
         {
-            string viewName = parameter as string;
+            string? viewName = parameter as string;
 
             CurrentView = viewName switch
             {

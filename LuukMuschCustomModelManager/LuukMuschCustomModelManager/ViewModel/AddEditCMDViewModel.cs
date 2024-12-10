@@ -124,6 +124,60 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        public string Name
+        {
+            get => EditedCustomModelData.Name;
+            set
+            {
+                if (EditedCustomModelData.Name != value)
+                {
+                    EditedCustomModelData.Name = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public string ModelPath
+        {
+            get => EditedCustomModelData.ModelPath;
+            set
+            {
+                if (EditedCustomModelData.ModelPath != value)
+                {
+                    EditedCustomModelData.ModelPath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public int CustomModelNumber
+        {
+            get => EditedCustomModelData.CustomModelNumber;
+            set
+            {
+                if (EditedCustomModelData.CustomModelNumber != value)
+                {
+                    EditedCustomModelData.CustomModelNumber = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+        public bool Status
+        {
+            get => EditedCustomModelData.Status;
+            set
+            {
+                if (EditedCustomModelData.Status != value)
+                {
+                    EditedCustomModelData.Status = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
+
+
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand ClearArmorInfoCommand { get; }
