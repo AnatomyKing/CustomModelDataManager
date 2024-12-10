@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\ICT\LeerJaar2\desktopdev\dekstop1\LuukMuschCustomModelManager\LuukMuschCustomModelManager\obj\Debug\net8.0-windows\
+C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\obj\Debug\net8.0-windows\
 LuukMuschCustomModelManager
 none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
-C:\ICT\LeerJaar2\desktopdev\dekstop1\LuukMuschCustomModelManager\LuukMuschCustomModelManager\App.xaml
+C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\App.xaml
 81865267915
 
 31-1951360619
 222-171853365
 View\AddEditCMDView.xaml;View\ArmorInfoView.xaml;View\BlockTypeView.xaml;View\DashboardView.xaml;View\ExportView.xaml;View\MainView.xaml;View\ParentItemView.xaml;View\UnusedView.xaml;
 
-False
+True
 

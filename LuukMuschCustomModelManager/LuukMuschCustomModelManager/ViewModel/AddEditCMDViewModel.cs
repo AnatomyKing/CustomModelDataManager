@@ -40,6 +40,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             CancelCommand = new RelayCommand(Cancel);
             SaveCommand = new RelayCommand(Save);
 
+            ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
+            ClearBlockInfoCommand = new RelayCommand(ClearBlockInfo);
+
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
@@ -123,6 +126,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
+        public ICommand ClearArmorInfoCommand { get; }
+        public ICommand ClearBlockInfoCommand {  get; }
 
         #endregion
 
@@ -137,6 +142,17 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             UpdateOriginalData();
             DialogHost.CloseDialogCommand.Execute(true, null);
+        }
+
+        private void ClearBlockInfo(object? obj)
+        {
+            NewBlockData = string.Empty;
+            SelectedBlockType = null;
+        }
+
+        private void ClearArmorInfo(object? obj)
+        {
+            SelectedShaderArmorColorInfo = null;
         }
 
         #endregion

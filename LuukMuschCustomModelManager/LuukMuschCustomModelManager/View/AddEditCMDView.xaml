@@ -20,8 +20,8 @@
                      materialDesign:HintAssist.Hint="Custom Model Number" 
                      Style="{StaticResource MaterialDesignOutlinedTextBox}" 
                      Margin="0,10" Width="150" />
-            <CheckBox IsChecked="{Binding Status}" 
-                      Content="Used" 
+            <CheckBox IsChecked="{Binding Status}"
+                      Content="Used"
                       Margin="0,10" />
 
             <!-- Parent Item Selection -->
@@ -79,7 +79,7 @@
                                    />
 
                         <!-- Clear Button as Icon -->
-                        <Button Command="{Binding ClearShaderArmorInfoCommand}" 
+                        <Button Command="{Binding ClearArmorInfoCommand}" 
                                 ToolTip="Clear Selection"
                                 Style="{StaticResource MaterialDesignToolButton}">
                             <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />

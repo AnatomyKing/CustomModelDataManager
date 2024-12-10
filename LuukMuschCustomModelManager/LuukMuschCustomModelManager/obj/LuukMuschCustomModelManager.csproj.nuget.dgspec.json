@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj": {}
+    "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj": {}
   },
   "projects": {
-    "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj": {
+    "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
+        "projectUniqueName": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
         "projectName": "LuukMuschCustomModelManager",
-        "projectPath": "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
+        "projectPath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
         "packagesPath": "C:\\Users\\mrluu\\.nuget\\packages\\",
-        "outputPath": "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\obj\\",
+        "outputPath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\mrluu\\AppData\\Roaming\\NuGet\\NuGet.Config",

@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "bIXx/zb29G4JoQXDgupUSG9SpD8Msyz+5mxFJ/YzCQdw6SjiI91VSIOhgBJLn7Adqr5PtJBtLjjKsF8AjNwFOw==",
+  "dgSpecHash": "XUU3A4imLZM84Pu4TVLMgT3yvJML7Ng2weEvb2hqYg8+WTaD7eCNwZxLa+6SBcWRybb5KjW232Bf1Ec4rIm/8Q==",
   "success": true,
-  "projectFilePath": "C:\\ICT\\LeerJaar2\\desktopdev\\dekstop1\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
+  "projectFilePath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\mrluu\\.nuget\\packages\\bouncycastle.cryptography\\2.3.1\\bouncycastle.cryptography.2.3.1.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\google.protobuf\\3.26.1\\google.protobuf.3.26.1.nupkg.sha512",
