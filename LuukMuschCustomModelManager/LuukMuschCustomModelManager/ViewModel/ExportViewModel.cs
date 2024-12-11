@@ -24,24 +24,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Properties
 
-        private string _exportPath;
+        private string _exportPath = string.Empty;  // Fix for CS8618
         public string ExportPath
         {
             get => _exportPath;
             set
             {
                 _exportPath = value;
-                OnPropertyChanged();
-            }
-        }
-
-        private bool _advancedExport;
-        public bool AdvancedExport
-        {
-            get => _advancedExport;
-            set
-            {
-                _advancedExport = value;
                 OnPropertyChanged();
             }
         }
@@ -56,7 +45,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             ExportPath = _defaultExportPath;
             ExportCommand = new RelayCommand(ExportData);
-            AdvancedExport = false; // Default to simple export
         }
 
         #endregion
@@ -115,6 +103,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             string line = $"{item.Name} = CustomModelData: {item.CustomModelNumber}";
 
+            // Handle Variations
             var variations = item.CustomVariations
                 .OrderBy(cv => cv.BlockType?.Name)
                 .ThenBy(cv => cv.Variation)
@@ -126,6 +115,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 line += $" | {firstVar.BlockType?.Name ?? "Unknown"} {firstVar.Variation} [{firstVar.BlockData}]";
             }
 
+            // Handle Shader Infos
             var shaderInfos = item.ShaderArmors
                 .Select(sa => sa.ShaderArmorColorInfo)
                 .Where(info => info != null)
@@ -136,16 +126,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 foreach (var info in shaderInfos)
                 {
-                    line += $" | #{info.Name} = {info.HEX} | {info.RGB} | {info.Color}";
+                    line += $" | #{info!.Name} = {info.HEX} | {info.RGB} | {info.Color}";
                 }
             }
 
             return line;
-        }
-
-        private string EscapeForYaml(string input)
-        {
-            return input.Replace("\\", "\\\\").Replace("\"", "\\\"");
         }
 
         #endregion

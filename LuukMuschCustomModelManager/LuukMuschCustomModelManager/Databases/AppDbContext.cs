@@ -77,8 +77,10 @@ namespace LuukMuschCustomModelManager.Databases
                     // drop database
                     //context.Database.EnsureDeleted();
 
-                    // create database
-                    context.Database.EnsureCreated();
+                    //create database
+                    //context.Database.EnsureCreated();
+
+                    context.Database.Migrate();  // Apply migrations
                 }
                 catch (Exception ex)
                 {

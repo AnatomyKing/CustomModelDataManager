@@ -3,20 +3,72 @@
   "WorkspaceRootPath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\databases\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\databases\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\dashboardview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\dashboardview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\blocktypeview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\blocktypeview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\blocktypeview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\blocktypeview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\dashboardview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\dashboardview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\addeditcmdview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\addeditcmdview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\mainview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\mainview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\mainviewcontentviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\mainviewcontentviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\armorinfoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\armorinfoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\parentitemview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\parentitemview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\addeditcmdviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\addeditcmdviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodel_blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodel_blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodel_shaderarmor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodel_shaderarmor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodeldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodeldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\customvariation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\customvariation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\shaderarmorcolorinfo.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -27,52 +79,52 @@
       "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\parentitem.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\customvariation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\customvariation.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\databases\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\databases\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodeldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodeldata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\databases\\cmdseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\databases\\cmdseeder.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodel_shaderarmor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodel_shaderarmor.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\custommodel_blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\custommodel_blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\model\\blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\model\\blocktype.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\armorinfoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\armorinfoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\mainviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\mainviewcontentviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\mainviewcontentviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\armorinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\armorinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\addeditcmdviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\addeditcmdviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\migrations\\20241210142800_cmddatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\migrations\\20241210142800_cmddatabase.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\blocktypeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\blocktypeviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.config||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\migrations\\appdbcontextmodelsnapshot.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\helpers\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\helpers\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\migrations\\20241210152157_testdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\migrations\\20241210152157_testdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\app.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\armorinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\armorinfoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -82,36 +134,304 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 3,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
               "DocumentIndex": 1,
+              "Title": "BlockTypeView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\BlockTypeView.xaml.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\BlockTypeView.xaml.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\BlockTypeView.xaml.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\BlockTypeView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T08:43:31.606Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "DashboardView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\DashboardView.xaml.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\DashboardView.xaml.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\DashboardView.xaml.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\DashboardView.xaml.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABYAAAAFAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-11T08:42:02.164Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DashboardView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\DashboardView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\DashboardView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\DashboardView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\DashboardView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T08:41:54.496Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "ParentItemView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ParentItemView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\ParentItemView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ParentItemView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\ParentItemView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T08:38:03.345Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "MainViewContentViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
+              "ViewState": "AQIAAMgAAAAAAAAAAAAvwLcAAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T10:26:35.82Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "MainView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\MainView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\MainView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\MainView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\MainView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T08:09:20.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "AddEditCMDView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T08:12:07.403Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "ExportViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
+              "ViewState": "AQIAAHEAAAAAAAAAAAAuwIkAAAABAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T11:38:27.289Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "BlockTypeView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\BlockTypeView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\BlockTypeView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\BlockTypeView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\BlockTypeView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T08:32:57.701Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "AddEditCMDViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
+              "ViewState": "AQIAAAMBAAAAAAAAAAAAwGQAAAAJAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T10:26:12.437Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "BlockType.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\BlockType.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\BlockType.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\BlockType.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\BlockType.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAANAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:22:05.749Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "ArmorInfoView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-10T11:22:14.696Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "CustomModel_BlockType.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAwAAAAnAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T10:37:51.767Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "CustomModel_ShaderArmor.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABAAAAAsAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:22:31.089Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "CustomModelData.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T10:37:54.289Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "CustomVariation.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAAAAABcAAAAyAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:22:01.179Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "MainViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
+              "ViewState": "AQIAABUAAAAAAAAAAAAMwCYAAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T10:36:10.424Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "ShaderArmorColorInfo.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABoAAAA5AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:23:14.309Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ParentItem.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ParentItem.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\ParentItem.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ParentItem.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\ParentItem.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABMAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:23:02.37Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFAAAAA3AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T13:29:49.335Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "CMDSeeder.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\CMDSeeder.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Databases\\CMDSeeder.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\CMDSeeder.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Databases\\CMDSeeder.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T14:37:25.55Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "20241210142800_CMDdatabase.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\20241210142800_CMDdatabase.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Migrations\\20241210142800_CMDdatabase.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\20241210142800_CMDdatabase.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Migrations\\20241210142800_CMDdatabase.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-10T14:28:00.322Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml.cs",
               "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\App.xaml.cs",
               "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml.cs",
               "RelativeToolTip": "LuukMuschCustomModelManager\\App.xaml.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAACAAAAAOAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-10T13:30:23.212Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "App.xaml",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\App.xaml",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\App.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-10T13:30:19.009Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 24,
               "Title": "App.config",
               "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.config",
               "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\App.config",
@@ -124,109 +444,81 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "AppDbContext.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Databases\\AppDbContext.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAADwvxQAAAAdAAAA",
+              "DocumentIndex": 25,
+              "Title": "AppDbContextModelSnapshot.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Migrations\\AppDbContextModelSnapshot.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\AppDbContextModelSnapshot.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Migrations\\AppDbContextModelSnapshot.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAABFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:29:49.335Z",
+              "WhenOpened": "2024-12-10T14:34:52.471Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "ShaderArmorColorInfo.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\ShaderArmorColorInfo.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "DocumentIndex": 22,
+              "Title": "BlockTypeViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAAA8AAAAIAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:23:14.309Z",
+              "WhenOpened": "2024-12-10T10:53:33.707Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "ParentItem.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ParentItem.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\ParentItem.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\ParentItem.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\ParentItem.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAkAAAAAAAAA",
+              "DocumentIndex": 28,
+              "Title": "20241210152157_TestData.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\20241210152157_TestData.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Migrations\\20241210152157_TestData.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Migrations\\20241210152157_TestData.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Migrations\\20241210152157_TestData.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABEAAABHAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:23:02.37Z",
+              "WhenOpened": "2024-12-10T15:21:57.517Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ExportView.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ExportView.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\ExportView.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ExportView.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\ExportView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-12-11T07:45:45.059Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "CustomModel_ShaderArmor.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModel_ShaderArmor.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:22:31.089Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "BlockType.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\BlockType.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\BlockType.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\BlockType.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\BlockType.cs",
+              "DocumentIndex": 27,
+              "Title": "RelayCommand.cs",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Helpers\\RelayCommand.cs",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Helpers\\RelayCommand.cs",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Helpers\\RelayCommand.cs",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\Helpers\\RelayCommand.cs",
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:22:05.749Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-10T15:47:55.328Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CustomVariation.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomVariation.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAAB4AAAABAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T13:22:01.179Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 11,
-              "Title": "ExportViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
-              "ViewState": "AQIAABYAAAAAAAAAAAArwG4AAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T11:38:27.289Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "ArmorInfoView.xaml",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\View\\ArmorInfoView.xaml",
+              "DocumentIndex": 29,
+              "Title": "App.xaml",
+              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml",
+              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\App.xaml",
+              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\App.xaml",
+              "RelativeToolTip": "LuukMuschCustomModelManager\\App.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-10T11:22:14.696Z"
+              "WhenOpened": "2024-12-10T13:30:19.009Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 30,
               "Title": "ArmorInfoViewModel.cs",
               "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ArmorInfoViewModel.cs",
               "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\ArmorInfoViewModel.cs",
@@ -235,80 +527,6 @@
               "ViewState": "AQIAAAAAAAAAAAAAAAAAAA8AAAAFAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-10T10:58:24.637Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 17,
-              "Title": "BlockTypeViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\BlockTypeViewModel.cs",
-              "ViewState": "AQIAAAkAAAAAAAAAAAAAABUAAAARAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:53:33.707Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "CustomModelData.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModelData.cs",
-              "ViewState": "AQIAAAYAAAAAAAAAAAAAAAkAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:37:54.289Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "CustomModel_BlockType.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\Model\\CustomModel_BlockType.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAcAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:37:51.767Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
-              "Title": "MainViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\MainViewModel.cs",
-              "ViewState": "AQIAAAMAAAAAAAAAAAAAAA4AAAAlAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:36:10.424Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 14,
-              "Title": "MainViewContentViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\MainViewContentViewModel.cs",
-              "ViewState": "AQIAAL8AAAAAAAAAAAAvwNUAAAANAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:26:35.82Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 16,
-              "Title": "AddEditCMDViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
-              "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
-              "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
-              "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\AddEditCMDViewModel.cs",
-              "ViewState": "AQIAAHIAAAAAAAAAAAAkwGQAAAAJAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-12-10T10:26:12.437Z"
             }
           ]
         }
