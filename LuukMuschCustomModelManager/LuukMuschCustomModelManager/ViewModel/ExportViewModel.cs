@@ -18,7 +18,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
     {
         #region Fields
 
-        private readonly string _defaultExportPath = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe\assets";
+        private readonly string _defaultExportPath = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe";
 
         #endregion
 

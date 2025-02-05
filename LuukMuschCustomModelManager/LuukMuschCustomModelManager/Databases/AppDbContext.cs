@@ -1,6 +1,8 @@
 ﻿using System.Configuration;
 using Microsoft.EntityFrameworkCore;
 using LuukMuschCustomModelManager.Model;
+using System.Diagnostics;
+using MySql.Data.MySqlClient;
 
 namespace LuukMuschCustomModelManager.Databases
 {
@@ -70,21 +72,36 @@ namespace LuukMuschCustomModelManager.Databases
 
         public static void InitializeDatabase()
         {
-            using (var context = new AppDbContext())
+            using var context = new AppDbContext();
+            int retryCount = 5;
+
+            for (int i = 0; i < retryCount; i++)
             {
                 try
                 {
+                    var connection = context.Database.GetDbConnection();
+                    connection.Open();
+                    context.Database.Migrate();
+                    connection.Close();
 
-                    context.Database.Migrate();  // Apply migrations
-
+                    // Seed initial data (assuming CMDSeeder is defined elsewhere)
                     CMDSeeder seeder = new CMDSeeder();
                     seeder.SeedData();
+                    return;
+                }
+                catch (MySqlException ex) when (ex.Number == 1042 || ex.Number == 2006 || ex.Number == 2013)
+                {
+                    Debug.WriteLine($"MySQL connection lost. Retrying ({i + 1}/{retryCount})...");
+                    Thread.Sleep(2000);
                 }
                 catch (Exception ex)
                 {
-                    throw new InvalidOperationException($"Database initialization failed: {ex.Message}", ex);
+                    Debug.WriteLine($"Database initialization failed: {ex.Message}");
+                    throw;
                 }
             }
+
+            throw new Exception("Could not connect to the database after multiple attempts.");
         }
     }
 }

@@ -1,19 +1,23 @@
 ﻿using System;
-using System;
 using System.Configuration;
-using System.Data;
 using System.Diagnostics;
-using System.ServiceProcess;
+using System.Linq;
 using System.Threading;
 using System.Windows;
+using System.Data;
+using System.IO;
 using LuukMuschCustomModelManager.Databases;
 using LuukMuschCustomModelManager.View;
 using LuukMuschCustomModelManager.ViewModels;
+using Microsoft.EntityFrameworkCore;
+using MySql.Data.MySqlClient;
 
 namespace LuukMuschCustomModelManager
 {
     public partial class App : Application
     {
+        private Process? _mysqlProcess = null;
+
         protected override void OnStartup(StartupEventArgs e)
         {
             base.OnStartup(e);
@@ -21,33 +25,35 @@ namespace LuukMuschCustomModelManager
             // Ensure MySQL is running
             if (!EnsureMySQLIsRunning())
             {
-                MessageBox.Show("Failed to start MySQL automatically. The application will now exit.", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show("Failed to start MySQL automatically. The application will now exit.",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(1);
             }
 
+            // Wait a little extra to ensure MySQL is fully ready before attempting any DB work
+            Thread.Sleep(5000);
+
             try
             {
-                // Initialize Database
+                // Initialize Database (includes migrations and seeding)
                 AppDbContext.InitializeDatabase();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Database initialization failed: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"Database initialization failed: {ex.Message}",
+                                "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 Environment.Exit(1);
             }
 
-            // Launch Main Window
+            Exit += OnApplicationExit;
+
             MainWindow = new MainView
             {
                 DataContext = new MainViewModel()
             };
-
             MainWindow.Show();
         }
 
-        /// <summary>
-        /// Ensures MySQL is running by checking both XAMPP and MySQL service.
-        /// </summary>
         private bool EnsureMySQLIsRunning()
         {
             int maxAttempts = 10;
@@ -59,34 +65,27 @@ namespace LuukMuschCustomModelManager
                     return true;
 
                 StartMySQL();
-
-                Thread.Sleep(3000); // Wait for 3 seconds before retrying
+                // Wait a short period before trying again
+                Thread.Sleep(3000);
                 attempts++;
             }
 
-            return false; // MySQL never started after max attempts
+            return false;
         }
 
-        /// <summary>
-        /// Checks if MySQL is running as a process.
-        /// </summary>
         private bool IsMySQLRunning()
         {
             return Process.GetProcessesByName("mysqld").Any();
         }
 
-        /// <summary>
-        /// Starts MySQL either as a XAMPP process or a Windows service.
-        /// </summary>
         private void StartMySQL()
         {
             try
             {
-                // First, try starting MySQL via XAMPP (mysqld.exe)
                 string xamppPath = ConfigurationManager.AppSettings["XAMPPPath"] ?? @"C:\xampp\mysql\bin";
-                string mysqldPath = System.IO.Path.Combine(xamppPath, "mysqld.exe");
+                string mysqldPath = Path.Combine(xamppPath, "mysqld.exe");
 
-                if (System.IO.File.Exists(mysqldPath))
+                if (File.Exists(mysqldPath))
                 {
                     var processStartInfo = new ProcessStartInfo
                     {
@@ -95,12 +94,11 @@ namespace LuukMuschCustomModelManager
                         UseShellExecute = false
                     };
 
-                    Process.Start(processStartInfo);
-                    Debug.WriteLine("Started MySQL via XAMPP (mysqld.exe).");
+                    _mysqlProcess = Process.Start(processStartInfo);
                     return;
                 }
 
-                // Fallback: Try starting MySQL as a Windows service
+                // Fallback: attempt to start MySQL using net start
                 ProcessStartInfo psi = new ProcessStartInfo
                 {
                     FileName = "cmd.exe",
@@ -113,12 +111,77 @@ namespace LuukMuschCustomModelManager
 
                 using Process? process = Process.Start(psi);
                 process?.WaitForExit();
-
-                Debug.WriteLine("Started MySQL via Windows Service.");
             }
             catch (Exception ex)
             {
                 Debug.WriteLine($"Failed to start MySQL: {ex.Message}");
+            }
+        }
+
+        private void OnApplicationExit(object sender, ExitEventArgs e)
+        {
+            CloseDatabaseConnections();
+            StopMySQL();
+        }
+
+        private void CloseDatabaseConnections()
+        {
+            try
+            {
+                using var context = new AppDbContext();
+                var connection = context.Database.GetDbConnection();
+
+                if (connection.State != ConnectionState.Closed)
+                {
+                    // Save any pending changes and then close connection
+                    context.SaveChanges();
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to close database connections: {ex.Message}");
+            }
+        }
+
+        private void StopMySQL()
+        {
+            try
+            {
+                // Make sure all DB connections are closed before shutting down MySQL
+                CloseDatabaseConnections();
+                Thread.Sleep(5000);
+
+                if (_mysqlProcess != null && !_mysqlProcess.HasExited)
+                {
+                    // Try to close gracefully first
+                    _mysqlProcess.CloseMainWindow();
+                    if (!_mysqlProcess.WaitForExit(5000))
+                    {
+                        // If it did not close in time, kill it forcefully
+                        _mysqlProcess.Kill();
+                        _mysqlProcess.WaitForExit();
+                    }
+                    return;
+                }
+
+                // Fallback: use net stop command
+                ProcessStartInfo psi = new ProcessStartInfo
+                {
+                    FileName = "cmd.exe",
+                    Arguments = "/c net stop MySQL",
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                    CreateNoWindow = true
+                };
+
+                using Process? process = Process.Start(psi);
+                process?.WaitForExit();
+            }
+            catch (Exception ex)
+            {
+                Debug.WriteLine($"Failed to stop MySQL: {ex.Message}");
             }
         }
     }
