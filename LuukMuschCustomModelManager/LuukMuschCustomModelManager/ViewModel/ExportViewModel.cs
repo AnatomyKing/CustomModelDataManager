@@ -56,7 +56,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             using var context = new AppDbContext();
 
             var allItems = context.CustomModelDataItems
-                .Include(cmd => cmd.ParentItem)
+                .Include(cmd => cmd.ParentItems)
                 .Include(cmd => cmd.CustomVariations).ThenInclude(cv => cv.BlockType)
                 .Include(cmd => cmd.ShaderArmors).ThenInclude(sa => sa.ShaderArmorColorInfo)
                 .Include(cmd => cmd.BlockTypes).ThenInclude(cmbt => cmbt.BlockType)
@@ -74,19 +74,41 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private Dictionary<string, List<CustomModelData>> GroupItemsByParent(IEnumerable<CustomModelData> items)
         {
-            return items.GroupBy(i => i.ParentItem?.Name ?? "(No Parent)")
-                        .ToDictionary(
-                            g => g.Key,
-                            g => g.OrderBy(i => i.Name).ToList()
-                        );
+            var groups = new Dictionary<string, List<CustomModelData>>();
+
+            foreach (var item in items)
+            {
+                if (item.ParentItems.Any())
+                {
+                    foreach (var parent in item.ParentItems)
+                    {
+                        if (!groups.ContainsKey(parent.Name))
+                            groups[parent.Name] = new List<CustomModelData>();
+
+                        groups[parent.Name].Add(item);
+                    }
+                }
+                else
+                {
+                    if (!groups.ContainsKey("(No Parent)"))
+                        groups["(No Parent)"] = new List<CustomModelData>();
+
+                    groups["(No Parent)"].Add(item);
+                }
+            }
+
+            return groups;
         }
 
         private void WriteExportFile(Dictionary<string, List<CustomModelData>> groupedItems, string filePath)
         {
             using var writer = new StreamWriter(filePath);
 
-            foreach (var (parentName, items) in groupedItems)
+            foreach (var kvp in groupedItems)
             {
+                string parentName = kvp.Key;
+                var items = kvp.Value;
+
                 writer.WriteLine($"{parentName}:");
 
                 foreach (var item in items)

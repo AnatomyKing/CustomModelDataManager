@@ -24,14 +24,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Constructor
 
+        // Note the additional 'context' parameter.
         public AddEditCMDViewModel(
             CustomModelData customModelData,
             ObservableCollection<ParentItem> parentItems,
             ObservableCollection<BlockType> blockTypes,
-            ObservableCollection<ShaderArmorColorInfo> shaderArmorColorInfos)
+            ObservableCollection<ShaderArmorColorInfo> shaderArmorColorInfos,
+            AppDbContext context)
         {
             _originalCustomModelData = customModelData;
-            _context = new AppDbContext();
+            _context = context;  // Use the passed context instead of creating a new one.
 
             ParentItems = parentItems;
             BlockTypes = blockTypes;
@@ -46,6 +48,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
+            // Initialize SelectedParentItems to avoid CS8618 warning.
+            _selectedParentItems = new ObservableCollection<ParentItem>();
+
             PreSelectProperties();
         }
 
@@ -59,13 +64,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; }
         public ObservableCollection<CustomVariation> CustomVariations { get; }
 
-        private ParentItem? _selectedParentItem;
-        public ParentItem? SelectedParentItem
+        // NEW: A collection for multiple parent items.
+        private ObservableCollection<ParentItem> _selectedParentItems = new ObservableCollection<ParentItem>();
+        public ObservableCollection<ParentItem> SelectedParentItems
         {
-            get => _selectedParentItem;
+            get => _selectedParentItems;
             set
             {
-                _selectedParentItem = value;
+                _selectedParentItems = value;
                 OnPropertyChanged();
             }
         }
@@ -176,12 +182,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-
-
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand ClearArmorInfoCommand { get; }
-        public ICommand ClearBlockInfoCommand {  get; }
+        public ICommand ClearBlockInfoCommand { get; }
 
         #endregion
 
@@ -221,7 +225,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 ModelPath = original.ModelPath,
                 CustomModelNumber = original.CustomModelNumber,
                 Status = original.Status,
-                ParentItemID = original.ParentItemID,
+                ParentItems = new List<ParentItem>(original.ParentItems),
                 CustomVariations = new List<CustomVariation>(original.CustomVariations),
                 ShaderArmors = new List<CustomModel_ShaderArmor>(original.ShaderArmors),
                 BlockTypes = new List<CustomModel_BlockType>(original.BlockTypes)
@@ -230,7 +234,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
-            SelectedParentItem = ParentItems.FirstOrDefault(p => p.ParentItemID == EditedCustomModelData.ParentItemID);
+            // Pre-select all parent items already assigned to this CMD item.
+            foreach (var parent in EditedCustomModelData.ParentItems)
+            {
+                SelectedParentItems.Add(parent);
+            }
 
             if (EditedCustomModelData.ShaderArmors.Any())
             {
@@ -265,7 +273,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
             else
             {
-                UpdateParentItem();
+                UpdateParentItems();
                 UpdateRelations();
                 AddOrUpdateCustomVariation();
             }
@@ -276,8 +284,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             string newName = GenerateUnusedName();
             _originalCustomModelData.Name = newName;
             _originalCustomModelData.ModelPath = string.Empty;
-            _originalCustomModelData.ParentItemID = 1;
-            _originalCustomModelData.ParentItem = null;
+            _originalCustomModelData.ParentItems.Clear();
+            // Assign default parent (assumes a ParentItem with ID=1 exists)
+            var defaultParent = _context.ParentItems.FirstOrDefault(p => p.ParentItemID == 1);
+            if (defaultParent != null)
+            {
+                _originalCustomModelData.ParentItems.Add(defaultParent);
+            }
             _originalCustomModelData.BlockTypes.Clear();
             _originalCustomModelData.CustomVariations.Clear();
             _originalCustomModelData.ShaderArmors.Clear();
@@ -299,12 +312,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             return $"Unused {letter}";
         }
 
-        private void UpdateParentItem()
+        private void UpdateParentItems()
         {
-            if (SelectedParentItem != null)
+            _originalCustomModelData.ParentItems.Clear();
+            foreach (var parent in SelectedParentItems)
             {
-                _originalCustomModelData.ParentItemID = SelectedParentItem.ParentItemID;
-                _originalCustomModelData.ParentItem = SelectedParentItem;
+                _originalCustomModelData.ParentItems.Add(parent);
             }
         }
 

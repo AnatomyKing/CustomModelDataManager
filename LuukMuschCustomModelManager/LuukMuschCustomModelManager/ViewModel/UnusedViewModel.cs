@@ -10,6 +10,7 @@ using LuukMuschCustomModelManager.Helpers;
 using LuukMuschCustomModelManager.Model;
 using MaterialDesignThemes.Wpf;
 
+
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class UnusedViewModel : ObservableObject
@@ -96,7 +97,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 var blockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.ToList());
                 var shaderArmorColorInfos = new ObservableCollection<ShaderArmorColorInfo>(_context.ShaderArmorColorInfos.ToList());
 
-                var viewModel = new AddEditCMDViewModel(_selectedUnusedItem, parentItems, blockTypes, shaderArmorColorInfos);
+                // Pass the existing _context to the AddEditCMDViewModel constructor.
+                var viewModel = new AddEditCMDViewModel(_selectedUnusedItem, parentItems, blockTypes, shaderArmorColorInfos, _context);
                 var result = await DialogHost.Show(viewModel, "UnusedDialog");
 
                 if (result is true)

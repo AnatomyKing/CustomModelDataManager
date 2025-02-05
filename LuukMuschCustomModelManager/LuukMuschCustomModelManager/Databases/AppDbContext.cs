@@ -67,8 +67,22 @@ namespace LuukMuschCustomModelManager.Databases
                 .HasOne(cv => cv.BlockType)
                 .WithMany(bt => bt.CustomVariations)
                 .HasForeignKey(cv => cv.BlockTypeID);
-        }
 
+            // MANY-TO-MANY: Relationship between CustomModelData and ParentItem.
+            modelBuilder.Entity<CustomModelData>()
+                .HasMany(cmd => cmd.ParentItems)
+                .WithMany(pi => pi.CustomModelDataItems)
+                .UsingEntity<Dictionary<string, object>>(
+                    "CustomModelData_ParentItem",
+                    j => j.HasOne<ParentItem>().WithMany().HasForeignKey("ParentItemID"),
+                    j => j.HasOne<CustomModelData>().WithMany().HasForeignKey("CustomModelDataID"),
+                    j =>
+                    {
+                        j.HasKey("CustomModelDataID", "ParentItemID");
+                        j.ToTable("CustomModelData_ParentItem");
+                    }
+                );
+        }
 
         public static void InitializeDatabase()
         {
@@ -92,7 +106,7 @@ namespace LuukMuschCustomModelManager.Databases
                 catch (MySqlException ex) when (ex.Number == 1042 || ex.Number == 2006 || ex.Number == 2013)
                 {
                     Debug.WriteLine($"MySQL connection lost. Retrying ({i + 1}/{retryCount})...");
-                    Thread.Sleep(2000);
+                    System.Threading.Thread.Sleep(2000);
                 }
                 catch (Exception ex)
                 {

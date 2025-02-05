@@ -15,12 +15,13 @@ namespace LuukMuschCustomModelManager.Model
         [Key]
         public int ParentItemID { get; set; }
 
-        [Required, MaxLength(100)] // Name of the JSON file rabbit.json
+        [Required, MaxLength(100)] // Name of the JSON file (e.g. rabbit.json)
         public string Name { get; set; } = string.Empty;
 
         [Required, MaxLength(50)] // Type of item, like block or item
         public string Type { get; set; } = string.Empty;
 
+        // Navigation property for the many-to-many relationship.
         public ICollection<CustomModelData> CustomModelDataItems { get; set; } = new List<CustomModelData>();
     }
 }

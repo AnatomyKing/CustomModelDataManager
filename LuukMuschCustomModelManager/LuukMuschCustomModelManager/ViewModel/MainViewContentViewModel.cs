@@ -93,11 +93,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void LoadData()
         {
-            // Load data from the database into ObservableCollections
+            // Load data from the database into ObservableCollections.
             CustomModelDataItems = new ObservableCollection<CustomModelData>(
                 _context.CustomModelDataItems
                     .Where(cmd => cmd.Status)
-                    .Include(cmd => cmd.ParentItem)
+                    .Include(cmd => cmd.ParentItems)
                     .Include(cmd => cmd.CustomVariations).ThenInclude(cv => cv.BlockType)
                     .Include(cmd => cmd.ShaderArmors).ThenInclude(sa => sa.ShaderArmorColorInfo)
                     .Include(cmd => cmd.BlockTypes).ThenInclude(cmbt => cmbt.BlockType)
@@ -107,17 +107,17 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             BlockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.ToList());
             ShaderArmorColorInfos = new ObservableCollection<ShaderArmorColorInfo>(_context.ShaderArmorColorInfos.ToList());
 
-            // Initialize grouped and sorted collection view
+            // Initialize grouped and sorted collection view using FirstParentName for grouping.
             GroupedCustomModels = CollectionViewSource.GetDefaultView(CustomModelDataItems);
-            GroupedCustomModels.GroupDescriptions.Add(new PropertyGroupDescription("ParentItem.Name"));
-            GroupedCustomModels.SortDescriptions.Add(new SortDescription("ParentItem.Name", ListSortDirection.Ascending));
+            GroupedCustomModels.GroupDescriptions.Add(new PropertyGroupDescription("FirstParentName"));
+            GroupedCustomModels.SortDescriptions.Add(new SortDescription("FirstParentName", ListSortDirection.Ascending));
             GroupedCustomModels.SortDescriptions.Add(new SortDescription("Name", ListSortDirection.Ascending));
 
-            // Update highest custom model number
+            // Update highest custom model number.
             CustomModelDataItems.CollectionChanged += (_, _) => UpdateHighestCustomModelNumber();
             UpdateHighestCustomModelNumber();
 
-            // Apply initial filter
+            // Apply initial filter.
             FilterData();
         }
 
@@ -190,7 +190,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             try
             {
-                AddEditCMDViewModel viewModel = new AddEditCMDViewModel(customModelData, ParentItems, BlockTypes, ShaderArmorColorInfos);
+                // Pass the existing _context into the AddEditCMDViewModel.
+                AddEditCMDViewModel viewModel = new AddEditCMDViewModel(customModelData, ParentItems, BlockTypes, ShaderArmorColorInfos, _context);
                 object? result = await DialogHost.Show(viewModel, "RootDialog");
 
                 if (result is true)

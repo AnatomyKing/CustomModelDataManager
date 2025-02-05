@@ -27,13 +27,15 @@ namespace LuukMuschCustomModelManager.Model
         [Required] // Boolean flag for used/unused status
         public bool Status { get; set; }
 
-        [ForeignKey("ParentItem")] // Foreign key to ParentItem
-        public int ParentItemID { get; set; }
-        public ParentItem? ParentItem { get; set; }
+        // MANY-TO-MANY: A CMD item can be assigned to multiple ParentItems.
+        public ICollection<ParentItem> ParentItems { get; set; } = new List<ParentItem>();
 
         public ICollection<CustomModel_BlockType> BlockTypes { get; set; } = new List<CustomModel_BlockType>();
         public ICollection<CustomModel_ShaderArmor> ShaderArmors { get; set; } = new List<CustomModel_ShaderArmor>();
         public ICollection<CustomVariation> CustomVariations { get; set; } = new List<CustomVariation>();
 
+        // A computed property used for grouping in the UI.
+        [NotMapped]
+        public string FirstParentName => ParentItems.FirstOrDefault()?.Name ?? "(No Parent)";
     }
 }
