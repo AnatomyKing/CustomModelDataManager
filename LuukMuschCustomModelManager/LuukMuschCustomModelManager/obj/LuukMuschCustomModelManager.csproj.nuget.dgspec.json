@@ -58,6 +58,10 @@
             "MySql.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.8, )"
+            },
+            "System.ServiceProcess.ServiceController": {
+              "target": "Package",
+              "version": "[9.0.1, )"
             }
           },
           "imports": [

@@ -74,13 +74,11 @@ namespace LuukMuschCustomModelManager.Databases
             {
                 try
                 {
-                    // drop database
-                    //context.Database.EnsureDeleted();
-
-                    //create database
-                    //context.Database.EnsureCreated();
 
                     context.Database.Migrate();  // Apply migrations
+
+                    CMDSeeder seeder = new CMDSeeder();
+                    seeder.SeedData();
                 }
                 catch (Exception ex)
                 {

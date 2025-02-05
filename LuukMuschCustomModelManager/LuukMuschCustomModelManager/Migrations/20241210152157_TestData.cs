@@ -11,7 +11,7 @@ namespace LuukMuschCustomModelManager.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            new CMDSeeder().SeedData();
+
         }
 
         /// <inheritdoc />
