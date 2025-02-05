@@ -62,7 +62,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 .Include(cmd => cmd.BlockTypes).ThenInclude(cmbt => cmbt.BlockType)
                 .ToList();
 
-            var groupedItems = GroupItemsByParent(allItems);
+            var groupedItems = GroupItemsByParentType(allItems);
 
             Directory.CreateDirectory(ExportPath);
             string filePath = Path.Combine(ExportPath, "export.yml");
@@ -72,7 +72,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private Dictionary<string, List<CustomModelData>> GroupItemsByParent(IEnumerable<CustomModelData> items)
+        // Group items by parent's type instead of parent's name.
+        private Dictionary<string, List<CustomModelData>> GroupItemsByParentType(IEnumerable<CustomModelData> items)
         {
             var groups = new Dictionary<string, List<CustomModelData>>();
 
@@ -82,10 +83,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     foreach (var parent in item.ParentItems)
                     {
-                        if (!groups.ContainsKey(parent.Name))
-                            groups[parent.Name] = new List<CustomModelData>();
+                        string key = parent.Type; // Group by parent's type
+                        if (!groups.ContainsKey(key))
+                            groups[key] = new List<CustomModelData>();
 
-                        groups[parent.Name].Add(item);
+                        groups[key].Add(item);
                     }
                 }
                 else
@@ -106,10 +108,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             foreach (var kvp in groupedItems)
             {
-                string parentName = kvp.Key;
+                string parentType = kvp.Key;
                 var items = kvp.Value;
 
-                writer.WriteLine($"{parentName}:");
+                writer.WriteLine($"{parentType}:");
 
                 foreach (var item in items)
                 {

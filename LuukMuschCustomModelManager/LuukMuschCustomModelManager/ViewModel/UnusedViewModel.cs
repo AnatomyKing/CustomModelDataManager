@@ -30,6 +30,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             LoadData();
 
             EditCommand = new RelayCommand(OpenEditDialog, CanEdit);
+            DeleteUnusedCommand = new RelayCommand(DeleteUnusedItem, CanDelete);
         }
 
         #endregion
@@ -58,6 +59,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         }
 
         public ICommand EditCommand { get; }
+        public ICommand DeleteUnusedCommand { get; }
 
         #endregion
 
@@ -122,6 +124,21 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             if (_selectedUnusedItem != null && _selectedUnusedItem.Status)
             {
                 UnusedItems.Remove(_selectedUnusedItem);
+                OnPropertyChanged(nameof(UnusedItems));
+            }
+        }
+
+        // Command to delete the unused item permanently.
+        private bool CanDelete(object? parameter) => parameter is CustomModelData;
+
+        private void DeleteUnusedItem(object? parameter)
+        {
+            if (parameter is CustomModelData item)
+            {
+                // (Optionally, you can show a confirmation dialog here.)
+                _context.CustomModelDataItems.Remove(item);
+                _context.SaveChanges();
+                UnusedItems.Remove(item);
                 OnPropertyChanged(nameof(UnusedItems));
             }
         }

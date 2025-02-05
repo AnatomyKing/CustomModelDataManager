@@ -17,20 +17,26 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Add Block Type Section -->
+        <!-- Add / Edit Block Type Section -->
         <StackPanel Orientation="Vertical" Margin="10" Grid.Row="0">
-            <TextBox Text="{Binding NewBlockTypeName}"
+            <TextBox Text="{Binding NewBlockTypeName, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Block Type Name"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
-
-            <Button Content="Add Block Type"
-                    Command="{Binding AddBlockTypeCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="{Binding ButtonContent}"
+                        Command="{Binding AddBlockTypeCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                <Button Content="Cancel"
+                        Command="{Binding CancelBlockTypeEditCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="10,0,0,0" />
+            </StackPanel>
         </StackPanel>
 
         <!-- List of Block Types -->
         <ListBox ItemsSource="{Binding BlockTypes}"
+                 SelectedItem="{Binding SelectedBlockType, Mode=TwoWay}"
                  Margin="10"
                  Grid.Row="1"
                  Style="{StaticResource MaterialDesignListBox}">
@@ -38,7 +44,6 @@
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="0,5">
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="14" />
-
                         <Button Command="{Binding DataContext.DeleteBlockTypeCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource MaterialDesignFlatButton}"

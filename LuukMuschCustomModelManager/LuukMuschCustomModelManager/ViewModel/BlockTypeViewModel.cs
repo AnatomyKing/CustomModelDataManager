@@ -13,29 +13,20 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class BlockTypeViewModel : ObservableObject
     {
-        #region Fields
-
         private readonly AppDbContext _context;
-
-        #endregion
-
-        #region Constructor
 
         public BlockTypeViewModel()
         {
             _context = new AppDbContext();
             LoadData();
-
-            AddBlockTypeCommand = new RelayCommand(AddBlockType);
+            AddBlockTypeCommand = new RelayCommand(AddOrUpdateBlockType);
             DeleteBlockTypeCommand = new RelayCommand(DeleteBlockType);
         }
 
-        #endregion
-
-        #region Properties
-
+        // Collection of Block Types
         public ObservableCollection<BlockType> BlockTypes { get; private set; } = new ObservableCollection<BlockType>();
 
+        // Input field
         private string _newBlockTypeName = string.Empty;
         public string NewBlockTypeName
         {
@@ -50,16 +41,40 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        // Selected Block Type for editing
+        private BlockType? _selectedBlockType;
+        public BlockType? SelectedBlockType
+        {
+            get => _selectedBlockType;
+            set
+            {
+                _selectedBlockType = value;
+                OnPropertyChanged();
+                if (_selectedBlockType != null)
+                {
+                    NewBlockTypeName = _selectedBlockType.Name;
+                    IsEditing = true;
+                }
+                else
+                {
+                    IsEditing = false;
+                }
+                OnPropertyChanged(nameof(ButtonContent));
+            }
+        }
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); OnPropertyChanged(nameof(ButtonContent)); }
+        }
+
+        public string ButtonContent => IsEditing ? "Update Block Type" : "Add Block Type";
+
         public ICommand AddBlockTypeCommand { get; }
         public ICommand DeleteBlockTypeCommand { get; }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Loads all BlockType records from the database into the collection.
-        /// </summary>
         private void LoadData()
         {
             BlockTypes = new ObservableCollection<BlockType>(
@@ -68,25 +83,30 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             OnPropertyChanged(nameof(BlockTypes));
         }
 
-        /// <summary>
-        /// Adds a new BlockType record to the database.
-        /// </summary>
-        private void AddBlockType(object? parameter)
+        private void AddOrUpdateBlockType(object? parameter)
         {
-            if (!ValidateNewBlockTypeName()) return;
+            if (string.IsNullOrWhiteSpace(NewBlockTypeName))
+                return;
 
-            var newBlockType = new BlockType { Name = NewBlockTypeName.Trim() };
-
-            _context.BlockTypes.Add(newBlockType);
+            if (IsEditing && SelectedBlockType != null)
+            {
+                // Update existing block type.
+                SelectedBlockType.Name = NewBlockTypeName.Trim();
+                _context.BlockTypes.Update(SelectedBlockType);
+            }
+            else
+            {
+                // Add new block type.
+                var newBlockType = new BlockType { Name = NewBlockTypeName.Trim() };
+                _context.BlockTypes.Add(newBlockType);
+            }
             _context.SaveChanges();
-
-            ResetNewBlockTypeName();
+            ResetBlockTypeField();
+            SelectedBlockType = null;
+            IsEditing = false;
             LoadData();
         }
 
-        /// <summary>
-        /// Deletes the selected BlockType record from the database.
-        /// </summary>
         private void DeleteBlockType(object? parameter)
         {
             if (parameter is BlockType blockTypeToDelete)
@@ -97,27 +117,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Validates the input for the new BlockType name.
-        /// </summary>
-        private bool ValidateNewBlockTypeName()
-        {
-            return !string.IsNullOrWhiteSpace(NewBlockTypeName);
-        }
-
-        /// <summary>
-        /// Resets the input field for the new BlockType name.
-        /// </summary>
-        private void ResetNewBlockTypeName()
+        private void ResetBlockTypeField()
         {
             NewBlockTypeName = string.Empty;
             OnPropertyChanged(nameof(NewBlockTypeName));
         }
-
-        #endregion
     }
 }

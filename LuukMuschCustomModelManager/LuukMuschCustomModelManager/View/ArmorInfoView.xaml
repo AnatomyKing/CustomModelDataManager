@@ -13,41 +13,47 @@
 
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Add Armor Info Section -->
+        <!-- Add / Edit Armor Info Section -->
         <StackPanel Orientation="Vertical" Margin="10" Grid.Row="0">
-            <TextBox Text="{Binding NewName}"
+            <TextBox Text="{Binding NewName, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Name"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <TextBox Text="{Binding NewHEX}"
+            <TextBox Text="{Binding NewHEX, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="HEX Color (#RRGGBB)"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <TextBox Text="{Binding NewRGB}"
+            <TextBox Text="{Binding NewRGB, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="RGB Color (R,G,B)"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <TextBox Text="{Binding NewColor}"
+            <TextBox Text="{Binding NewColor, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Decimal Color"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <Button Content="Add Armor Info"
-                    Command="{Binding AddArmorInfoCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}" />
+            <StackPanel Orientation="Horizontal">
+                <Button Content="{Binding ButtonContent}"
+                        Command="{Binding AddOrUpdateArmorInfoCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                <Button Content="Cancel"
+                        Command="{Binding CancelArmorInfoEditCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="10,0,0,0" />
+            </StackPanel>
         </StackPanel>
 
         <!-- List of Armor Infos -->
         <ListBox ItemsSource="{Binding ArmorInfos}"
-                 Margin="10"
-                 Grid.Row="1"
+                 SelectedItem="{Binding SelectedArmorInfo, Mode=TwoWay}"
+                 Margin="10" Grid.Row="1"
                  Style="{StaticResource MaterialDesignListBox}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
@@ -55,8 +61,7 @@
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0" />
                         <TextBlock Text="{Binding HEX}" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0" />
                         <TextBlock Text="{Binding RGB}" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0" />
-                        <TextBlock Text="{Binding Color}" VerticalAlignment="Center" FontSize="14" />
-
+                        <TextBlock Text="{Binding Color}" VerticalAlignment="Center" FontSize="14" Margin="0,0,10,0" />
                         <Button Command="{Binding DataContext.DeleteArmorInfoCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource MaterialDesignFlatButton}"

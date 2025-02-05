@@ -14,44 +14,91 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class ArmorInfoViewModel : ObservableObject
     {
-        #region Fields
-
         private readonly AppDbContext _context;
-
-        #endregion
-
-        #region Constructor
 
         public ArmorInfoViewModel()
         {
             _context = new AppDbContext();
             LoadData();
 
-            AddArmorInfoCommand = new RelayCommand(AddArmorInfo);
+            AddOrUpdateArmorInfoCommand = new RelayCommand(AddOrUpdateArmorInfo);
             DeleteArmorInfoCommand = new RelayCommand(DeleteArmorInfo);
+            CancelArmorInfoEditCommand = new RelayCommand(CancelArmorInfoEdit);
+            // Set default values for new inputs.
+            ResetArmorInfoFields();
         }
 
-        #endregion
-
-        #region Properties
-
+        // Collection of Armor Infos
         public ObservableCollection<ShaderArmorColorInfo> ArmorInfos { get; private set; } = new ObservableCollection<ShaderArmorColorInfo>();
 
-        public string NewName { get; set; } = string.Empty;
-        public string NewHEX { get; set; } = string.Empty;
-        public string NewRGB { get; set; } = string.Empty;
-        public int NewColor { get; set; }
+        // Input fields
+        private string _newName = string.Empty;
+        public string NewName
+        {
+            get => _newName;
+            set { _newName = value; OnPropertyChanged(); }
+        }
 
-        public ICommand AddArmorInfoCommand { get; }
+        private string _newHEX = string.Empty;
+        public string NewHEX
+        {
+            get => _newHEX;
+            set { _newHEX = value; OnPropertyChanged(); }
+        }
+
+        private string _newRGB = string.Empty;
+        public string NewRGB
+        {
+            get => _newRGB;
+            set { _newRGB = value; OnPropertyChanged(); }
+        }
+
+        private int _newColor;
+        public int NewColor
+        {
+            get => _newColor;
+            set { _newColor = value; OnPropertyChanged(); }
+        }
+
+        // Selected Armor Info for editing
+        private ShaderArmorColorInfo? _selectedArmorInfo;
+        public ShaderArmorColorInfo? SelectedArmorInfo
+        {
+            get => _selectedArmorInfo;
+            set
+            {
+                _selectedArmorInfo = value;
+                OnPropertyChanged();
+                if (_selectedArmorInfo != null)
+                {
+                    NewName = _selectedArmorInfo.Name;
+                    NewHEX = _selectedArmorInfo.HEX;
+                    NewRGB = _selectedArmorInfo.RGB;
+                    NewColor = _selectedArmorInfo.Color;
+                    IsEditing = true;
+                }
+                else
+                {
+                    IsEditing = false;
+                }
+                OnPropertyChanged(nameof(ButtonContent));
+            }
+        }
+
+        private bool _isEditing;
+        public bool IsEditing
+        {
+            get => _isEditing;
+            set { _isEditing = value; OnPropertyChanged(); OnPropertyChanged(nameof(ButtonContent)); }
+        }
+
+        public string ButtonContent => IsEditing ? "Update Armor Info" : "Add Armor Info";
+
+        // Commands
+        public ICommand AddOrUpdateArmorInfoCommand { get; }
         public ICommand DeleteArmorInfoCommand { get; }
+        public ICommand CancelArmorInfoEditCommand { get; }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Loads all ShaderArmorColorInfo records from the database and updates the collection.
-        /// </summary>
         private void LoadData()
         {
             ArmorInfos = new ObservableCollection<ShaderArmorColorInfo>(
@@ -60,31 +107,41 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             OnPropertyChanged(nameof(ArmorInfos));
         }
 
-        /// <summary>
-        /// Adds a new ShaderArmorColorInfo record to the database.
-        /// </summary>
-        private void AddArmorInfo(object? parameter)
+        private void AddOrUpdateArmorInfo(object? parameter)
         {
-            if (!ValidateNewArmorInfo()) return;
+            if (string.IsNullOrWhiteSpace(NewName) ||
+                string.IsNullOrWhiteSpace(NewHEX) ||
+                string.IsNullOrWhiteSpace(NewRGB))
+                return;
 
-            ShaderArmorColorInfo newInfo = new ShaderArmorColorInfo
+            if (IsEditing && SelectedArmorInfo != null)
             {
-                Name = NewName.Trim(),
-                HEX = NewHEX.Trim(),
-                RGB = NewRGB.Trim(),
-                Color = NewColor
-            };
-
-            _context.ShaderArmorColorInfos.Add(newInfo);
+                // Update existing record.
+                SelectedArmorInfo.Name = NewName.Trim();
+                SelectedArmorInfo.HEX = NewHEX.Trim();
+                SelectedArmorInfo.RGB = NewRGB.Trim();
+                SelectedArmorInfo.Color = NewColor;
+                _context.ShaderArmorColorInfos.Update(SelectedArmorInfo);
+            }
+            else
+            {
+                // Add new record.
+                var newInfo = new ShaderArmorColorInfo
+                {
+                    Name = NewName.Trim(),
+                    HEX = NewHEX.Trim(),
+                    RGB = NewRGB.Trim(),
+                    Color = NewColor
+                };
+                _context.ShaderArmorColorInfos.Add(newInfo);
+            }
             _context.SaveChanges();
-
-            ResetNewArmorInfoFields();
+            ResetArmorInfoFields();
+            SelectedArmorInfo = null;
+            IsEditing = false;
             LoadData();
         }
 
-        /// <summary>
-        /// Deletes the selected ShaderArmorColorInfo record from the database.
-        /// </summary>
         private void DeleteArmorInfo(object? parameter)
         {
             if (parameter is ShaderArmorColorInfo infoToDelete)
@@ -95,36 +152,23 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        #endregion
-
-        #region Helpers
-
-        /// <summary>
-        /// Validates the new ShaderArmorColorInfo input fields.
-        /// </summary>
-        private bool ValidateNewArmorInfo()
+        private void CancelArmorInfoEdit(object? parameter)
         {
-            return !string.IsNullOrWhiteSpace(NewName) &&
-                   !string.IsNullOrWhiteSpace(NewHEX) &&
-                   !string.IsNullOrWhiteSpace(NewRGB);
+            ResetArmorInfoFields();
+            SelectedArmorInfo = null;
+            IsEditing = false;
         }
 
-        /// <summary>
-        /// Resets the input fields for adding a new ShaderArmorColorInfo.
-        /// </summary>
-        private void ResetNewArmorInfoFields()
+        private void ResetArmorInfoFields()
         {
             NewName = string.Empty;
-            NewHEX = string.Empty;
-            NewRGB = string.Empty;
+            NewHEX = "#";         // Default to a hash symbol
+            NewRGB = "0,0,0";      // Default RGB value
             NewColor = 0;
-
             OnPropertyChanged(nameof(NewName));
             OnPropertyChanged(nameof(NewHEX));
             OnPropertyChanged(nameof(NewRGB));
             OnPropertyChanged(nameof(NewColor));
         }
-
-        #endregion
     }
 }

@@ -17,39 +17,48 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- Add Parent Item Section -->
+        <!-- Add / Edit Parent Item Section -->
         <StackPanel Orientation="Vertical" Margin="10" Grid.Row="0">
-            <TextBox Text="{Binding NewParentItemName}"
+            <TextBox Text="{Binding NewParentItemName, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Parent Item Name"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <TextBox Text="{Binding NewParentItemType}"
+            <TextBox Text="{Binding NewParentItemType, UpdateSourceTrigger=PropertyChanged}"
                      materialDesign:HintAssist.Hint="Parent Item Type"
                      Style="{StaticResource MaterialDesignOutlinedTextBox}"
                      Margin="0,0,0,10" />
 
-            <Button Content="Add Parent Item"
-                    Command="{Binding AddParentItemCommand}"
-                    Style="{StaticResource MaterialDesignRaisedButton}" />
+            <StackPanel Orientation="Horizontal">
+                <!-- Button content switches based on editing state -->
+                <Button Content="{Binding ButtonContent}"
+                        Command="{Binding AddOrUpdateParentItemCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}" />
+                <Button Content="Cancel"
+                        Command="{Binding CancelEditCommand}"
+                        Style="{StaticResource MaterialDesignFlatButton}"
+                        Margin="10,0,0,0" />
+            </StackPanel>
         </StackPanel>
 
         <!-- List of Parent Items -->
         <ListBox ItemsSource="{Binding ParentItems}"
+                 SelectedItem="{Binding SelectedParentItem, Mode=TwoWay}"
                  Margin="10"
                  Grid.Row="1"
                  Style="{StaticResource MaterialDesignListBox}">
             <ListBox.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal" Margin="0,5">
-                        <!-- Display Name -->
+                        <!-- Display Parent Name and Type -->
                         <TextBlock Text="{Binding Name}" VerticalAlignment="Center" FontSize="14" />
-
-                        <!-- Delete Button -->
+                        <TextBlock Text=" - " VerticalAlignment="Center" FontSize="14" Margin="5,0"/>
+                        <TextBlock Text="{Binding Type}" VerticalAlignment="Center" FontSize="14" />
+                        <!-- Delete Button with delete icon -->
                         <Button Command="{Binding DataContext.DeleteParentItemCommand, RelativeSource={RelativeSource AncestorType=ListBox}}"
                                 CommandParameter="{Binding}"
                                 Style="{StaticResource MaterialDesignFlatButton}"
-                                Margin="5,0,0,0">
+                                Margin="10,0,0,0">
                             <Button.Content>
                                 <materialDesign:PackIcon Kind="Delete" />
                             </Button.Content>

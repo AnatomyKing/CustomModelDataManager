@@ -28,22 +28,27 @@
                 <DataTemplate>
                     <materialDesign:Card Padding="10" Margin="5" Background="{DynamicResource PrimaryHueLightBrush}">
                         <StackPanel Orientation="Horizontal">
-                            <!-- Model Name -->
+                            <!-- Model Name and Number -->
                             <TextBlock Text="{Binding Name}" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                             <TextBlock Text=" =" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                            <!-- Custom Model Data Number -->
                             <TextBlock Text="{Binding CustomModelNumber}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <!-- Delete Button for permanent deletion -->
+                            <Button Command="{Binding DataContext.DeleteUnusedCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                        CommandParameter="{Binding}"
+                                        Style="{StaticResource MaterialDesignFlatButton}"
+                                        Margin="10,0,0,0">
+                                <Button.Content>
+                                    <materialDesign:PackIcon Kind="Delete" Width="24" Height="24" />
+                                </Button.Content>
+                            </Button>
+
                         </StackPanel>
                     </materialDesign:Card>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
 
-        <!-- DialogHost for Edit -->
-        <materialDesign:DialogHost Identifier="UnusedDialog" Grid.Row="1">
-            <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddEditDialogViewModel}" />
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
+        <!-- DialogHost for Edit (the same dialog is used by the Edit command) -->
+        <materialDesign:DialogHost Identifier="UnusedDialog" Grid.Row="1" />
     </Grid>
 </UserControl>
