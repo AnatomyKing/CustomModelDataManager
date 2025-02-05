@@ -106,10 +106,6 @@
                 Style="{StaticResource MaterialDesignFloatingActionButton}" />
 
         <!-- DialogHost for Add/Edit -->
-        <materialDesign:DialogHost Identifier="RootDialog" Grid.Row="1">
-            <materialDesign:DialogHost.DialogContent>
-                <ContentControl Content="{Binding AddEditDialogViewModel}" />
-            </materialDesign:DialogHost.DialogContent>
-        </materialDesign:DialogHost>
+        <materialDesign:DialogHost Identifier="RootDialog" Grid.Row="1" />
     </Grid>
 </UserControl>
