@@ -15,14 +15,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class UnusedViewModel : ObservableObject
     {
-        #region Fields
-
         private readonly AppDbContext _context;
         private bool _isDialogOpen;
-
-        #endregion
-
-        #region Constructor
 
         public UnusedViewModel()
         {
@@ -32,8 +26,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             EditCommand = new RelayCommand(OpenEditDialog, CanEdit);
             DeleteUnusedCommand = new RelayCommand(DeleteUnusedItem, CanDelete);
         }
-
-        #endregion
 
         #region Properties
 
@@ -65,9 +57,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Methods
 
-        /// <summary>
-        /// Loads all unused items from the database.
-        /// </summary>
         private void LoadData()
         {
             UnusedItems = new ObservableCollection<CustomModelData>(
@@ -79,14 +68,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             OnPropertyChanged(nameof(UnusedItems));
         }
 
-        /// <summary>
-        /// Checks if the selected item can be edited.
-        /// </summary>
         private bool CanEdit(object? parameter) => SelectedUnusedItem != null;
 
-        /// <summary>
-        /// Opens the edit dialog for the selected unused item.
-        /// </summary>
         private async void OpenEditDialog(object? obj)
         {
             if (_selectedUnusedItem == null || _isDialogOpen) return;
@@ -99,7 +82,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 var blockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.ToList());
                 var shaderArmorColorInfos = new ObservableCollection<ShaderArmorColorInfo>(_context.ShaderArmorColorInfos.ToList());
 
-                // Pass the existing _context to the AddEditCMDViewModel constructor.
                 var viewModel = new AddEditCMDViewModel(_selectedUnusedItem, parentItems, blockTypes, shaderArmorColorInfos, _context);
                 var result = await DialogHost.Show(viewModel, "UnusedDialog");
 
@@ -116,9 +98,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        /// <summary>
-        /// Handles changes to the item's status after the edit dialog closes.
-        /// </summary>
         private void HandleItemStatusChange()
         {
             if (_selectedUnusedItem != null && _selectedUnusedItem.Status)
@@ -128,14 +107,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        // Command to delete the unused item permanently.
         private bool CanDelete(object? parameter) => parameter is CustomModelData;
 
         private void DeleteUnusedItem(object? parameter)
         {
             if (parameter is CustomModelData item)
             {
-                // (Optionally, you can show a confirmation dialog here.)
                 _context.CustomModelDataItems.Remove(item);
                 _context.SaveChanges();
                 UnusedItems.Remove(item);

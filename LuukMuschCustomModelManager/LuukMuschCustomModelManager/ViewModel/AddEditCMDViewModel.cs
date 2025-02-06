@@ -16,14 +16,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
     {
-        #region Fields
-
         private readonly CustomModelData _originalCustomModelData;
         private readonly AppDbContext _context;
-
-        #endregion
-
-        #region Constructor
 
         public AddEditCMDViewModel(
             CustomModelData customModelData,
@@ -44,14 +38,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
             ClearBlockInfoCommand = new RelayCommand(ClearBlockInfo);
 
+            // Create an editable copy of the original data.
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
             _selectedParentItems = new ArrayList();
             PreSelectProperties();
         }
-
-        #endregion
 
         #region Properties
 
@@ -230,19 +223,20 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
+            // Preselect parent items except the default unused parent (ID == 1) if the item is used.
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
+                if (EditedCustomModelData.Status && parent.ParentItemID == 1)
+                    continue;
+
                 if (!_selectedParentItems.Contains(parent))
-                {
                     _selectedParentItems.Add(parent);
-                }
             }
 
             if (EditedCustomModelData.ShaderArmors.Any())
             {
                 SelectedShaderArmorColorInfo = ShaderArmorColorInfos
-                    .FirstOrDefault(s => EditedCustomModelData.ShaderArmors
-                        .Any(sa => sa.ShaderArmorColorInfoID == s.ShaderArmorColorInfoID));
+                    .FirstOrDefault(s => EditedCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == s.ShaderArmorColorInfoID));
             }
 
             var firstVariation = CustomVariations.FirstOrDefault();
@@ -267,11 +261,35 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
+                // When the item is unused, strip its data and assign the default unused parent.
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                UpdateParentItems();
+                // When the item is used, ensure that the default unused parent (ID == 1) is removed.
+
+                // Remove any default unused parent from the original ParentItems.
+                var defaultParents = _originalCustomModelData.ParentItems.Where(p => p.ParentItemID == 1).ToList();
+                foreach (var p in defaultParents)
+                {
+                    _originalCustomModelData.ParentItems.Remove(p);
+                }
+
+                // Remove the default unused parent from the SelectedParentItems collection.
+                for (int i = SelectedParentItems.Count - 1; i >= 0; i--)
+                {
+                    if (SelectedParentItems[i] is ParentItem parent && parent.ParentItemID == 1)
+                        SelectedParentItems.RemoveAt(i);
+                }
+
+                // Rebuild the original ParentItems based solely on the cleaned SelectedParentItems.
+                _originalCustomModelData.ParentItems.Clear();
+                foreach (var item in SelectedParentItems)
+                {
+                    if (item is ParentItem p && p.ParentItemID != 1)
+                        _originalCustomModelData.ParentItems.Add(p);
+                }
+
                 UpdateRelations();
                 AddOrUpdateCustomVariation();
             }
@@ -309,22 +327,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             return $"Unused {letter}";
         }
 
-        private void UpdateParentItems()
-        {
-            _originalCustomModelData.ParentItems.Clear();
-            foreach (var item in SelectedParentItems)
-            {
-                if (item is ParentItem parent)
-                {
-                    _originalCustomModelData.ParentItems.Add(parent);
-                }
-            }
-        }
-
         private void UpdateRelations()
         {
-            if (SelectedBlockType != null && !_originalCustomModelData.BlockTypes
-                    .Any(b => b.BlockTypeID == SelectedBlockType.BlockTypeID))
+            if (SelectedBlockType != null && !_originalCustomModelData.BlockTypes.Any(b => b.BlockTypeID == SelectedBlockType.BlockTypeID))
             {
                 _originalCustomModelData.BlockTypes.Add(new CustomModel_BlockType
                 {
@@ -333,8 +338,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 });
             }
 
-            if (SelectedShaderArmorColorInfo != null && !_originalCustomModelData.ShaderArmors
-                    .Any(sa => sa.ShaderArmorColorInfoID == SelectedShaderArmorColorInfo.ShaderArmorColorInfoID))
+            if (SelectedShaderArmorColorInfo != null && !_originalCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == SelectedShaderArmorColorInfo.ShaderArmorColorInfoID))
             {
                 _originalCustomModelData.ShaderArmors.Add(new CustomModel_ShaderArmor
                 {
@@ -348,9 +352,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             if (!string.IsNullOrWhiteSpace(NewBlockData) && SelectedBlockType != null)
             {
-                var existingVariation = _originalCustomModelData.CustomVariations
-                    .FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
-
+                var existingVariation = _originalCustomModelData.CustomVariations.FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
                 if (existingVariation != null)
                 {
                     existingVariation.BlockData = NewBlockData;
@@ -372,9 +374,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private void UpdateNewVariationNumber()
         {
             NewVariationNumber = SelectedBlockType != null
-                ? (_context.CustomVariations
+                ? ((_context.CustomVariations
                     .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
-                    .Max(cv => (int?)cv.Variation) ?? 0) + 1
+                    .Max(cv => (int?)cv.Variation) ?? 0) + 1)
                 : 1;
         }
 

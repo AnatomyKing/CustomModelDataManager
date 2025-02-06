@@ -38,8 +38,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; private set; } = new ObservableCollection<ShaderArmorColorInfo>();
 
         // Flattened collection: one entry per CMD item–parent relationship.
-        public ObservableCollection<KeyValuePair<string, CustomModelData>> FlattenedCustomModelItems { get; private set; }
-            = new ObservableCollection<KeyValuePair<string, CustomModelData>>();
+        public ObservableCollection<KeyValuePair<string, CustomModelData>> FlattenedCustomModelItems { get; private set; } = new ObservableCollection<KeyValuePair<string, CustomModelData>>();
 
         // Grouped view built on the flattened collection.
         public ICollectionView? GroupedCustomModels { get; private set; }
@@ -82,7 +81,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        // New property: the SelectedFlattenedItem from the grouped ListBox.
+        // Selected flattened item from the grouped ListBox.
         private KeyValuePair<string, CustomModelData>? _selectedFlattenedItem;
         public KeyValuePair<string, CustomModelData>? SelectedFlattenedItem
         {
@@ -93,7 +92,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 OnPropertyChanged();
                 if (value.HasValue)
                 {
-                    // Set the underlying CMD item and open the edit dialog.
                     SelectedCustomModelData = value.Value.Value;
                     OpenEditDialog(null);
                 }
@@ -109,7 +107,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void LoadData()
         {
-            // Load used CMD items from the database.
+            // Load only used CMD items.
             CustomModelDataItems = new ObservableCollection<CustomModelData>(
                 _context.CustomModelDataItems
                     .Where(cmd => cmd.Status)
@@ -127,9 +125,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             FlattenedCustomModelItems.Clear();
             foreach (var cmd in CustomModelDataItems)
             {
-                if (cmd.ParentItems.Any())
+                // Exclude the default unused parent (ID == 1) from display.
+                var validParents = cmd.ParentItems.Where(p => p.ParentItemID != 1).ToList();
+                if (validParents.Any())
                 {
-                    foreach (var parent in cmd.ParentItems)
+                    foreach (var parent in validParents)
                     {
                         FlattenedCustomModelItems.Add(new KeyValuePair<string, CustomModelData>(parent.Name, cmd));
                     }
@@ -140,17 +140,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 }
             }
 
-            // Initialize the grouped view.
             GroupedCustomModels = CollectionViewSource.GetDefaultView(FlattenedCustomModelItems);
             GroupedCustomModels.GroupDescriptions.Add(new PropertyGroupDescription("Key"));
             GroupedCustomModels.SortDescriptions.Add(new SortDescription("Key", ListSortDirection.Ascending));
             GroupedCustomModels.SortDescriptions.Add(new SortDescription("Value.Name", ListSortDirection.Ascending));
 
-            // Update highest CMD number.
             CustomModelDataItems.CollectionChanged += (_, _) => UpdateHighestCustomModelNumber();
             UpdateHighestCustomModelNumber();
-
-            // Apply the initial filter.
             FilterData();
         }
 
@@ -179,7 +175,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     string searchLower = SearchText.ToLower();
                     var cmd = kvp.Value;
                     return cmd.Name.ToLower().Contains(searchLower)
-                        || cmd.CustomModelNumber.ToString().Contains(searchLower);
+                           || cmd.CustomModelNumber.ToString().Contains(searchLower);
                 }
                 return false;
             };
@@ -189,7 +185,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private async void OpenAddDialog(object? obj)
         {
-            // First, check if any unused CMD items exist.
+            // Look for the lowest unused item.
             var unusedItem = _context.CustomModelDataItems
                 .Where(cmd => !cmd.Status)
                 .OrderBy(cmd => cmd.CustomModelNumber)
@@ -221,27 +217,23 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             if (SelectedCustomModelData != null)
             {
                 await OpenDialogAsync(SelectedCustomModelData, false);
-                SelectedCustomModelData = null;
             }
         }
 
-        private bool CanEdit(object? parameter)
-        {
-            return SelectedCustomModelData != null;
-        }
+        private bool CanEdit(object? parameter) => SelectedCustomModelData != null;
 
         #endregion
 
         #region Dialog Logic
 
-        private async Task OpenDialogAsync(CustomModelData customModelData, bool isNew)
+        private async System.Threading.Tasks.Task OpenDialogAsync(CustomModelData customModelData, bool isNew)
         {
             if (_isDialogOpen) return;
             _isDialogOpen = true;
 
             try
             {
-                // Pass the current _context into the AddEditCMDViewModel.
+                // Pass the current context and lookup collections.
                 AddEditCMDViewModel viewModel = new AddEditCMDViewModel(customModelData, ParentItems, BlockTypes, ShaderArmorColorInfos, _context);
                 object? result = await DialogHost.Show(viewModel, "RootDialog");
 
@@ -249,9 +241,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     if (isNew)
                     {
+                        // For new items, add them to the context and main view.
                         _context.CustomModelDataItems.Add(customModelData);
                         CustomModelDataItems.Add(customModelData);
-                        // Also add entries to the flattened collection.
                         if (customModelData.ParentItems.Any())
                         {
                             foreach (var parent in customModelData.ParentItems)
@@ -264,9 +256,36 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                             FlattenedCustomModelItems.Add(new KeyValuePair<string, CustomModelData>("(No Parent)", customModelData));
                         }
                     }
-                    else if (!customModelData.Status)
+                    else
                     {
-                        CustomModelDataItems.Remove(customModelData);
+                        // For re-used unused items now marked as used:
+                        // If the item is not already in the used collection, add it.
+                        if (!CustomModelDataItems.Contains(customModelData))
+                        {
+                            CustomModelDataItems.Add(customModelData);
+                        }
+                        // Remove any existing flattened entries for this item.
+                        for (int i = FlattenedCustomModelItems.Count - 1; i >= 0; i--)
+                        {
+                            if (FlattenedCustomModelItems[i].Value == customModelData)
+                                FlattenedCustomModelItems.RemoveAt(i);
+                        }
+                        // Add new flattened entries based on the current ParentItems.
+                        if (customModelData.ParentItems.Any())
+                        {
+                            foreach (var parent in customModelData.ParentItems)
+                            {
+                                // (Skip default unused parent if somehow still present.)
+                                if (parent.ParentItemID != 1)
+                                {
+                                    FlattenedCustomModelItems.Add(new KeyValuePair<string, CustomModelData>(parent.Name, customModelData));
+                                }
+                            }
+                        }
+                        else
+                        {
+                            FlattenedCustomModelItems.Add(new KeyValuePair<string, CustomModelData>("(No Parent)", customModelData));
+                        }
                     }
 
                     _context.SaveChanges();
@@ -277,7 +296,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             finally
             {
                 _isDialogOpen = false;
+                // Clear selections so the same item can be reopened.
                 SelectedCustomModelData = null;
+                SelectedFlattenedItem = null;
             }
         }
 

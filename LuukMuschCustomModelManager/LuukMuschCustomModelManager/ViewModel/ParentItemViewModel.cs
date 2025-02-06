@@ -10,6 +10,7 @@ using LuukMuschCustomModelManager.Model;
 using System.Windows.Input;
 
 
+
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class ParentItemViewModel : ObservableObject
@@ -22,36 +23,25 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             LoadData();
             AddOrUpdateParentItemCommand = new RelayCommand(AddOrUpdateParentItem);
             DeleteParentItemCommand = new RelayCommand(DeleteParentItem);
+            CancelEditCommand = new RelayCommand(CancelEdit);
         }
 
-        // Collection of Parent Items for display in the ListBox.
         public ObservableCollection<ParentItem> ParentItems { get; private set; } = new();
 
-        // Bound to the "Parent Item Name" TextBox.
         private string _newParentItemName = string.Empty;
         public string NewParentItemName
         {
             get => _newParentItemName;
-            set
-            {
-                _newParentItemName = value;
-                OnPropertyChanged();
-            }
+            set { _newParentItemName = value; OnPropertyChanged(); }
         }
 
-        // Bound to the "Parent Item Type" TextBox.
         private string _newParentItemType = string.Empty;
         public string NewParentItemType
         {
             get => _newParentItemType;
-            set
-            {
-                _newParentItemType = value;
-                OnPropertyChanged();
-            }
+            set { _newParentItemType = value; OnPropertyChanged(); }
         }
 
-        // The currently selected ParentItem in the ListBox.
         private ParentItem? _selectedParentItem;
         public ParentItem? SelectedParentItem
         {
@@ -60,10 +50,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 _selectedParentItem = value;
                 OnPropertyChanged();
-
                 if (_selectedParentItem != null)
                 {
-                    // Fill the text boxes with the selected item's values.
                     NewParentItemName = _selectedParentItem.Name;
                     NewParentItemType = _selectedParentItem.Type;
                     IsEditing = true;
@@ -76,71 +64,46 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        // Tracks whether we're editing an existing item.
         private bool _isEditing;
         public bool IsEditing
         {
             get => _isEditing;
-            set
-            {
-                _isEditing = value;
-                OnPropertyChanged();
-                OnPropertyChanged(nameof(ButtonContent));
-            }
+            set { _isEditing = value; OnPropertyChanged(); OnPropertyChanged(nameof(ButtonContent)); }
         }
 
-        // Button content changes based on editing state.
         public string ButtonContent => IsEditing ? "Update Parent Item" : "Add Parent Item";
 
-        // Commands
         public ICommand AddOrUpdateParentItemCommand { get; }
         public ICommand DeleteParentItemCommand { get; }
+        public ICommand CancelEditCommand { get; }
 
-        // Loads ParentItems from the database.
         private void LoadData()
         {
-            ParentItems = new ObservableCollection<ParentItem>(
-                _context.ParentItems.OrderBy(p => p.Name).ToList());
+            ParentItems = new ObservableCollection<ParentItem>(_context.ParentItems.OrderBy(p => p.Name).ToList());
             OnPropertyChanged(nameof(ParentItems));
         }
 
-        // Adds a new ParentItem or updates an existing one.
         private void AddOrUpdateParentItem(object? parameter)
         {
-            if (string.IsNullOrWhiteSpace(NewParentItemName) ||
-                string.IsNullOrWhiteSpace(NewParentItemType))
+            if (string.IsNullOrWhiteSpace(NewParentItemName) || string.IsNullOrWhiteSpace(NewParentItemType))
                 return;
 
             if (IsEditing && SelectedParentItem != null)
             {
-                // Update the existing item.
                 SelectedParentItem.Name = NewParentItemName;
                 SelectedParentItem.Type = NewParentItemType;
                 _context.ParentItems.Update(SelectedParentItem);
             }
             else
             {
-                // Add a new item.
-                var newParent = new ParentItem
-                {
-                    Name = NewParentItemName,
-                    Type = NewParentItemType
-                };
+                var newParent = new ParentItem { Name = NewParentItemName, Type = NewParentItemType };
                 _context.ParentItems.Add(newParent);
             }
             _context.SaveChanges();
-
-            // Clear fields and reset editing state.
-            NewParentItemName = string.Empty;
-            NewParentItemType = string.Empty;
-            SelectedParentItem = null;
-            IsEditing = false;
-
-            // Reload list.
+            CancelEdit(null);
             LoadData();
         }
 
-        // Deletes the specified ParentItem.
         private void DeleteParentItem(object? parameter)
         {
             if (parameter is ParentItem parentToDelete)
@@ -149,6 +112,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 _context.SaveChanges();
                 LoadData();
             }
+        }
+
+        private void CancelEdit(object? parameter)
+        {
+            NewParentItemName = string.Empty;
+            NewParentItemType = string.Empty;
+            SelectedParentItem = null;
+            IsEditing = false;
         }
     }
 }

@@ -21,27 +21,18 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             LoadData();
             AddBlockTypeCommand = new RelayCommand(AddOrUpdateBlockType);
             DeleteBlockTypeCommand = new RelayCommand(DeleteBlockType);
+            CancelBlockTypeEditCommand = new RelayCommand(CancelBlockTypeEdit);
         }
 
-        // Collection of Block Types
-        public ObservableCollection<BlockType> BlockTypes { get; private set; } = new ObservableCollection<BlockType>();
+        public ObservableCollection<BlockType> BlockTypes { get; private set; } = new();
 
-        // Input field
         private string _newBlockTypeName = string.Empty;
         public string NewBlockTypeName
         {
             get => _newBlockTypeName;
-            set
-            {
-                if (_newBlockTypeName != value)
-                {
-                    _newBlockTypeName = value;
-                    OnPropertyChanged();
-                }
-            }
+            set { _newBlockTypeName = value; OnPropertyChanged(); }
         }
 
-        // Selected Block Type for editing
         private BlockType? _selectedBlockType;
         public BlockType? SelectedBlockType
         {
@@ -74,12 +65,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         public ICommand AddBlockTypeCommand { get; }
         public ICommand DeleteBlockTypeCommand { get; }
+        public ICommand CancelBlockTypeEditCommand { get; }
 
         private void LoadData()
         {
-            BlockTypes = new ObservableCollection<BlockType>(
-                _context.BlockTypes.OrderBy(b => b.Name).ToList()
-            );
+            BlockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.OrderBy(b => b.Name).ToList());
             OnPropertyChanged(nameof(BlockTypes));
         }
 
@@ -90,20 +80,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (IsEditing && SelectedBlockType != null)
             {
-                // Update existing block type.
                 SelectedBlockType.Name = NewBlockTypeName.Trim();
                 _context.BlockTypes.Update(SelectedBlockType);
             }
             else
             {
-                // Add new block type.
                 var newBlockType = new BlockType { Name = NewBlockTypeName.Trim() };
                 _context.BlockTypes.Add(newBlockType);
             }
             _context.SaveChanges();
-            ResetBlockTypeField();
-            SelectedBlockType = null;
-            IsEditing = false;
+            CancelBlockTypeEdit(null);
             LoadData();
         }
 
@@ -117,10 +103,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        private void ResetBlockTypeField()
+        private void CancelBlockTypeEdit(object? parameter)
         {
             NewBlockTypeName = string.Empty;
-            OnPropertyChanged(nameof(NewBlockTypeName));
+            SelectedBlockType = null;
+            IsEditing = false;
         }
     }
 }
