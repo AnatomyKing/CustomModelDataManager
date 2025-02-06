@@ -6,121 +6,147 @@
              xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              xmlns:local="clr-namespace:LuukMuschCustomModelManager.Helpers"
              mc:Ignorable="d">
+    <UserControl.Resources>
+        <!-- CollectionViewSource to group ParentItems by their Type -->
+        <CollectionViewSource x:Key="GroupedParentItems" Source="{Binding ParentItems}">
+            <CollectionViewSource.GroupDescriptions>
+                <PropertyGroupDescription PropertyName="Type"/>
+            </CollectionViewSource.GroupDescriptions>
+        </CollectionViewSource>
+
+        <!-- Style for Group Headers with a checkbox -->
+        <Style x:Key="GroupHeaderStyle" TargetType="GroupItem">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="GroupItem">
+                        <StackPanel>
+                            <!-- The header row with a CheckBox that uses event handlers -->
+                            <StackPanel Orientation="Horizontal" Background="#FFE0E0E0">
+                                <CheckBox x:Name="GroupHeaderCheckBox" 
+                                          Content="{Binding Name}" 
+                                          FontWeight="Bold" 
+                                          VerticalAlignment="Center"
+                                          Loaded="GroupHeaderCheckBox_Loaded"
+                                          Click="GroupHeaderCheckBox_Click"
+                                          IsThreeState="True" />
+                            </StackPanel>
+                            <!-- The child items -->
+                            <ItemsPresenter Margin="10,0,0,0"/>
+                        </StackPanel>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid Margin="20">
         <Grid.RowDefinitions>
-            <!-- Content area -->
-            <RowDefinition Height="Auto"/>
-            <!-- Save/Cancel buttons area -->
+            <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <StackPanel Grid.Row="0">
-            <!-- Existing Fields -->
-            <TextBox Text="{Binding Name}" 
-               materialDesign:HintAssist.Hint="Model Name" 
-               Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-               Margin="0,10" Width="300" />
-            <TextBox Text="{Binding ModelPath}" 
-               materialDesign:HintAssist.Hint="Model Path" 
-               Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-               Margin="0,10" Width="300" />
-            <TextBox Text="{Binding CustomModelNumber}" 
-               materialDesign:HintAssist.Hint="Custom Model Number" 
-               Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-               Margin="0,10" Width="150" 
-               TextChanged="TextBox_TextChanged" />
-            <CheckBox IsChecked="{Binding Status}"
-                Content="Used"
-                Margin="0,10" />
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel>
+                <!-- Basic fields -->
+                <TextBox Text="{Binding Name}" 
+                         materialDesign:HintAssist.Hint="Model Name" 
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                         Margin="0,10" Width="300" />
+                <TextBox Text="{Binding ModelPath}" 
+                         materialDesign:HintAssist.Hint="Model Path" 
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                         Margin="0,10" Width="300" />
+                <TextBox Text="{Binding CustomModelNumber}" 
+                         materialDesign:HintAssist.Hint="Custom Model Number" 
+                         Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                         Margin="0,10" Width="150" />
+                <CheckBox IsChecked="{Binding Status}"
+                          Content="Used"
+                          Margin="0,10" />
 
-            <!-- Parent Items Selection (Vertical scrollable list) -->
-            <StackPanel Margin="0,10">
-                <TextBlock Text="Select Parent Items:" 
-                   Margin="0,0,0,5" 
-                   Foreground="Gray" />
-                <Border BorderBrush="{DynamicResource PrimaryHueDarkForegroundBrush}" 
-                BorderThickness="1" 
-                Padding="5" 
-                CornerRadius="2">
-                    <!-- Use a fixed Height to force vertical scrolling -->
-                    <ScrollViewer Height="100" VerticalScrollBarVisibility="Auto">
-                        <ItemsControl ItemsSource="{Binding ParentItems}">
-                            <!-- Use a vertical StackPanel instead of a WrapPanel -->
-                            <ItemsControl.ItemsPanel>
-                                <ItemsPanelTemplate>
-                                    <StackPanel Orientation="Vertical" />
-                                </ItemsPanelTemplate>
-                            </ItemsControl.ItemsPanel>
-                            <ItemsControl.ItemTemplate>
-                                <DataTemplate>
-                                    <CheckBox Content="{Binding Name}" Margin="5"
-                            Loaded="ParentCheckBox_Loaded"
-                            Checked="ParentCheckBox_Checked" 
-                            Unchecked="ParentCheckBox_Unchecked"/>
-                                </DataTemplate>
-                            </ItemsControl.ItemTemplate>
-                        </ItemsControl>
-                    </ScrollViewer>
-                </Border>
+                <!-- Parent Items GroupBox -->
+                <GroupBox Header="Select Parent Items" Margin="0,10">
+                    <StackPanel>
+                        <!-- Search box (filters the parent items list) -->
+                        <TextBox x:Name="ParentSearchBox" 
+                                 Margin="5" 
+                                 Width="250" 
+                                 materialDesign:HintAssist.Hint="Search Parent Items"
+                                 TextChanged="ParentSearchBox_TextChanged" />
+                        <Border BorderBrush="{DynamicResource PrimaryHueDarkForegroundBrush}" 
+                                BorderThickness="1" 
+                                Padding="5" 
+                                CornerRadius="2" Margin="5">
+                            <ScrollViewer Height="150" VerticalScrollBarVisibility="Auto">
+                                <ItemsControl ItemsSource="{Binding Source={StaticResource GroupedParentItems}}">
+                                    <ItemsControl.GroupStyle>
+                                        <GroupStyle ContainerStyle="{StaticResource GroupHeaderStyle}" />
+                                    </ItemsControl.GroupStyle>
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate>
+                                            <!-- Bind the CheckBox IsChecked to IsSelected (TwoWay) -->
+                                            <CheckBox Content="{Binding Name}" Margin="5"
+                                                      IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </ScrollViewer>
+                        </Border>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Block Info (unchanged) -->
+                <GroupBox Margin="0,20">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Block Info" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                            <Button Command="{Binding ClearBlockInfoCommand}" 
+                                    ToolTip="Clear Block Info"
+                                    Style="{StaticResource MaterialDesignToolButton}">
+                                <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBox Text="{Binding NewBlockData}" 
+                                     materialDesign:HintAssist.Hint="Block Data" 
+                                     Width="200" Margin="0,10" />
+                            <TextBox Text="{Binding NewVariationNumber}" 
+                                     materialDesign:HintAssist.Hint="Variation Number" 
+                                     Width="100" Margin="10,10,0,10" />
+                            <ComboBox ItemsSource="{Binding BlockTypes}" 
+                                      SelectedItem="{Binding SelectedBlockType}" 
+                                      DisplayMemberPath="Name" 
+                                      materialDesign:HintAssist.Hint="Block Type" 
+                                      Width="150" Margin="10,10,0,10" />
+                        </StackPanel>
+                    </StackPanel>
+                </GroupBox>
+
+                <!-- Shader Armor Info (unchanged) -->
+                <GroupBox Margin="0,20">
+                    <GroupBox.Header>
+                        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                            <TextBlock Text="Shader Armor Info" VerticalAlignment="Center" Margin="0,0,5,0" Foreground="White" />
+                            <Button Command="{Binding ClearArmorInfoCommand}" 
+                                    ToolTip="Clear Selection"
+                                    Style="{StaticResource MaterialDesignToolButton}">
+                                <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
+                            </Button>
+                        </StackPanel>
+                    </GroupBox.Header>
+                    <StackPanel>
+                        <ComboBox ItemsSource="{Binding ShaderArmorColorInfos}" 
+                                  SelectedItem="{Binding SelectedShaderArmorColorInfo}" 
+                                  DisplayMemberPath="Name" 
+                                  materialDesign:HintAssist.Hint="Select Shader Armor Info" 
+                                  Margin="0,10" Width="300" />
+                    </StackPanel>
+                </GroupBox>
             </StackPanel>
+        </ScrollViewer>
 
-            <!-- Block Info Section -->
-            <GroupBox Margin="0,20">
-                <GroupBox.Header>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Block Info" 
-                       VerticalAlignment="Center" 
-                       Margin="0,0,5,0" 
-                       Foreground="White" />
-                        <Button Command="{Binding ClearBlockInfoCommand}" 
-                    ToolTip="Clear Block Info"
-                    Style="{StaticResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
-                        </Button>
-                    </StackPanel>
-                </GroupBox.Header>
-                <StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBox Text="{Binding NewBlockData}" 
-                     materialDesign:HintAssist.Hint="Block Data" 
-                     Width="200" Margin="0,10" />
-                        <TextBox Text="{Binding NewVariationNumber}" 
-                     materialDesign:HintAssist.Hint="Variation Number" 
-                     Width="100" Margin="10,10,0,10" />
-                        <ComboBox ItemsSource="{Binding BlockTypes}" 
-                      SelectedItem="{Binding SelectedBlockType}" 
-                      DisplayMemberPath="Name" 
-                      materialDesign:HintAssist.Hint="Block Type" 
-                      Width="150" Margin="10,10,0,10" />
-                    </StackPanel>
-                </StackPanel>
-            </GroupBox>
-
-            <!-- Shader Armor Info Section -->
-            <GroupBox Margin="0,20">
-                <GroupBox.Header>
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="Shader Armor Info" 
-                       VerticalAlignment="Center" 
-                       Margin="0,0,5,0"
-                       Foreground="White" />
-                        <Button Command="{Binding ClearArmorInfoCommand}" 
-                    ToolTip="Clear Selection"
-                    Style="{StaticResource MaterialDesignToolButton}">
-                            <materialDesign:PackIcon Kind="Cleaning" Foreground="White" />
-                        </Button>
-                    </StackPanel>
-                </GroupBox.Header>
-                <StackPanel>
-                    <ComboBox ItemsSource="{Binding ShaderArmorColorInfos}" 
-                    SelectedItem="{Binding SelectedShaderArmorColorInfo}" 
-                    DisplayMemberPath="Name" 
-                    materialDesign:HintAssist.Hint="Select Shader Armor Info" 
-                    Margin="0,10" Width="300" />
-                </StackPanel>
-            </GroupBox>
-        </StackPanel>
-
-        <!-- Save/Cancel Buttons (placed in a separate grid row) -->
+        <!-- Save/Cancel Buttons -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
             <Button Content="Cancel" Width="75" Margin="5" Command="{Binding CancelCommand}" />
             <Button Content="Save" Width="75" Margin="5" Command="{Binding SaveCommand}" />

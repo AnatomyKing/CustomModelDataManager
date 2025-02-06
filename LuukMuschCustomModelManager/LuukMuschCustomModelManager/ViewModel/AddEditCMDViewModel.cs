@@ -12,6 +12,8 @@ using System.Windows;
 using LuukMuschCustomModelManager.Databases;
 using System.Collections;
 
+using System.ComponentModel;
+
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
@@ -33,6 +35,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             BlockTypes = blockTypes;
             ShaderArmorColorInfos = shaderArmorColorInfos;
 
+            // Subscribe to property changed events for each ParentItem
+            foreach (var parent in ParentItems)
+            {
+                parent.PropertyChanged += ParentItem_PropertyChanged;
+            }
+
             CancelCommand = new RelayCommand(Cancel);
             SaveCommand = new RelayCommand(Save);
             ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
@@ -42,8 +50,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
-            _selectedParentItems = new ArrayList();
+            // Initialize SelectedParentItems as an ObservableCollection.
+            _selectedParentItems = new ObservableCollection<ParentItem>();
             PreSelectProperties();
+        }
+
+        // This event handler now uses a nullable sender parameter to match PropertyChangedEventHandler.
+        private void ParentItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ParentItem parent && e.PropertyName == nameof(ParentItem.IsSelected))
+            {
+                if (parent.IsSelected)
+                {
+                    if (!SelectedParentItems.Contains(parent))
+                        SelectedParentItems.Add(parent);
+                }
+                else
+                {
+                    if (SelectedParentItems.Contains(parent))
+                        SelectedParentItems.Remove(parent);
+                }
+            }
         }
 
         #region Properties
@@ -54,8 +81,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; }
         public ObservableCollection<CustomVariation> CustomVariations { get; }
 
-        private IList _selectedParentItems;
-        public IList SelectedParentItems
+        // The SelectedParentItems collection is updated automatically via ParentItem_PropertyChanged.
+        private ObservableCollection<ParentItem> _selectedParentItems;
+        public ObservableCollection<ParentItem> SelectedParentItems
         {
             get => _selectedParentItems;
             set
@@ -223,14 +251,17 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
-            // Preselect parent items except the default unused parent (ID == 1) if the item is used.
+            // Preselect ParentItems (skip the default unused parent with ID==1 when used)
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
                 if (EditedCustomModelData.Status && parent.ParentItemID == 1)
                     continue;
 
-                if (!_selectedParentItems.Contains(parent))
-                    _selectedParentItems.Add(parent);
+                if (!SelectedParentItems.Contains(parent))
+                {
+                    // Setting IsSelected will update SelectedParentItems via the PropertyChanged event.
+                    parent.IsSelected = true;
+                }
             }
 
             if (EditedCustomModelData.ShaderArmors.Any())
@@ -261,33 +292,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
-                // When the item is unused, strip its data and assign the default unused parent.
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                // When the item is used, ensure that the default unused parent (ID == 1) is removed.
-
-                // Remove any default unused parent from the original ParentItems.
+                // Remove default unused parent (ID==1) if present.
                 var defaultParents = _originalCustomModelData.ParentItems.Where(p => p.ParentItemID == 1).ToList();
                 foreach (var p in defaultParents)
                 {
                     _originalCustomModelData.ParentItems.Remove(p);
                 }
 
-                // Remove the default unused parent from the SelectedParentItems collection.
                 for (int i = SelectedParentItems.Count - 1; i >= 0; i--)
                 {
-                    if (SelectedParentItems[i] is ParentItem parent && parent.ParentItemID == 1)
+                    if (SelectedParentItems[i].ParentItemID == 1)
                         SelectedParentItems.RemoveAt(i);
                 }
 
-                // Rebuild the original ParentItems based solely on the cleaned SelectedParentItems.
                 _originalCustomModelData.ParentItems.Clear();
                 foreach (var item in SelectedParentItems)
                 {
-                    if (item is ParentItem p && p.ParentItemID != 1)
-                        _originalCustomModelData.ParentItems.Add(p);
+                    _originalCustomModelData.ParentItems.Add(item);
                 }
 
                 UpdateRelations();
@@ -383,3 +408,5 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         #endregion
     }
 }
+
+

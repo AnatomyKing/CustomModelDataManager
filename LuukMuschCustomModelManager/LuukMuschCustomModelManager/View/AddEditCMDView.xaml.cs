@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 using LuukMuschCustomModelManager.Model;
 using LuukMuschCustomModelManager.ViewModels.Views;
 
@@ -22,51 +23,91 @@ namespace LuukMuschCustomModelManager.View
         public AddEditCMDView()
         {
             InitializeComponent();
+
+            // Set up the CollectionViewSource filter for ParentItems.
+            var cvs = (CollectionViewSource)this.Resources["GroupedParentItems"];
+            cvs.Filter += ParentItemsFilter;
         }
 
-        // When a parent checkbox is loaded, set its IsChecked state based on whether its ParentItem is in SelectedParentItems.
-        private void ParentCheckBox_Loaded(object sender, RoutedEventArgs e)
+        #region Filtering
+
+        private void ParentItemsFilter(object sender, FilterEventArgs e)
         {
-            if (sender is CheckBox cb && cb.DataContext is ParentItem parent)
+            if (e.Item is ParentItem parent)
             {
-                if (DataContext is AddEditCMDViewModel vm)
+                string search = ParentSearchBox.Text.Trim().ToLower();
+                if (string.IsNullOrEmpty(search))
                 {
-                    cb.IsChecked = vm.SelectedParentItems.Contains(parent);
+                    e.Accepted = true;
+                    return;
                 }
+                if ((parent.Name != null && parent.Name.ToLower().Contains(search)) ||
+                    (parent.Type != null && parent.Type.ToLower().Contains(search)))
+                {
+                    e.Accepted = true;
+                }
+                else
+                {
+                    e.Accepted = false;
+                }
+            }
+            else
+            {
+                e.Accepted = true;
             }
         }
 
-        private void ParentCheckBox_Checked(object sender, RoutedEventArgs e)
+        private void ParentSearchBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            if (sender is CheckBox cb && cb.DataContext is ParentItem parent)
+            var cvs = (CollectionViewSource)this.Resources["GroupedParentItems"];
+            cvs.View.Refresh();
+        }
+
+        #endregion
+
+        #region Group Header Checkbox Events
+
+        private void GroupHeaderCheckBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (sender is CheckBox groupCheckBox && groupCheckBox.DataContext is CollectionViewGroup group)
             {
-                if (DataContext is AddEditCMDViewModel vm)
-                {
-                    if (!vm.SelectedParentItems.Contains(parent))
-                    {
-                        vm.SelectedParentItems.Add(parent);
-                    }
-                }
+                var groupItems = group.Items.OfType<ParentItem>().ToList();
+                bool allSelected = groupItems.All(p => p.IsSelected);
+                bool noneSelected = groupItems.All(p => !p.IsSelected);
+                groupCheckBox.IsChecked = allSelected ? true : (noneSelected ? false : (bool?)null);
             }
         }
 
-        private void ParentCheckBox_Unchecked(object sender, RoutedEventArgs e)
+        private void GroupHeaderCheckBox_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is CheckBox cb && cb.DataContext is ParentItem parent)
+            if (sender is CheckBox groupCheckBox && groupCheckBox.DataContext is CollectionViewGroup group)
             {
-                if (DataContext is AddEditCMDViewModel vm)
+                var groupItems = group.Items.OfType<ParentItem>().ToList();
+                bool allSelected = groupItems.All(p => p.IsSelected);
+
+                // If all are selected, unselect all; otherwise, select all.
+                bool newState = !allSelected;
+                foreach (var parent in groupItems)
                 {
-                    if (vm.SelectedParentItems.Contains(parent))
-                    {
-                        vm.SelectedParentItems.Remove(parent);
-                    }
+                    parent.IsSelected = newState;
                 }
             }
+            ScheduleRefresh();
         }
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        #endregion
+
+        #region Helper Methods
+
+        private void ScheduleRefresh()
         {
-            // (Your existing logic, if any.)
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                var cvs = (CollectionViewSource)this.Resources["GroupedParentItems"];
+                cvs.View.Refresh();
+            }), DispatcherPriority.Background);
         }
+
+        #endregion
     }
 }
