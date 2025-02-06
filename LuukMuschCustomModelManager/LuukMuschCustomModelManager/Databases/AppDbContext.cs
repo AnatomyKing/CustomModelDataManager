@@ -93,29 +93,64 @@ namespace LuukMuschCustomModelManager.Databases
             {
                 try
                 {
+                    // Attempt to open connection and apply migrations.
                     var connection = context.Database.GetDbConnection();
                     connection.Open();
-                    context.Database.Migrate();
+                    context.Database.Migrate(); // Will fail if DB doesn't exist
                     connection.Close();
 
-                    // Seed initial data (assuming CMDSeeder is defined elsewhere)
+                    // After successful migration, seed data
                     CMDSeeder seeder = new CMDSeeder();
                     seeder.SeedData();
+
+                    // If everything worked, we can return
                     return;
+                }
+                catch (MySqlException ex) when (ex.Number == 1049)
+                {
+                    // #1049 = "Unknown database 'cmddb'"
+                    Debug.WriteLine("Database does not exist. Creating it now...");
+
+                    // Create the DB, then loop again so context.Database.Migrate() will succeed next time
+                    CreateDatabaseIfNotExists("cmddb");
                 }
                 catch (MySqlException ex) when (ex.Number == 1042 || ex.Number == 2006 || ex.Number == 2013)
                 {
+                    // MySQL connection lost, try again (sleep briefly)
                     Debug.WriteLine($"MySQL connection lost. Retrying ({i + 1}/{retryCount})...");
-                    System.Threading.Thread.Sleep(2000);
+                    Thread.Sleep(2000);
                 }
                 catch (Exception ex)
                 {
+                    // Non-recoverable error
                     Debug.WriteLine($"Database initialization failed: {ex.Message}");
                     throw;
                 }
             }
 
-            throw new Exception("Could not connect to the database after multiple attempts.");
+            // If we still fail after multiple tries, throw
+            throw new Exception("Could not connect or create the database after multiple attempts.");
+        }
+
+        /// <summary>
+        /// Creates the given database if it does not exist.
+        /// </summary>
+        private static void CreateDatabaseIfNotExists(string dbName)
+        {
+            // Rebuild a connection string that DOES NOT specify the 'cmddb' database,
+            // so that we can create the DB. You can read these settings from config.
+            string noDbConnStr = "server=localhost;user=root;pwd=;port=3306;" +
+                                 "Pooling=false;Connect Timeout=60;Default Command Timeout=60;";
+
+            using var con = new MySqlConnection(noDbConnStr);
+            con.Open();
+
+            // Create DB if missing
+            string sql = $"CREATE DATABASE IF NOT EXISTS `{dbName}`;";
+            using var cmd = new MySqlCommand(sql, con);
+            cmd.ExecuteNonQuery();
+
+            con.Close();
         }
     }
 }

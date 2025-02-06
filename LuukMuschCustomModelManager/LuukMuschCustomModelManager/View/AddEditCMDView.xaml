@@ -59,9 +59,12 @@
                          materialDesign:HintAssist.Hint="Custom Model Number" 
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" 
                          Margin="0,10" Width="150" />
+
+                <!-- The status checkbox is now bound to 'Status' but also uses 'CanChangeStatus' -->
                 <CheckBox IsChecked="{Binding Status}"
                           Content="Used"
-                          Margin="0,10" />
+                          Margin="0,10"
+                          IsEnabled="{Binding CanChangeStatus}" />
 
                 <!-- Parent Items GroupBox -->
                 <GroupBox Header="Select Parent Items" Margin="0,10">
@@ -94,7 +97,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <!-- Block Info (unchanged) -->
+                <!-- Block Info -->
                 <GroupBox Margin="0,20">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -123,7 +126,7 @@
                     </StackPanel>
                 </GroupBox>
 
-                <!-- Shader Armor Info (unchanged) -->
+                <!-- Shader Armor Info -->
                 <GroupBox Margin="0,20">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">

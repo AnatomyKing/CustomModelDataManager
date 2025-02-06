@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LuukMuschCustomModelManager")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+845966c319f4c2440a922148cf48f19c91a05bab")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+32574f716be09ccc63a7276337a634e2bf08f1d3")]
 [assembly: System.Reflection.AssemblyProductAttribute("LuukMuschCustomModelManager")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LuukMuschCustomModelManager")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

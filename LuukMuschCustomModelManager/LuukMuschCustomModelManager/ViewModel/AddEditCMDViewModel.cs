@@ -21,15 +21,20 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private readonly CustomModelData _originalCustomModelData;
         private readonly AppDbContext _context;
 
+        // New flag indicating this item was opened from the "Unused" view
+        private readonly bool _isFromUnused;
+
         public AddEditCMDViewModel(
             CustomModelData customModelData,
             ObservableCollection<ParentItem> parentItems,
             ObservableCollection<BlockType> blockTypes,
             ObservableCollection<ShaderArmorColorInfo> shaderArmorColorInfos,
-            AppDbContext context)
+            AppDbContext context,
+            bool isFromUnused = false)
         {
             _originalCustomModelData = customModelData;
             _context = context;
+            _isFromUnused = isFromUnused;
 
             ParentItems = parentItems;
             BlockTypes = blockTypes;
@@ -46,16 +51,23 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
             ClearBlockInfoCommand = new RelayCommand(ClearBlockInfo);
 
-            // Create an editable copy of the original data.
+            // Create an editable copy of the original data
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
-            // Initialize SelectedParentItems as an ObservableCollection.
+            // Initialize SelectedParentItems as an ObservableCollection
             _selectedParentItems = new ObservableCollection<ParentItem>();
+
             PreSelectProperties();
+
+            // If we're coming from "UnusedView", force the item to be "Used" and disallow unchecking
+            if (_isFromUnused)
+            {
+                EditedCustomModelData.Status = true;
+                OnPropertyChanged(nameof(Status));
+            }
         }
 
-        // This event handler now uses a nullable sender parameter to match PropertyChangedEventHandler.
         private void ParentItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (sender is ParentItem parent && e.PropertyName == nameof(ParentItem.IsSelected))
@@ -81,7 +93,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; }
         public ObservableCollection<CustomVariation> CustomVariations { get; }
 
-        // The SelectedParentItems collection is updated automatically via ParentItem_PropertyChanged.
         private ObservableCollection<ParentItem> _selectedParentItems;
         public ObservableCollection<ParentItem> SelectedParentItems
         {
@@ -199,6 +210,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        // This is used by the UI to disable the Status checkbox if it came from 'Unused'.
+        public bool CanChangeStatus => !_isFromUnused;
+
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand ClearArmorInfoCommand { get; }
@@ -210,12 +224,15 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void Cancel(object? obj)
         {
+            // Close dialog without saving
             DialogHost.CloseDialogCommand.Execute(false, null);
         }
 
         private void Save(object? obj)
         {
+            // Copy the edited data back to the original
             UpdateOriginalData();
+            // Close dialog (result = true)
             DialogHost.CloseDialogCommand.Execute(true, null);
         }
 
@@ -251,7 +268,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
-            // Preselect ParentItems (skip the default unused parent with ID==1 when used)
+            // Preselect ParentItems (skip default "unused" parent with ID=1 if item is actually used)
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
                 if (EditedCustomModelData.Status && parent.ParentItemID == 1)
@@ -259,17 +276,19 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
                 if (!SelectedParentItems.Contains(parent))
                 {
-                    // Setting IsSelected will update SelectedParentItems via the PropertyChanged event.
-                    parent.IsSelected = true;
+                    parent.IsSelected = true; // triggers the property-changed event
                 }
             }
 
+            // Preselect Armor info
             if (EditedCustomModelData.ShaderArmors.Any())
             {
                 SelectedShaderArmorColorInfo = ShaderArmorColorInfos
-                    .FirstOrDefault(s => EditedCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == s.ShaderArmorColorInfoID));
+                    .FirstOrDefault(s => EditedCustomModelData.ShaderArmors
+                        .Any(sa => sa.ShaderArmorColorInfoID == s.ShaderArmorColorInfoID));
             }
 
+            // Preselect the first variation (if any)
             var firstVariation = CustomVariations.FirstOrDefault();
             if (firstVariation != null)
             {
@@ -292,12 +311,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
+                // If the user somehow unchecks it (in normal scenario) or it was unused...
+                // you can do your "strip data" logic here. But with the new approach, you might not even get here.
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                // Remove default unused parent (ID==1) if present.
-                var defaultParents = _originalCustomModelData.ParentItems.Where(p => p.ParentItemID == 1).ToList();
+                // Remove default unused parent (ID==1) if present
+                var defaultParents = _originalCustomModelData.ParentItems
+                    .Where(p => p.ParentItemID == 1)
+                    .ToList();
                 foreach (var p in defaultParents)
                 {
                     _originalCustomModelData.ParentItems.Remove(p);
@@ -309,6 +332,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                         SelectedParentItems.RemoveAt(i);
                 }
 
+                // Rebuild the parent collection
                 _originalCustomModelData.ParentItems.Clear();
                 foreach (var item in SelectedParentItems)
                 {
@@ -326,11 +350,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             _originalCustomModelData.Name = newName;
             _originalCustomModelData.ModelPath = string.Empty;
             _originalCustomModelData.ParentItems.Clear();
+
             var defaultParent = _context.ParentItems.FirstOrDefault(p => p.ParentItemID == 1);
             if (defaultParent != null)
             {
                 _originalCustomModelData.ParentItems.Add(defaultParent);
             }
+
             _originalCustomModelData.BlockTypes.Clear();
             _originalCustomModelData.CustomVariations.Clear();
             _originalCustomModelData.ShaderArmors.Clear();
@@ -354,7 +380,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateRelations()
         {
-            if (SelectedBlockType != null && !_originalCustomModelData.BlockTypes.Any(b => b.BlockTypeID == SelectedBlockType.BlockTypeID))
+            // If there's a block type selected, ensure it is in the relationship
+            if (SelectedBlockType != null &&
+                !_originalCustomModelData.BlockTypes.Any(b => b.BlockTypeID == SelectedBlockType.BlockTypeID))
             {
                 _originalCustomModelData.BlockTypes.Add(new CustomModel_BlockType
                 {
@@ -363,7 +391,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 });
             }
 
-            if (SelectedShaderArmorColorInfo != null && !_originalCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == SelectedShaderArmorColorInfo.ShaderArmorColorInfoID))
+            // If there's a ShaderArmorColorInfo selected, ensure it is in the relationship
+            if (SelectedShaderArmorColorInfo != null &&
+                !_originalCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == SelectedShaderArmorColorInfo.ShaderArmorColorInfoID))
             {
                 _originalCustomModelData.ShaderArmors.Add(new CustomModel_ShaderArmor
                 {
@@ -377,7 +407,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             if (!string.IsNullOrWhiteSpace(NewBlockData) && SelectedBlockType != null)
             {
-                var existingVariation = _originalCustomModelData.CustomVariations.FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
+                var existingVariation = _originalCustomModelData.CustomVariations
+                    .FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
+
                 if (existingVariation != null)
                 {
                     existingVariation.BlockData = NewBlockData;

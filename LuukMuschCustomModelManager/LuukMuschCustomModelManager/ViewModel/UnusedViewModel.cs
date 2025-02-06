@@ -10,7 +10,6 @@ using LuukMuschCustomModelManager.Helpers;
 using LuukMuschCustomModelManager.Model;
 using MaterialDesignThemes.Wpf;
 
-
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class UnusedViewModel : ObservableObject
@@ -29,7 +28,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Properties
 
-        public ObservableCollection<CustomModelData> UnusedItems { get; private set; } = new ObservableCollection<CustomModelData>();
+        private ObservableCollection<CustomModelData> _unusedItems = new ObservableCollection<CustomModelData>();
+        public ObservableCollection<CustomModelData> UnusedItems
+        {
+            get => _unusedItems;
+            set
+            {
+                _unusedItems = value;
+                OnPropertyChanged();
+            }
+        }
 
         private CustomModelData? _selectedUnusedItem;
         public CustomModelData? SelectedUnusedItem
@@ -61,11 +69,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             UnusedItems = new ObservableCollection<CustomModelData>(
                 _context.CustomModelDataItems
-                    .Where(x => !x.Status)
+                    .Where(x => !x.Status) // Only load items where Status == false
                     .ToList()
             );
-
-            OnPropertyChanged(nameof(UnusedItems));
         }
 
         private bool CanEdit(object? parameter) => SelectedUnusedItem != null;
@@ -73,7 +79,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private async void OpenEditDialog(object? obj)
         {
             if (_selectedUnusedItem == null || _isDialogOpen) return;
-
             _isDialogOpen = true;
 
             try
@@ -82,12 +87,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 var blockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.ToList());
                 var shaderArmorColorInfos = new ObservableCollection<ShaderArmorColorInfo>(_context.ShaderArmorColorInfos.ToList());
 
-                var viewModel = new AddEditCMDViewModel(_selectedUnusedItem, parentItems, blockTypes, shaderArmorColorInfos, _context);
+                // Note the extra "true" to indicate we're coming from the 'Unused' view.
+                var viewModel = new AddEditCMDViewModel(
+                    _selectedUnusedItem,
+                    parentItems,
+                    blockTypes,
+                    shaderArmorColorInfos,
+                    _context,
+                    isFromUnused: true
+                );
+
                 var result = await DialogHost.Show(viewModel, "UnusedDialog");
 
                 if (result is true)
                 {
-                    HandleItemStatusChange();
+                    // If the item has become used, remove it from the UnusedItems collection
+                    if (_selectedUnusedItem.Status)
+                    {
+                        UnusedItems.Remove(_selectedUnusedItem);
+                    }
+
+                    // Save changes
                     _context.SaveChanges();
                 }
             }
@@ -95,15 +115,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 _isDialogOpen = false;
                 SelectedUnusedItem = null;
-            }
-        }
-
-        private void HandleItemStatusChange()
-        {
-            if (_selectedUnusedItem != null && _selectedUnusedItem.Status)
-            {
-                UnusedItems.Remove(_selectedUnusedItem);
-                OnPropertyChanged(nameof(UnusedItems));
             }
         }
 
@@ -116,7 +127,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 _context.CustomModelDataItems.Remove(item);
                 _context.SaveChanges();
                 UnusedItems.Remove(item);
-                OnPropertyChanged(nameof(UnusedItems));
             }
         }
 
