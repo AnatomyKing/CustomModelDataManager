@@ -2,14 +2,11 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Text.Json;
-using System.Threading.Tasks;
-using LuukMuschCustomModelManager.Databases;
-using LuukMuschCustomModelManager.Helpers;
+using System.Windows;
 using System.Windows.Input;
 using Microsoft.EntityFrameworkCore;
-using System.Windows;
+using LuukMuschCustomModelManager.Databases;
+using LuukMuschCustomModelManager.Helpers;
 using LuukMuschCustomModelManager.Model;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
@@ -62,7 +59,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 .Include(cmd => cmd.BlockTypes).ThenInclude(cmbt => cmbt.BlockType)
                 .ToList();
 
-            var groupedItems = GroupItemsByParentType(allItems);
+            // Group items first by parent type and then by parent item name.
+            var groupedItems = GroupItemsByParentAndType(allItems);
 
             Directory.CreateDirectory(ExportPath);
             string filePath = Path.Combine(ExportPath, "export.yml");
@@ -72,9 +70,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        private Dictionary<string, List<CustomModelData>> GroupItemsByParentType(IEnumerable<CustomModelData> items)
+        /// <summary>
+        /// Groups CustomModelData items into a two-level dictionary:
+        /// Outer key: parent item type.
+        /// Inner key: parent item name.
+        /// Value: list of CustomModelData items assigned to that parent.
+        /// If an item has no parents, it is grouped under "(No Parent)".
+        /// </summary>
+        private Dictionary<string, Dictionary<string, List<CustomModelData>>> GroupItemsByParentAndType(IEnumerable<CustomModelData> items)
         {
-            var groups = new Dictionary<string, List<CustomModelData>>();
+            var groups = new Dictionary<string, Dictionary<string, List<CustomModelData>>>();
 
             foreach (var item in items)
             {
@@ -82,42 +87,69 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     foreach (var parent in item.ParentItems)
                     {
-                        string key = parent.Type;
-                        if (!groups.ContainsKey(key))
-                            groups[key] = new List<CustomModelData>();
+                        // Use the parent's Type as the outer key and its Name as the inner key.
+                        string outerKey = parent.Type;
+                        string innerKey = parent.Name;
 
-                        groups[key].Add(item);
+                        if (!groups.ContainsKey(outerKey))
+                            groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
+
+                        if (!groups[outerKey].ContainsKey(innerKey))
+                            groups[outerKey][innerKey] = new List<CustomModelData>();
+
+                        groups[outerKey][innerKey].Add(item);
                     }
                 }
                 else
                 {
-                    if (!groups.ContainsKey("(No Parent)"))
-                        groups["(No Parent)"] = new List<CustomModelData>();
+                    // For items with no parent, group them under "(No Parent)".
+                    string outerKey = "(No Parent)";
+                    string innerKey = "(No Parent)";
 
-                    groups["(No Parent)"].Add(item);
+                    if (!groups.ContainsKey(outerKey))
+                        groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
+
+                    if (!groups[outerKey].ContainsKey(innerKey))
+                        groups[outerKey][innerKey] = new List<CustomModelData>();
+
+                    groups[outerKey][innerKey].Add(item);
                 }
             }
 
             return groups;
         }
 
-        private void WriteExportFile(Dictionary<string, List<CustomModelData>> groupedItems, string filePath)
+        /// <summary>
+        /// Writes the export file in a nested YAML-like format.
+        /// Example output:
+        ///   tools:
+        ///     Axe:
+        ///       - axe_belmont = CustomModelData: 3349 | NOTE_BLOCK 1 [hhhh] | #belmont = #000007 | 0,0,7 | 7
+        ///       - another_item = CustomModelData: 3350 | ... 
+        ///     Pickaxe:
+        ///       - pick_item = CustomModelData: 3348 | ...
+        /// </summary>
+        private void WriteExportFile(Dictionary<string, Dictionary<string, List<CustomModelData>>> groupedItems, string filePath)
         {
             using var writer = new StreamWriter(filePath);
 
-            foreach (var kvp in groupedItems)
+            foreach (var outerGroup in groupedItems)
             {
-                string parentType = kvp.Key;
-                var items = kvp.Value;
+                // Write parent item type.
+                writer.WriteLine($"{outerGroup.Key}:");
 
-                writer.WriteLine($"{parentType}:");
-
-                foreach (var item in items)
+                foreach (var innerGroup in outerGroup.Value)
                 {
-                    string exportLine = CreateOldFormatLine(item);
-                    writer.WriteLine($"  - {exportLine}");
-                }
+                    // Write parent item name indented.
+                    writer.WriteLine($"  {innerGroup.Key}:");
 
+                    foreach (var item in innerGroup.Value)
+                    {
+                        string exportLine = CreateOldFormatLine(item);
+                        writer.WriteLine($"    - {exportLine}");
+                    }
+                    writer.WriteLine();
+                }
                 writer.WriteLine();
             }
         }
