@@ -10,6 +10,7 @@ using System.Windows.Input;
 using MaterialDesignThemes.Wpf;
 using System.Windows;
 using LuukMuschCustomModelManager.Databases;
+using System.Collections;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
@@ -24,7 +25,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Constructor
 
-        // Note the additional 'context' parameter.
         public AddEditCMDViewModel(
             CustomModelData customModelData,
             ObservableCollection<ParentItem> parentItems,
@@ -33,7 +33,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             AppDbContext context)
         {
             _originalCustomModelData = customModelData;
-            _context = context;  // Use the passed context instead of creating a new one.
+            _context = context;
 
             ParentItems = parentItems;
             BlockTypes = blockTypes;
@@ -41,16 +41,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             CancelCommand = new RelayCommand(Cancel);
             SaveCommand = new RelayCommand(Save);
-
             ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
             ClearBlockInfoCommand = new RelayCommand(ClearBlockInfo);
 
             EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
 
-            // Initialize SelectedParentItems to avoid CS8618 warning.
-            _selectedParentItems = new ObservableCollection<ParentItem>();
-
+            _selectedParentItems = new ArrayList();
             PreSelectProperties();
         }
 
@@ -64,9 +61,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; }
         public ObservableCollection<CustomVariation> CustomVariations { get; }
 
-        // NEW: A collection for multiple parent items.
-        private ObservableCollection<ParentItem> _selectedParentItems = new ObservableCollection<ParentItem>();
-        public ObservableCollection<ParentItem> SelectedParentItems
+        private IList _selectedParentItems;
+        public IList SelectedParentItems
         {
             get => _selectedParentItems;
             set
@@ -234,10 +230,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
-            // Pre-select all parent items already assigned to this CMD item.
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
-                SelectedParentItems.Add(parent);
+                if (!_selectedParentItems.Contains(parent))
+                {
+                    _selectedParentItems.Add(parent);
+                }
             }
 
             if (EditedCustomModelData.ShaderArmors.Any())
@@ -285,7 +283,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             _originalCustomModelData.Name = newName;
             _originalCustomModelData.ModelPath = string.Empty;
             _originalCustomModelData.ParentItems.Clear();
-            // Assign default parent (assumes a ParentItem with ID=1 exists)
             var defaultParent = _context.ParentItems.FirstOrDefault(p => p.ParentItemID == 1);
             if (defaultParent != null)
             {
@@ -315,9 +312,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private void UpdateParentItems()
         {
             _originalCustomModelData.ParentItems.Clear();
-            foreach (var parent in SelectedParentItems)
+            foreach (var item in SelectedParentItems)
             {
-                _originalCustomModelData.ParentItems.Add(parent);
+                if (item is ParentItem parent)
+                {
+                    _originalCustomModelData.ParentItems.Add(parent);
+                }
             }
         }
 

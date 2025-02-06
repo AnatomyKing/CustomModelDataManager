@@ -24,7 +24,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         #region Properties
 
-        private string _exportPath = string.Empty;  // Fix for CS8618
+        private string _exportPath = string.Empty;
         public string ExportPath
         {
             get => _exportPath;
@@ -72,7 +72,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        // Group items by parent's type instead of parent's name.
         private Dictionary<string, List<CustomModelData>> GroupItemsByParentType(IEnumerable<CustomModelData> items)
         {
             var groups = new Dictionary<string, List<CustomModelData>>();
@@ -83,7 +82,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     foreach (var parent in item.ParentItems)
                     {
-                        string key = parent.Type; // Group by parent's type
+                        string key = parent.Type;
                         if (!groups.ContainsKey(key))
                             groups[key] = new List<CustomModelData>();
 
@@ -119,7 +118,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     writer.WriteLine($"  - {exportLine}");
                 }
 
-                writer.WriteLine(); // Blank line between groups
+                writer.WriteLine();
             }
         }
 
@@ -127,7 +126,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             string line = $"{item.Name} = CustomModelData: {item.CustomModelNumber}";
 
-            // Handle Variations
             var variations = item.CustomVariations
                 .OrderBy(cv => cv.BlockType?.Name)
                 .ThenBy(cv => cv.Variation)
@@ -139,7 +137,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 line += $" | {firstVar.BlockType?.Name ?? "Unknown"} {firstVar.Variation} [{firstVar.BlockData}]";
             }
 
-            // Handle Shader Infos
             var shaderInfos = item.ShaderArmors
                 .Select(sa => sa.ShaderArmorColorInfo)
                 .Where(info => info != null)
