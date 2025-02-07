@@ -13,9 +13,9 @@
 
     <Window.Resources>
         <DataTemplate
-        DataType="{x:Type viewmodels:MainViewContentViewModel}"
+        DataType="{x:Type viewmodels:DashboardViewModel}"
         >
-            <local:MainViewContentView/>
+            <local:DashboardView/>
         </DataTemplate>
 
         <DataTemplate
@@ -54,6 +54,12 @@
             <local:ExportView/>
         </DataTemplate>
 
+        <DataTemplate 
+        DataType="{x:Type viewmodels:ImportViewModel}"
+        >
+            <local:ImportView/>
+        </DataTemplate>
+
 
     </Window.Resources>
 
@@ -65,11 +71,12 @@
     <DockPanel>
         <!-- Navigation Menu -->
         <StackPanel DockPanel.Dock="Left" Background="#2C3E50" Width="200">
-            <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="MainViewContentViewModel" Margin="10"/>
+            <Button Content="Dashboard" Command="{Binding NavigateCommand}" CommandParameter="DashboardViewModel" Margin="10"/>
             <Button Content="Parent Items" Command="{Binding NavigateCommand}" CommandParameter="ParentItemViewModel" Margin="10"/>
             <Button Content="Block Types" Command="{Binding NavigateCommand}" CommandParameter="BlockTypeViewModel" Margin="10"/>
             <Button Content="Armor Info" Command="{Binding NavigateCommand}" CommandParameter="ArmorInfoViewModel" Margin="10"/>
             <Button Content="Unused Items" Command="{Binding NavigateCommand}" CommandParameter="UnusedViewModel" Margin="10"/>
+            <Button Content="Import" Command="{Binding NavigateCommand}" CommandParameter="ImportViewModel" Margin="10"/>
             <Button Content="Export" Command="{Binding NavigateCommand}" CommandParameter="ExportViewModel" Margin="10"/>
         </StackPanel>
 

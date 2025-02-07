@@ -7,20 +7,17 @@
              xmlns:local="clr-namespace:LuukMuschCustomModelManager.Helpers"
              mc:Ignorable="d">
     <UserControl.Resources>
-        <!-- CollectionViewSource to group ParentItems by their Type -->
+        <BooleanToVisibilityConverter x:Key="BoolToVisConverter"/>
         <CollectionViewSource x:Key="GroupedParentItems" Source="{Binding ParentItems}">
             <CollectionViewSource.GroupDescriptions>
                 <PropertyGroupDescription PropertyName="Type"/>
             </CollectionViewSource.GroupDescriptions>
         </CollectionViewSource>
-
-        <!-- Style for Group Headers with a checkbox -->
         <Style x:Key="GroupHeaderStyle" TargetType="GroupItem">
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GroupItem">
                         <StackPanel>
-                            <!-- The header row with a CheckBox that uses event handlers -->
                             <StackPanel Orientation="Horizontal" Background="#FFE0E0E0">
                                 <CheckBox x:Name="GroupHeaderCheckBox" 
                                           Content="{Binding Name}" 
@@ -30,7 +27,6 @@
                                           Click="GroupHeaderCheckBox_Click"
                                           IsThreeState="True" />
                             </StackPanel>
-                            <!-- The child items -->
                             <ItemsPresenter Margin="10,0,0,0"/>
                         </StackPanel>
                     </ControlTemplate>
@@ -38,7 +34,6 @@
             </Setter>
         </Style>
     </UserControl.Resources>
-
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -46,7 +41,6 @@
         </Grid.RowDefinitions>
         <ScrollViewer VerticalScrollBarVisibility="Auto">
             <StackPanel>
-                <!-- Basic fields -->
                 <TextBox Text="{Binding Name}" 
                          materialDesign:HintAssist.Hint="Model Name" 
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" 
@@ -58,18 +52,23 @@
                 <TextBox Text="{Binding CustomModelNumber}" 
                          materialDesign:HintAssist.Hint="Custom Model Number" 
                          Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-                         Margin="0,10" Width="150" />
-
-                <!-- The status checkbox is now bound to 'Status' but also uses 'CanChangeStatus' -->
+                         Margin="0,10" Width="150"
+                         IsEnabled="{Binding IsCustomModelNumberEditable}" />
+                <!-- Toggle always visible; its label is bound to ToggleLabelText, and its enabled state bound to IsToggleEnabled -->
+                <StackPanel Orientation="Horizontal" Margin="0,10">
+                    <TextBlock Text="{Binding ToggleLabelText}" 
+                               VerticalAlignment="Center" Margin="0,0,5,0"/>
+                    <ToggleButton IsChecked="{Binding UseUnused, Mode=TwoWay}" 
+                                  Style="{StaticResource MaterialDesignSwitchToggleButton}"
+                                  IsEnabled="{Binding IsToggleEnabled}" />
+                </StackPanel>
+                <!-- Used checkbox enabled/disabled per IsStatusEditable -->
                 <CheckBox IsChecked="{Binding Status}"
                           Content="Used"
                           Margin="0,10"
-                          IsEnabled="{Binding CanChangeStatus}" />
-
-                <!-- Parent Items GroupBox -->
+                          IsEnabled="{Binding IsStatusEditable}" />
                 <GroupBox Header="Select Parent Items" Margin="0,10">
                     <StackPanel>
-                        <!-- Search box (filters the parent items list) -->
                         <TextBox x:Name="ParentSearchBox" 
                                  Margin="5" 
                                  Width="250" 
@@ -86,7 +85,6 @@
                                     </ItemsControl.GroupStyle>
                                     <ItemsControl.ItemTemplate>
                                         <DataTemplate>
-                                            <!-- Bind the CheckBox IsChecked to IsSelected (TwoWay) -->
                                             <CheckBox Content="{Binding Name}" Margin="5"
                                                       IsChecked="{Binding IsSelected, Mode=TwoWay}"/>
                                         </DataTemplate>
@@ -96,8 +94,6 @@
                         </Border>
                     </StackPanel>
                 </GroupBox>
-
-                <!-- Block Info -->
                 <GroupBox Margin="0,20">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -125,8 +121,6 @@
                         </StackPanel>
                     </StackPanel>
                 </GroupBox>
-
-                <!-- Shader Armor Info -->
                 <GroupBox Margin="0,20">
                     <GroupBox.Header>
                         <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
@@ -148,8 +142,6 @@
                 </GroupBox>
             </StackPanel>
         </ScrollViewer>
-
-        <!-- Save/Cancel Buttons -->
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Right" Margin="0,10">
             <Button Content="Cancel" Width="75" Margin="5" Command="{Binding CancelCommand}" />
             <Button Content="Save" Width="75" Margin="5" Command="{Binding SaveCommand}" />

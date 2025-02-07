@@ -35,6 +35,13 @@ namespace LuukMuschCustomModelManager.View
         {
             if (e.Item is ParentItem parent)
             {
+                // Filter out the behind–the–scenes "Unused" parent (ParentItemID==1)
+                if (parent.ParentItemID == 1)
+                {
+                    e.Accepted = false;
+                    return;
+                }
+
                 string search = ParentSearchBox.Text.Trim().ToLower();
                 if (string.IsNullOrEmpty(search))
                 {
@@ -62,6 +69,7 @@ namespace LuukMuschCustomModelManager.View
             var cvs = (CollectionViewSource)this.Resources["GroupedParentItems"];
             cvs.View.Refresh();
         }
+
 
         #endregion
 

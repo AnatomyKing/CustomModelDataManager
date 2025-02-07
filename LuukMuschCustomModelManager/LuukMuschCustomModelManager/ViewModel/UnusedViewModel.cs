@@ -26,8 +26,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             DeleteUnusedCommand = new RelayCommand(DeleteUnusedItem, CanDelete);
         }
 
-        #region Properties
-
         private ObservableCollection<CustomModelData> _unusedItems = new ObservableCollection<CustomModelData>();
         public ObservableCollection<CustomModelData> UnusedItems
         {
@@ -61,24 +59,21 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ICommand EditCommand { get; }
         public ICommand DeleteUnusedCommand { get; }
 
-        #endregion
-
-        #region Methods
-
-        private void LoadData()
+        void LoadData()
         {
             UnusedItems = new ObservableCollection<CustomModelData>(
                 _context.CustomModelDataItems
-                    .Where(x => !x.Status) // Only load items where Status == false
+                    .Where(x => !x.Status)
                     .ToList()
             );
         }
 
-        private bool CanEdit(object? parameter) => SelectedUnusedItem != null;
+        bool CanEdit(object? parameter) => SelectedUnusedItem != null;
 
-        private async void OpenEditDialog(object? obj)
+        async void OpenEditDialog(object? obj)
         {
-            if (_selectedUnusedItem == null || _isDialogOpen) return;
+            if (_selectedUnusedItem == null || _isDialogOpen)
+                return;
             _isDialogOpen = true;
 
             try
@@ -87,27 +82,26 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 var blockTypes = new ObservableCollection<BlockType>(_context.BlockTypes.ToList());
                 var shaderArmorColorInfos = new ObservableCollection<ShaderArmorColorInfo>(_context.ShaderArmorColorInfos.ToList());
 
-                // Note the extra "true" to indicate we're coming from the 'Unused' view.
+                // In UnusedView the dialog is used to edit an unused item (edit mode).
                 var viewModel = new AddEditCMDViewModel(
                     _selectedUnusedItem,
                     parentItems,
                     blockTypes,
                     shaderArmorColorInfos,
                     _context,
-                    isFromUnused: true
+                    _selectedUnusedItem.CustomModelNumber,
+                    isFromUnused: true,
+                    isEdit: true
                 );
 
                 var result = await DialogHost.Show(viewModel, "UnusedDialog");
 
                 if (result is true)
                 {
-                    // If the item has become used, remove it from the UnusedItems collection
                     if (_selectedUnusedItem.Status)
                     {
                         UnusedItems.Remove(_selectedUnusedItem);
                     }
-
-                    // Save changes
                     _context.SaveChanges();
                 }
             }
@@ -118,9 +112,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        private bool CanDelete(object? parameter) => parameter is CustomModelData;
+        bool CanDelete(object? parameter) => parameter is CustomModelData;
 
-        private void DeleteUnusedItem(object? parameter)
+        void DeleteUnusedItem(object? parameter)
         {
             if (parameter is CustomModelData item)
             {
@@ -129,7 +123,5 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 UnusedItems.Remove(item);
             }
         }
-
-        #endregion
     }
 }

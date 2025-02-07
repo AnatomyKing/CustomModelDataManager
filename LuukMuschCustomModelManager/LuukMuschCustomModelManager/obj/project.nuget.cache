@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "8eDLMOhpb8R9VaRFOCRvkXk2deLct+CARClRoIAEsArkRV2Nx+181Tr+9n2Mjm7vbECKEb1CN03U8Ig/MOso1Q==",
+  "dgSpecHash": "P0UsjzcRX1xHyfh4Z9FZ/boj8GdrwLdCkDLlSYTg5yhz/ocay3bjpMecedpugTFNtQuAt9G1V0kgn4R6nA04NA==",
   "success": true,
   "projectFilePath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj",
   "expectedPackageFiles": [
@@ -40,6 +40,7 @@
     "C:\\Users\\mrluu\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\mysql.data\\9.1.0\\mysql.data.9.1.0.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\mysql.entityframeworkcore\\8.0.8\\mysql.entityframeworkcore.8.0.8.nupkg.sha512",
+    "C:\\Users\\mrluu\\.nuget\\packages\\newtonsoft.json\\13.0.3\\newtonsoft.json.13.0.3.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\system.buffers\\4.5.1\\system.buffers.4.5.1.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\system.codedom\\4.4.0\\system.codedom.4.4.0.nupkg.sha512",
     "C:\\Users\\mrluu\\.nuget\\packages\\system.collections.immutable\\6.0.0\\system.collections.immutable.6.0.0.nupkg.sha512",

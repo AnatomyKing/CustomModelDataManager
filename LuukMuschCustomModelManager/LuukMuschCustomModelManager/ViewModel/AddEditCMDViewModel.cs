@@ -11,36 +11,120 @@ using MaterialDesignThemes.Wpf;
 using System.Windows;
 using LuukMuschCustomModelManager.Databases;
 using System.Collections;
-
 using System.ComponentModel;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
     {
-        private readonly CustomModelData _originalCustomModelData;
+        // Removed _createNewItem field as it's no longer needed.
+        private CustomModelData _originalCustomModelData;
         private readonly AppDbContext _context;
+        private readonly int _newModelNumber;
+        private CustomModelData? _unusedData;
+        private bool _useUnused;
+        private readonly bool _initialIsFromUnused;
 
-        // New flag indicating this item was opened from the "Unused" view
-        private readonly bool _isFromUnused;
+        /// <summary>
+        /// If true then this dialog ended up creating a new item (even if originally an unused item existed).
+        /// </summary>
+        public bool IsNewItem { get; private set; }
 
-        public AddEditCMDViewModel(
-            CustomModelData customModelData,
+        /// <summary>
+        /// This property exposes the final item that was edited or created.
+        /// Use this in DashboardViewModel to decide whether to add a new record.
+        /// </summary>
+        public CustomModelData FinalCustomModelData => _originalCustomModelData;
+
+        public bool IsAddMode { get; }
+
+        // Toggle label text: "Enable Unused:" in add mode; "Enable Edit:" in edit mode.
+        public string ToggleLabelText => IsAddMode ? "Enable Unused:" : "Enable Edit:";
+
+        // In add mode the toggle is always enabled.
+        // In edit mode the toggle is enabled only if the original item was not unused.
+        public bool IsToggleEnabled => IsAddMode ? true : !_initialIsFromUnused;
+
+        // In both modes the fields (Used checkbox and Custom Model Number) are enabled only when the toggle is off.
+        public bool IsStatusEditable => !UseUnused;
+        public bool IsCustomModelNumberEditable => !UseUnused;
+
+        public bool UseUnused
+        {
+            get => _useUnused;
+            set
+            {
+                if (_useUnused != value)
+                {
+                    _useUnused = value;
+                    OnPropertyChanged();
+                    OnPropertyChanged(nameof(IsStatusEditable));
+                    OnPropertyChanged(nameof(IsCustomModelNumberEditable));
+                    if (IsAddMode)
+                        ToggleUnusedItem();
+                    // In edit mode we do not change the underlying entity—only the UI.
+                }
+            }
+        }
+
+        public AddEditCMDViewModel(CustomModelData customModelData,
             ObservableCollection<ParentItem> parentItems,
             ObservableCollection<BlockType> blockTypes,
             ObservableCollection<ShaderArmorColorInfo> shaderArmorColorInfos,
             AppDbContext context,
-            bool isFromUnused = false)
+            int newModelNumber,
+            bool isFromUnused,
+            bool isEdit)
         {
-            _originalCustomModelData = customModelData;
+            IsAddMode = !isEdit;
             _context = context;
-            _isFromUnused = isFromUnused;
+            _newModelNumber = newModelNumber;
+            _initialIsFromUnused = isFromUnused;
+
+            if (IsAddMode)
+            {
+                if (isFromUnused)
+                {
+                    // We were given an unused item from the DB.
+                    _unusedData = customModelData;
+                    _originalCustomModelData = customModelData;
+                    _useUnused = true;
+                    IsNewItem = false;
+                    // Create an editable copy (including its join collections)
+                    EditedCustomModelData = CreateEditableCopy(_unusedData, copyCollections: true);
+                }
+                else
+                {
+                    // No unused item is used – create a brand new item.
+                    _useUnused = false;
+                    IsNewItem = true;
+                    _originalCustomModelData = new CustomModelData
+                    {
+                        CustomModelNumber = newModelNumber,
+                        Status = true,
+                        Name = string.Empty,
+                        ModelPath = string.Empty,
+                        ParentItems = new List<ParentItem>(),
+                        CustomVariations = new List<CustomVariation>(),
+                        ShaderArmors = new List<CustomModel_ShaderArmor>(),
+                        BlockTypes = new List<CustomModel_BlockType>()
+                    };
+                    EditedCustomModelData = CreateEditableCopy(_originalCustomModelData, copyCollections: false);
+                }
+            }
+            else
+            {
+                // In edit mode, always use the given item.
+                _originalCustomModelData = customModelData;
+                _useUnused = true;
+                IsNewItem = false;
+                EditedCustomModelData = CreateEditableCopy(customModelData, copyCollections: true);
+            }
 
             ParentItems = parentItems;
             BlockTypes = blockTypes;
             ShaderArmorColorInfos = shaderArmorColorInfos;
 
-            // Subscribe to property changed events for each ParentItem
             foreach (var parent in ParentItems)
             {
                 parent.PropertyChanged += ParentItem_PropertyChanged;
@@ -51,43 +135,79 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             ClearArmorInfoCommand = new RelayCommand(ClearArmorInfo);
             ClearBlockInfoCommand = new RelayCommand(ClearBlockInfo);
 
-            // Create an editable copy of the original data
-            EditedCustomModelData = CreateEditableCopy(customModelData);
             CustomVariations = new ObservableCollection<CustomVariation>(EditedCustomModelData.CustomVariations);
-
-            // Initialize SelectedParentItems as an ObservableCollection
             _selectedParentItems = new ObservableCollection<ParentItem>();
 
             PreSelectProperties();
 
-            // If we're coming from "UnusedView", force the item to be "Used" and disallow unchecking
-            if (_isFromUnused)
+            // In edit mode, if the original item was unused then the fields remain read-only.
+            if (!IsAddMode && !_originalCustomModelData.Status)
             {
                 EditedCustomModelData.Status = true;
                 OnPropertyChanged(nameof(Status));
             }
         }
 
-        private void ParentItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        /// <summary>
+        /// Called when the user toggles the “use unused” switch.
+        /// If turning it on, we re–use the unused item (if any); if off, we create a new item.
+        /// </summary>
+        private void ToggleUnusedItem()
         {
-            if (sender is ParentItem parent && e.PropertyName == nameof(ParentItem.IsSelected))
+            if (UseUnused)
             {
-                if (parent.IsSelected)
+                if (_unusedData != null)
                 {
-                    if (!SelectedParentItems.Contains(parent))
-                        SelectedParentItems.Add(parent);
+                    // Switch back to using the unused item from DB.
+                    _originalCustomModelData = _unusedData;
+                    IsNewItem = false;
+                    EditedCustomModelData = CreateEditableCopy(_unusedData, copyCollections: true);
                 }
                 else
                 {
-                    if (SelectedParentItems.Contains(parent))
-                        SelectedParentItems.Remove(parent);
+                    // No unused item exists – create a new entity (treated as new).
+                    _originalCustomModelData = new CustomModelData
+                    {
+                        CustomModelNumber = _newModelNumber,
+                        Status = true,
+                        Name = string.Empty,
+                        ModelPath = string.Empty,
+                        ParentItems = new List<ParentItem>(),
+                        CustomVariations = new List<CustomVariation>(),
+                        ShaderArmors = new List<CustomModel_ShaderArmor>(),
+                        BlockTypes = new List<CustomModel_BlockType>()
+                    };
+                    IsNewItem = true;
+                    EditedCustomModelData = CreateEditableCopy(_originalCustomModelData, copyCollections: false);
                 }
             }
+            else
+            {
+                // User does not want to reuse an existing unused item.
+                // Create a completely new entity.
+                _originalCustomModelData = new CustomModelData
+                {
+                    CustomModelNumber = _newModelNumber,
+                    Status = true,
+                    Name = string.Empty,
+                    ModelPath = string.Empty,
+                    ParentItems = new List<ParentItem>(),
+                    CustomVariations = new List<CustomVariation>(),
+                    ShaderArmors = new List<CustomModel_ShaderArmor>(),
+                    BlockTypes = new List<CustomModel_BlockType>()
+                };
+                IsNewItem = true;
+                EditedCustomModelData = CreateEditableCopy(_originalCustomModelData, copyCollections: false);
+            }
+            PreSelectProperties();
+            OnPropertyChanged(nameof(EditedCustomModelData));
+            OnPropertyChanged(nameof(Name));
+            OnPropertyChanged(nameof(ModelPath));
+            OnPropertyChanged(nameof(CustomModelNumber));
+            OnPropertyChanged(nameof(Status));
         }
 
-        #region Properties
-
-        public CustomModelData EditedCustomModelData { get; }
+        public CustomModelData EditedCustomModelData { get; set; }
         public ObservableCollection<ParentItem> ParentItems { get; }
         public ObservableCollection<BlockType> BlockTypes { get; }
         public ObservableCollection<ShaderArmorColorInfo> ShaderArmorColorInfos { get; }
@@ -210,29 +330,36 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        // This is used by the UI to disable the Status checkbox if it came from 'Unused'.
-        public bool CanChangeStatus => !_isFromUnused;
-
         public ICommand CancelCommand { get; }
         public ICommand SaveCommand { get; }
         public ICommand ClearArmorInfoCommand { get; }
         public ICommand ClearBlockInfoCommand { get; }
 
-        #endregion
-
-        #region Command Methods
+        private void ParentItem_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+        {
+            if (sender is ParentItem parent && e.PropertyName == nameof(ParentItem.IsSelected))
+            {
+                if (parent.IsSelected)
+                {
+                    if (!SelectedParentItems.Contains(parent))
+                        SelectedParentItems.Add(parent);
+                }
+                else
+                {
+                    if (SelectedParentItems.Contains(parent))
+                        SelectedParentItems.Remove(parent);
+                }
+            }
+        }
 
         private void Cancel(object? obj)
         {
-            // Close dialog without saving
             DialogHost.CloseDialogCommand.Execute(false, null);
         }
 
         private void Save(object? obj)
         {
-            // Copy the edited data back to the original
             UpdateOriginalData();
-            // Close dialog (result = true)
             DialogHost.CloseDialogCommand.Execute(true, null);
         }
 
@@ -247,11 +374,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             SelectedShaderArmorColorInfo = null;
         }
 
-        #endregion
-
-        #region Private Methods
-
-        private CustomModelData CreateEditableCopy(CustomModelData original)
+        // If copyCollections is false, join collections will be created empty.
+        private CustomModelData CreateEditableCopy(CustomModelData original, bool copyCollections)
         {
             return new CustomModelData
             {
@@ -259,28 +383,32 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 ModelPath = original.ModelPath,
                 CustomModelNumber = original.CustomModelNumber,
                 Status = original.Status,
-                ParentItems = new List<ParentItem>(original.ParentItems),
-                CustomVariations = new List<CustomVariation>(original.CustomVariations),
-                ShaderArmors = new List<CustomModel_ShaderArmor>(original.ShaderArmors),
-                BlockTypes = new List<CustomModel_BlockType>(original.BlockTypes)
+                ParentItems = copyCollections ? new List<ParentItem>(original.ParentItems) : new List<ParentItem>(),
+                CustomVariations = copyCollections ? new List<CustomVariation>(original.CustomVariations) : new List<CustomVariation>(),
+                ShaderArmors = copyCollections ? new List<CustomModel_ShaderArmor>(original.ShaderArmors) : new List<CustomModel_ShaderArmor>(),
+                BlockTypes = copyCollections ? new List<CustomModel_BlockType>(original.BlockTypes) : new List<CustomModel_BlockType>()
             };
         }
 
         private void PreSelectProperties()
         {
-            // Preselect ParentItems (skip default "unused" parent with ID=1 if item is actually used)
-            foreach (var parent in EditedCustomModelData.ParentItems)
+            // Clear current selection for a fresh start.
+            SelectedParentItems.Clear();
+            foreach (var parent in ParentItems)
             {
-                if (EditedCustomModelData.Status && parent.ParentItemID == 1)
-                    continue;
-
-                if (!SelectedParentItems.Contains(parent))
-                {
-                    parent.IsSelected = true; // triggers the property-changed event
-                }
+                parent.IsSelected = false;
             }
 
-            // Preselect Armor info
+            // Now preselect the ParentItems that belong to the current item.
+            foreach (var parent in EditedCustomModelData.ParentItems)
+            {
+                // Skip the behind–the–scenes "Unused" parent (ID==1)
+                if (EditedCustomModelData.Status && parent.ParentItemID == 1)
+                    continue;
+                parent.IsSelected = true;
+                SelectedParentItems.Add(parent);
+            }
+
             if (EditedCustomModelData.ShaderArmors.Any())
             {
                 SelectedShaderArmorColorInfo = ShaderArmorColorInfos
@@ -288,7 +416,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                         .Any(sa => sa.ShaderArmorColorInfoID == s.ShaderArmorColorInfoID));
             }
 
-            // Preselect the first variation (if any)
             var firstVariation = CustomVariations.FirstOrDefault();
             if (firstVariation != null)
             {
@@ -304,6 +431,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateOriginalData()
         {
+            // Copy changes from the edited copy back to the original object.
             _originalCustomModelData.Name = EditedCustomModelData.Name;
             _originalCustomModelData.ModelPath = EditedCustomModelData.ModelPath;
             _originalCustomModelData.CustomModelNumber = EditedCustomModelData.CustomModelNumber;
@@ -311,16 +439,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
-                // If the user somehow unchecks it (in normal scenario) or it was unused...
-                // you can do your "strip data" logic here. But with the new approach, you might not even get here.
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                // Remove default unused parent (ID==1) if present
-                var defaultParents = _originalCustomModelData.ParentItems
-                    .Where(p => p.ParentItemID == 1)
-                    .ToList();
+                // Remove any default parent (ID==1) from the original before updating.
+                var defaultParents = _originalCustomModelData.ParentItems.Where(p => p.ParentItemID == 1).ToList();
                 foreach (var p in defaultParents)
                 {
                     _originalCustomModelData.ParentItems.Remove(p);
@@ -332,7 +456,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                         SelectedParentItems.RemoveAt(i);
                 }
 
-                // Rebuild the parent collection
                 _originalCustomModelData.ParentItems.Clear();
                 foreach (var item in SelectedParentItems)
                 {
@@ -349,8 +472,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             string newName = GenerateUnusedName();
             _originalCustomModelData.Name = newName;
             _originalCustomModelData.ModelPath = string.Empty;
-            _originalCustomModelData.ParentItems.Clear();
 
+            // Ensure the ParentItems collection is loaded so that removals are tracked.
+            _context.Entry(_originalCustomModelData).Collection(c => c.ParentItems).Load();
+            _originalCustomModelData.ParentItems.Clear();
             var defaultParent = _context.ParentItems.FirstOrDefault(p => p.ParentItemID == 1);
             if (defaultParent != null)
             {
@@ -380,7 +505,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateRelations()
         {
-            // If there's a block type selected, ensure it is in the relationship
             if (SelectedBlockType != null &&
                 !_originalCustomModelData.BlockTypes.Any(b => b.BlockTypeID == SelectedBlockType.BlockTypeID))
             {
@@ -391,7 +515,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 });
             }
 
-            // If there's a ShaderArmorColorInfo selected, ensure it is in the relationship
             if (SelectedShaderArmorColorInfo != null &&
                 !_originalCustomModelData.ShaderArmors.Any(sa => sa.ShaderArmorColorInfoID == SelectedShaderArmorColorInfo.ShaderArmorColorInfoID))
             {
@@ -407,9 +530,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             if (!string.IsNullOrWhiteSpace(NewBlockData) && SelectedBlockType != null)
             {
-                var existingVariation = _originalCustomModelData.CustomVariations
-                    .FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
-
+                var existingVariation = _originalCustomModelData.CustomVariations.FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
                 if (existingVariation != null)
                 {
                     existingVariation.BlockData = NewBlockData;
@@ -431,14 +552,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private void UpdateNewVariationNumber()
         {
             NewVariationNumber = SelectedBlockType != null
-                ? ((_context.CustomVariations
-                    .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
-                    .Max(cv => (int?)cv.Variation) ?? 0) + 1)
+                ? ((_context.CustomVariations.Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID).Max(cv => (int?)cv.Variation) ?? 0) + 1)
                 : 1;
         }
-
-        #endregion
     }
 }
-
-

@@ -10,17 +10,19 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.Windows.Navigation;
 using System.Windows.Shapes;
 
 namespace LuukMuschCustomModelManager.View
 {
-    public partial class DashboardView : UserControl
+    /// <summary>
+    /// Interaction logic for ImportView.xaml
+    /// </summary>
+    public partial class ImportView : UserControl
     {
-        public DashboardView()
+        public ImportView()
         {
             InitializeComponent();
-
         }
     }
 }
-

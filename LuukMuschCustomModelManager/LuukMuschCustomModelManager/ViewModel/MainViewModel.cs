@@ -16,7 +16,7 @@ namespace LuukMuschCustomModelManager.ViewModels
 
         public MainViewModel()
         {
-            CurrentView = new MainViewContentViewModel();
+            CurrentView = new DashboardViewModel();
             NavigateCommand = new RelayCommand(Navigate);
         }
 
@@ -42,8 +42,9 @@ namespace LuukMuschCustomModelManager.ViewModels
                 "UnusedViewModel" => new UnusedViewModel(),
                 "BlockTypeViewModel" => new BlockTypeViewModel(),
                 "ArmorInfoViewModel" => new ArmorInfoViewModel(),
+                "ImportViewModel" => new ImportViewModel(),
                 "ExportViewModel" => new ExportViewModel(),
-                _ => new MainViewContentViewModel()
+                _ => new DashboardViewModel()
             };
         }
     }
