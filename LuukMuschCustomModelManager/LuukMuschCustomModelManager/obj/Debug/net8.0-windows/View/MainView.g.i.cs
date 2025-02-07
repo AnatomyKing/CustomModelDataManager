@@ -58,7 +58,7 @@ namespace LuukMuschCustomModelManager.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/LuukMuschCustomModelManager;V1.0.0.0;component/view/mainview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/LuukMuschCustomModelManager;component/view/mainview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\MainView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

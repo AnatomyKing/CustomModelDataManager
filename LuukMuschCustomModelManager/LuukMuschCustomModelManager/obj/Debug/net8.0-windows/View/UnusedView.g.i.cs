@@ -56,7 +56,7 @@ namespace LuukMuschCustomModelManager.View {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/LuukMuschCustomModelManager;V1.0.0.0;component/view/unusedview.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/LuukMuschCustomModelManager;component/view/unusedview.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\..\View\UnusedView.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

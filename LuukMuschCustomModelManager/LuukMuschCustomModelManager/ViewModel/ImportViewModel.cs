@@ -8,6 +8,7 @@ using LuukMuschCustomModelManager.Databases;
 using LuukMuschCustomModelManager.Helpers;
 using LuukMuschCustomModelManager.Model;
 using System.Windows.Input;
+using Newtonsoft.Json;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
@@ -63,33 +64,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                             if (importData == null)
                                 continue;
 
-                            // Must have an "overrides" array.
+                            // If there are no overrides, skip this file.
                             if (importData.overrides == null || importData.overrides.Count == 0)
                                 continue;
-
-                            // Find the first override whose predicate contains a nonzero "custom_model_data" value.
-                            var validOverride = importData.overrides.FirstOrDefault(o =>
-                                o.predicate != null &&
-                                o.predicate.ContainsKey("custom_model_data") &&
-                                o.predicate["custom_model_data"] != 0);
-
-                            if (validOverride == null)
-                                continue;
-
-                            int customModelNumber = validOverride.predicate["custom_model_data"];
-                            string modelPath = validOverride.model;
 
                             // Use the file name (without extension) as the ParentItem name.
                             string parentName = Path.GetFileNameWithoutExtension(file);
 
-                            // Create or reuse a ParentItem with the given name and a hardcoded type "imported".
-                            var existingParent = context.ParentItems.FirstOrDefault(p => p.Name == parentName && p.Type == "imported");
-                            ParentItem parentItem;
-                            if (existingParent != null)
-                            {
-                                parentItem = existingParent;
-                            }
-                            else
+                            // Check if a ParentItem with the same name and type "imported" exists.
+                            var parentItem = context.ParentItems.FirstOrDefault(p => p.Name == parentName && p.Type == "imported");
+                            if (parentItem == null)
                             {
                                 parentItem = new ParentItem
                                 {
@@ -99,19 +83,58 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                                 context.ParentItems.Add(parentItem);
                             }
 
-                            // Create a new CustomModelData record with the imported values.
-                            var cmd = new CustomModelData
+                            // Process each override in the JSON file.
+                            foreach (var ovrd in importData.overrides)
                             {
-                                Name = parentName,
-                                CustomModelNumber = customModelNumber,
-                                ModelPath = modelPath,
-                                Status = true
-                            };
-                            // Associate the ParentItem with the CustomModelData.
-                            cmd.ParentItems.Add(parentItem);
+                                // Check that the predicate contains "custom_model_data" and that it's nonzero.
+                                if (ovrd.predicate == null ||
+                                    !ovrd.predicate.ContainsKey("custom_model_data") ||
+                                    ovrd.predicate["custom_model_data"] == 0)
+                                {
+                                    continue;
+                                }
 
-                            context.CustomModelDataItems.Add(cmd);
-                            importedCount++;
+                                int customModelNumber = ovrd.predicate["custom_model_data"];
+                                string modelPath = ovrd.model;
+                                if (string.IsNullOrWhiteSpace(modelPath))
+                                    continue;
+
+                                // Use the last segment of the model path as the CMD item name.
+                                // This splits on both '/' and '\' in case of different path separators.
+                                string[] segments = modelPath.Split(new char[] { '/', '\\' }, StringSplitOptions.RemoveEmptyEntries);
+                                string cmdName = segments.Last();
+
+                                // Check if a CMD item with the same custom model number already exists.
+                                var existingCmd = context.CustomModelDataItems.FirstOrDefault(cmd => cmd.CustomModelNumber == customModelNumber);
+                                if (existingCmd != null)
+                                {
+                                    // Update the model path and name if needed.
+                                    if (existingCmd.ModelPath != modelPath)
+                                        existingCmd.ModelPath = modelPath;
+                                    if (existingCmd.Name != cmdName)
+                                        existingCmd.Name = cmdName;
+
+                                    // If the parent item is not already associated, add it.
+                                    if (!existingCmd.ParentItems.Any(p => p.ParentItemID == parentItem.ParentItemID))
+                                    {
+                                        existingCmd.ParentItems.Add(parentItem);
+                                    }
+                                }
+                                else
+                                {
+                                    // Create a new CustomModelData record.
+                                    var newCmd = new CustomModelData
+                                    {
+                                        Name = cmdName,
+                                        CustomModelNumber = customModelNumber,
+                                        ModelPath = modelPath,
+                                        Status = true
+                                    };
+                                    newCmd.ParentItems.Add(parentItem);
+                                    context.CustomModelDataItems.Add(newCmd);
+                                }
+                                importedCount++;
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -121,7 +144,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
                     context.SaveChanges();
                 }
-                System.Windows.MessageBox.Show($"Imported {importedCount} item(s) successfully.");
+                System.Windows.MessageBox.Show($"Imported/Updated {importedCount} custom model data item(s) successfully.");
             }
             catch (Exception ex)
             {
