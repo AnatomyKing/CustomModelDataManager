@@ -17,7 +17,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
     {
-        // Removed _createNewItem field as it's no longer needed.
         private CustomModelData _originalCustomModelData;
         private readonly AppDbContext _context;
         private readonly int _newModelNumber;
@@ -25,27 +24,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private bool _useUnused;
         private readonly bool _initialIsFromUnused;
 
-        /// <summary>
-        /// If true then this dialog ended up creating a new item (even if originally an unused item existed).
-        /// </summary>
         public bool IsNewItem { get; private set; }
-
-        /// <summary>
-        /// This property exposes the final item that was edited or created.
-        /// Use this in DashboardViewModel to decide whether to add a new record.
-        /// </summary>
         public CustomModelData FinalCustomModelData => _originalCustomModelData;
 
         public bool IsAddMode { get; }
 
-        // Toggle label text: "Enable Unused:" in add mode; "Enable Edit:" in edit mode.
         public string ToggleLabelText => IsAddMode ? "Enable Unused:" : "Enable Edit:";
 
-        // In add mode the toggle is always enabled.
-        // In edit mode the toggle is enabled only if the original item was not unused.
         public bool IsToggleEnabled => IsAddMode ? true : !_initialIsFromUnused;
-
-        // In both modes the fields (Used checkbox and Custom Model Number) are enabled only when the toggle is off.
         public bool IsStatusEditable => !UseUnused;
         public bool IsCustomModelNumberEditable => !UseUnused;
 
@@ -62,7 +48,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     OnPropertyChanged(nameof(IsCustomModelNumberEditable));
                     if (IsAddMode)
                         ToggleUnusedItem();
-                    // In edit mode we do not change the underlying entity—only the UI.
                 }
             }
         }
@@ -85,17 +70,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 if (isFromUnused)
                 {
-                    // We were given an unused item from the DB.
                     _unusedData = customModelData;
                     _originalCustomModelData = customModelData;
                     _useUnused = true;
                     IsNewItem = false;
-                    // Create an editable copy (including its join collections)
                     EditedCustomModelData = CreateEditableCopy(_unusedData, copyCollections: true);
                 }
                 else
                 {
-                    // No unused item is used – create a brand new item.
                     _useUnused = false;
                     IsNewItem = true;
                     _originalCustomModelData = new CustomModelData
@@ -114,7 +96,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
             else
             {
-                // In edit mode, always use the given item.
                 _originalCustomModelData = customModelData;
                 _useUnused = true;
                 IsNewItem = false;
@@ -148,10 +129,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        /// <summary>
-        /// Called when the user toggles the “use unused” switch.
-        /// If turning it on, we re–use the unused item (if any); if off, we create a new item.
-        /// </summary>
         private void ToggleUnusedItem()
         {
             if (UseUnused)
@@ -278,6 +255,21 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        // New property for Block Model Path
+        private string _newBlockModelPath = string.Empty;
+        public string NewBlockModelPath
+        {
+            get => _newBlockModelPath;
+            set
+            {
+                if (_newBlockModelPath != value)
+                {
+                    _newBlockModelPath = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public string Name
         {
             get => EditedCustomModelData.Name;
@@ -366,6 +358,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private void ClearBlockInfo(object? obj)
         {
             NewBlockData = string.Empty;
+            NewBlockModelPath = string.Empty;
             SelectedBlockType = null;
         }
 
@@ -422,6 +415,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 SelectedBlockType = BlockTypes.FirstOrDefault(b => b.BlockTypeID == firstVariation.BlockTypeID);
                 NewBlockData = firstVariation.BlockData;
                 NewVariationNumber = firstVariation.Variation;
+                NewBlockModelPath = firstVariation.BlockModelPath;
             }
             else
             {
@@ -535,6 +529,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     existingVariation.BlockData = NewBlockData;
                     existingVariation.Variation = NewVariationNumber;
+                    existingVariation.BlockModelPath = NewBlockModelPath;
                 }
                 else
                 {
@@ -543,7 +538,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                         BlockData = NewBlockData,
                         Variation = NewVariationNumber,
                         BlockTypeID = SelectedBlockType.BlockTypeID,
-                        CustomModelDataID = _originalCustomModelData.CustomModelDataID
+                        CustomModelDataID = _originalCustomModelData.CustomModelDataID,
+                        BlockModelPath = NewBlockModelPath
                     });
                 }
             }

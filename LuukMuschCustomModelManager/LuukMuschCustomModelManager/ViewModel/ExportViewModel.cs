@@ -8,6 +8,8 @@ using Microsoft.EntityFrameworkCore;
 using LuukMuschCustomModelManager.Databases;
 using LuukMuschCustomModelManager.Helpers;
 using LuukMuschCustomModelManager.Model;
+using YamlDotNet.Serialization.NamingConventions;
+using YamlDotNet.Serialization;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
@@ -62,10 +64,97 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             // Group items first by parent type and then by parent item name.
             var groupedItems = GroupItemsByParentAndType(allItems);
 
+            // Build a nested object that will be serialized to YAML.
+            var exportStructure = new Dictionary<string, object>();
+
+            foreach (var outerGroup in groupedItems)
+            {
+                // Outer key: parent's type (e.g. "imported")
+                var outerMapping = new Dictionary<string, object>();
+
+                foreach (var innerGroup in outerGroup.Value)
+                {
+                    // Inner key: parent's name (e.g. "paper")
+                    var cmdMapping = new Dictionary<string, object>();
+
+                    foreach (var item in innerGroup.Value)
+                    {
+                        // Build a mapping for each CustomModelData item.
+                        var itemMapping = new Dictionary<string, object>
+                        {
+                            { "custom_model_data", item.CustomModelNumber },
+                            { "item_model_path", item.ModelPath }
+                        };
+
+                        // Block variation info (if available, take the first variation)
+                        var variations = item.CustomVariations
+                            .OrderBy(cv => cv.BlockType?.Name)
+                            .ThenBy(cv => cv.Variation)
+                            .ToList();
+                        if (variations.Any())
+                        {
+                            var firstVar = variations.First();
+                            var blockInfo = new Dictionary<string, object>
+                            {
+                                { "type", firstVar.BlockType?.Name ?? "Unknown" },
+                                { "variation", firstVar.Variation },
+                                { "blockdata", firstVar.BlockData }
+                            };
+                            itemMapping["block_info"] = blockInfo;
+                            if (!string.IsNullOrWhiteSpace(firstVar.BlockModelPath))
+                            {
+                                itemMapping["linked_block_model_path"] = firstVar.BlockModelPath;
+                            }
+                        }
+
+                        // Shader info – include as a list if available.
+                        var shaderInfos = item.ShaderArmors
+                            .Select(sa => sa.ShaderArmorColorInfo)
+                            .Where(si => si != null)
+                            .Distinct()
+                            .ToList();
+                        if (shaderInfos.Any())
+                        {
+                            var shaderList = new List<Dictionary<string, object>>();
+                            foreach (var shader in shaderInfos)
+                            {
+                                var shaderMapping = new Dictionary<string, object>
+                                {
+                                    { "name", shader!.Name },
+                                    { "hex", shader.HEX },
+                                    { "rgb", shader.RGB },
+                                    { "color", shader.Color }
+                                };
+                                shaderList.Add(shaderMapping);
+                            }
+                            itemMapping["shader_info"] = shaderList;
+                        }
+
+                        // Use the CMD item's name as the key.
+                        cmdMapping[item.Name] = itemMapping;
+                    }
+
+                    // Add the inner mapping under the parent's name.
+                    outerMapping[innerGroup.Key] = cmdMapping;
+                }
+
+                // Add the outer mapping under the parent's type.
+                exportStructure[outerGroup.Key] = outerMapping;
+            }
+
+            // Serialize the export structure to YAML.
+            var serializer = new SerializerBuilder()
+                .WithNamingConvention(new CamelCaseNamingConvention())
+                .Build();
+
+            string yamlOutput = serializer.Serialize(exportStructure);
+
+            // Post-process the YAML to insert extra blank lines between groups and between items.
+            yamlOutput = InsertBlankLines(yamlOutput);
+
             Directory.CreateDirectory(ExportPath);
             string filePath = Path.Combine(ExportPath, "export.yml");
-
-            WriteExportFile(groupedItems, filePath);
+            File.WriteAllText(filePath, yamlOutput);
 
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
         }
@@ -120,70 +209,43 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         }
 
         /// <summary>
-        /// Writes the export file in a nested YAML-like format.
-        /// Example output:
-        ///   tools:
-        ///     Axe:
-        ///       - axe_belmont = CustomModelData: 3349 | NOTE_BLOCK 1 [hhhh] | #belmont = #000007 | 0,0,7 | 7
-        ///       - another_item = CustomModelData: 3350 | ... 
-        ///     Pickaxe:
-        ///       - pick_item = CustomModelData: 3348 | ...
+        /// Inserts extra blank lines into the YAML string so that groups are clearly separated.
+        /// This method:
+        ///   - Inserts a blank line immediately after lines ending with ":" at indent levels 0 or 2.
+        ///   - Inserts a blank line before a line at indent level 4 if the previous line was indented at level 6 or more.
+        /// Adjust the logic as needed.
         /// </summary>
-        private void WriteExportFile(Dictionary<string, Dictionary<string, List<CustomModelData>>> groupedItems, string filePath)
+        private string InsertBlankLines(string input)
         {
-            using var writer = new StreamWriter(filePath);
+            var lines = input.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None).ToList();
+            var resultLines = new List<string>();
 
-            foreach (var outerGroup in groupedItems)
+            for (int i = 0; i < lines.Count; i++)
             {
-                // Write parent item type.
-                writer.WriteLine($"{outerGroup.Key}:");
+                string currentLine = lines[i];
+                int currIndent = currentLine.TakeWhile(char.IsWhiteSpace).Count();
 
-                foreach (var innerGroup in outerGroup.Value)
+                // If this line is at indent level 4 (an item key) and the previous line was indented at 6 or more,
+                // insert a blank line before the current line.
+                if (i > 0)
                 {
-                    // Write parent item name indented.
-                    writer.WriteLine($"  {innerGroup.Key}:");
-
-                    foreach (var item in innerGroup.Value)
+                    int prevIndent = lines[i - 1].TakeWhile(char.IsWhiteSpace).Count();
+                    if (currIndent == 4 && prevIndent >= 6)
                     {
-                        string exportLine = CreateOldFormatLine(item);
-                        writer.WriteLine($"    - {exportLine}");
+                        resultLines.Add(string.Empty);
                     }
-                    writer.WriteLine();
                 }
-                writer.WriteLine();
-            }
-        }
 
-        private string CreateOldFormatLine(CustomModelData item)
-        {
-            string line = $"{item.Name} = CustomModelData: {item.CustomModelNumber}";
+                resultLines.Add(currentLine);
 
-            var variations = item.CustomVariations
-                .OrderBy(cv => cv.BlockType?.Name)
-                .ThenBy(cv => cv.Variation)
-                .ToList();
-
-            if (variations.Any())
-            {
-                var firstVar = variations.First();
-                line += $" | {firstVar.BlockType?.Name ?? "Unknown"} {firstVar.Variation} [{firstVar.BlockData}]";
-            }
-
-            var shaderInfos = item.ShaderArmors
-                .Select(sa => sa.ShaderArmorColorInfo)
-                .Where(info => info != null)
-                .Distinct()
-                .ToList();
-
-            if (shaderInfos.Any())
-            {
-                foreach (var info in shaderInfos)
+                // If current line ends with ":" and indent is 0 or 2, then add a blank line after it.
+                if (currentLine.TrimEnd().EndsWith(":") && (currIndent == 0 || currIndent == 2))
                 {
-                    line += $" | #{info!.Name} = {info.HEX} | {info.RGB} | {info.Color}";
+                    resultLines.Add(string.Empty);
                 }
             }
 
-            return line;
+            return string.Join(Environment.NewLine, resultLines);
         }
 
         #endregion

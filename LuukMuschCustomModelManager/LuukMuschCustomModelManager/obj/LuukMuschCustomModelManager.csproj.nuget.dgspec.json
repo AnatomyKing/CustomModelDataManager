@@ -66,6 +66,10 @@
             "System.ServiceProcess.ServiceController": {
               "target": "Package",
               "version": "[9.0.1, )"
+            },
+            "YamlDotNet.NetCore": {
+              "target": "Package",
+              "version": "[1.0.0, )"
             }
           },
           "imports": [

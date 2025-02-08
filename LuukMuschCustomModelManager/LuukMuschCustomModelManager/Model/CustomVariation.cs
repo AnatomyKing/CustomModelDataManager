@@ -20,6 +20,9 @@ namespace LuukMuschCustomModelManager.Model
         [Required, MaxLength(255)] // Block data, e.g., minecraft:note_block[instrument=snare,note=16,powered=false]
         public string BlockData { get; set; } = string.Empty;
 
+        [Required, MaxLength(255)] // Path to the block model, max length 255
+        public string BlockModelPath { get; set; } = string.Empty;
+
         [ForeignKey("CustomModelData")]
         public int CustomModelDataID { get; set; }
         public CustomModelData? CustomModelData { get; set; }

@@ -31,9 +31,9 @@ namespace LuukMuschCustomModelManager.Databases
                 {
                     BlockType[] blockTypes = new BlockType[]
                     {
-                        new BlockType { Name = "NOTE_BLOCK" },
-                        new BlockType { Name = "CHORUS_PLANT" },
-                        new BlockType { Name = "TRIPWIRE" }
+                        new BlockType { Name = "NOTEBLOCK" },
+                        new BlockType { Name = "CHORUSBLOCK" },
+                        new BlockType { Name = "STRINGBLOCK" }
                     };
 
                     db.BlockTypes.AddRange(blockTypes);
