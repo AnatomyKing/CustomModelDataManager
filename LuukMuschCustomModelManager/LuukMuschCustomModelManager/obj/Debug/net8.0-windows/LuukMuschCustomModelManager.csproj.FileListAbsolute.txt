@@ -280,3 +280,5 @@ C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManag
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\obj\Debug\net8.0-windows\View\ImportView.baml
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\Newtonsoft.Json.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\YamlDotNet.NetCore.dll
+C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\obj\Debug\net8.0-windows\View\GenerationView.g.cs
+C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\obj\Debug\net8.0-windows\View\GenerationView.baml

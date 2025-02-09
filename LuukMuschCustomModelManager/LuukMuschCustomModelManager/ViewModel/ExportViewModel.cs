@@ -153,7 +153,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             yamlOutput = InsertBlankLines(yamlOutput);
 
             Directory.CreateDirectory(ExportPath);
-            string filePath = Path.Combine(ExportPath, "export.yml");
+            string filePath = Path.Combine(ExportPath, "CustomModelDataHarambe.yml");
             File.WriteAllText(filePath, yamlOutput);
 
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);

@@ -16,6 +16,7 @@ using System.Windows.Threading;
 using LuukMuschCustomModelManager.Model;
 using LuukMuschCustomModelManager.ViewModels.Views;
 
+
 namespace LuukMuschCustomModelManager.View
 {
     public partial class AddEditCMDView : UserControl
@@ -69,7 +70,6 @@ namespace LuukMuschCustomModelManager.View
             var cvs = (CollectionViewSource)this.Resources["GroupedParentItems"];
             cvs.View.Refresh();
         }
-
 
         #endregion
 

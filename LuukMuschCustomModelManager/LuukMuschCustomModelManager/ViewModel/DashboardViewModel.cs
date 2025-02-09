@@ -11,7 +11,8 @@ using System.Windows;
 using ZstdSharp.Unsafe;
 using System.ComponentModel;
 using System.Windows.Data;
-
+using System.Diagnostics;
+using LuukMuschCustomModelManager.ViewModels.Views;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {

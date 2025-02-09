@@ -12,14 +12,23 @@
     <Grid Margin="20">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <!-- row 0: header -->
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <!-- row 1: import folder line -->
+            <RowDefinition Height="Auto"/>
+            <!-- row 2: import button line -->
+            <RowDefinition Height="Auto"/>
+            <!-- row 3: block states folder line -->
+            <RowDefinition Height="Auto"/>
+            <!-- row 4: block states button line -->
+            <RowDefinition Height="*" />
+            <!-- row 5: filler -->
         </Grid.RowDefinitions>
 
-        <!-- Header -->
-        <TextBlock Text="Import Settings" FontSize="24" Margin="0,0,0,10"/>
+        <!-- Header (row 0) -->
+        <TextBlock Text="Import Settings" FontSize="24" Margin="0,0,0,10" Grid.Row="0"/>
 
-        <!-- Import Folder -->
+        <!-- (row 1) Import Folder for .json / .yml / .yaml -->
         <StackPanel Orientation="Horizontal" Margin="0,10,0,10" Grid.Row="1">
             <TextBlock Text="Import Folder:" VerticalAlignment="Center" Margin="0,0,10,0"/>
             <TextBox Text="{Binding ImportFolder, UpdateSourceTrigger=PropertyChanged}"
@@ -28,12 +37,30 @@
                      VerticalAlignment="Center"/>
         </StackPanel>
 
-        <!-- Import Button -->
+        <!-- (row 2) Import Command Button -->
         <StackPanel Orientation="Horizontal" Grid.Row="2" VerticalAlignment="Top" Margin="0,0,0,10">
-            <Button Content="Import"
+            <Button Content="Import .json/.yaml"
                     Command="{Binding ImportCommand}"
                     Style="{StaticResource MaterialDesignRaisedButton}"
                     Margin="5"/>
         </StackPanel>
+
+        <!-- (row 3) BlockStates Import Folder -->
+        <StackPanel Orientation="Horizontal" Margin="0,10,0,10" Grid.Row="3">
+            <TextBlock Text="BlockStates Folder:" VerticalAlignment="Center" Margin="0,0,10,0"/>
+            <TextBox Text="{Binding BlockStatesImportFolder, UpdateSourceTrigger=PropertyChanged}"
+                     Width="500"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}"
+                     VerticalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- (row 4) Button to Import BlockStates -->
+        <StackPanel Orientation="Horizontal" Grid.Row="4" VerticalAlignment="Top" Margin="0,0,0,10">
+            <Button Content="Import Block States"
+                    Command="{Binding ImportBlockStatesCommand}"
+                    Style="{StaticResource MaterialDesignRaisedButton}"
+                    Margin="5"/>
+        </StackPanel>
+
     </Grid>
 </UserControl>

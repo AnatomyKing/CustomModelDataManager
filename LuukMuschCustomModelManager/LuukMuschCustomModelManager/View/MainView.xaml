@@ -60,6 +60,12 @@
             <local:ImportView/>
         </DataTemplate>
 
+        <DataTemplate 
+        DataType="{x:Type viewmodels:GenerationViewModel}"
+        >
+            <local:GenerationView/>
+        </DataTemplate>
+
 
     </Window.Resources>
 
@@ -78,6 +84,7 @@
             <Button Content="Unused Items" Command="{Binding NavigateCommand}" CommandParameter="UnusedViewModel" Margin="10"/>
             <Button Content="Import" Command="{Binding NavigateCommand}" CommandParameter="ImportViewModel" Margin="10"/>
             <Button Content="Export" Command="{Binding NavigateCommand}" CommandParameter="ExportViewModel" Margin="10"/>
+            <Button Content="Generation" Command="{Binding NavigateCommand}" CommandParameter="GenerationViewModel" Margin="10"/>
         </StackPanel>
 
         <!-- Dynamic Content -->

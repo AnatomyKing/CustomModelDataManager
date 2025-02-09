@@ -13,6 +13,8 @@ using LuukMuschCustomModelManager.Databases;
 using System.Collections;
 using System.ComponentModel;
 
+
+
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
@@ -30,7 +32,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public bool IsAddMode { get; }
 
         public string ToggleLabelText => IsAddMode ? "Enable Unused:" : "Enable Edit:";
-
         public bool IsToggleEnabled => IsAddMode ? true : !_initialIsFromUnused;
         public bool IsStatusEditable => !UseUnused;
         public bool IsCustomModelNumberEditable => !UseUnused;
@@ -255,7 +256,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
-        // New property for Block Model Path
         private string _newBlockModelPath = string.Empty;
         public string NewBlockModelPath
         {
@@ -395,7 +395,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             // Now preselect the ParentItems that belong to the current item.
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
-                // Skip the behind–the–scenes "Unused" parent (ID==1)
+                // Skip the behind–the–scenes "Unused" parent (ID==1) if we're used
                 if (EditedCustomModelData.Status && parent.ParentItemID == 1)
                     continue;
                 parent.IsSelected = true;
@@ -433,27 +433,33 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
+                // Turn it into a fully "unused" item.
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                // Remove any default parent (ID==1) from the original before updating.
-                var defaultParents = _originalCustomModelData.ParentItems.Where(p => p.ParentItemID == 1).ToList();
+                // Ensure the ParentItems collection is loaded so we can modify it.
+                _context.Entry(_originalCustomModelData).Collection(c => c.ParentItems).Load();
+
+                // Remove any default parent (ID==1) if necessary.
+                var defaultParents = _originalCustomModelData.ParentItems
+                    .Where(p => p.ParentItemID == 1).ToList();
                 foreach (var p in defaultParents)
                 {
                     _originalCustomModelData.ParentItems.Remove(p);
                 }
 
-                for (int i = SelectedParentItems.Count - 1; i >= 0; i--)
-                {
-                    if (SelectedParentItems[i].ParentItemID == 1)
-                        SelectedParentItems.RemoveAt(i);
-                }
+                // Instead of using SelectedParentItems, rebuild the parent relationship by
+                // filtering the full ParentItems list for those that are still checked.
+                var updatedParents = ParentItems
+                    .Where(p => p.IsSelected && p.ParentItemID != 1)
+                    .ToList();
 
+                // Clear and update the parent collection.
                 _originalCustomModelData.ParentItems.Clear();
-                foreach (var item in SelectedParentItems)
+                foreach (var parent in updatedParents)
                 {
-                    _originalCustomModelData.ParentItems.Add(item);
+                    _originalCustomModelData.ParentItems.Add(parent);
                 }
 
                 UpdateRelations();
@@ -524,7 +530,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         {
             if (!string.IsNullOrWhiteSpace(NewBlockData) && SelectedBlockType != null)
             {
-                var existingVariation = _originalCustomModelData.CustomVariations.FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
+                var existingVariation = _originalCustomModelData.CustomVariations
+                    .FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
                 if (existingVariation != null)
                 {
                     existingVariation.BlockData = NewBlockData;
@@ -548,7 +555,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private void UpdateNewVariationNumber()
         {
             NewVariationNumber = SelectedBlockType != null
-                ? ((_context.CustomVariations.Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID).Max(cv => (int?)cv.Variation) ?? 0) + 1)
+                ? ((_context.CustomVariations
+                       .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
+                       .Max(cv => (int?)cv.Variation) ?? 0) + 1)
                 : 1;
         }
     }

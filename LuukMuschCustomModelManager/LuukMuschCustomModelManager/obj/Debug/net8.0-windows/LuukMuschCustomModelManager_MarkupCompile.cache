@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET8_0;NETCOREAPP
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\App.xaml
-9-2097650986
+10-2132052636
 
-42-658830196
+441531538508
 2251255387849
-View\AddEditCMDView.xaml;View\ArmorInfoView.xaml;View\BlockTypeView.xaml;View\DashboardView.xaml;View\ExportView.xaml;View\ImportView.xaml;View\MainView.xaml;View\ParentItemView.xaml;View\UnusedView.xaml;
+View\AddEditCMDView.xaml;View\ArmorInfoView.xaml;View\BlockTypeView.xaml;View\DashboardView.xaml;View\ExportView.xaml;View\GenerationView.xaml;View\ImportView.xaml;View\MainView.xaml;View\ParentItemView.xaml;View\UnusedView.xaml;
 
 False
 

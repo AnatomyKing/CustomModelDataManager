@@ -44,6 +44,7 @@ namespace LuukMuschCustomModelManager.ViewModels
                 "ArmorInfoViewModel" => new ArmorInfoViewModel(),
                 "ImportViewModel" => new ImportViewModel(),
                 "ExportViewModel" => new ExportViewModel(),
+                "GenerationViewModel" => new GenerationViewModel(),
                 _ => new DashboardViewModel()
             };
         }
