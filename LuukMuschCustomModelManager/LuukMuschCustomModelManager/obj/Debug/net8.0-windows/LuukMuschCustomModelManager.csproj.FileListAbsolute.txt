@@ -176,9 +176,7 @@ C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManag
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.Composition.Hosting.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.Composition.Runtime.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.Composition.TypedParts.dll
-C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.Diagnostics.DiagnosticSource.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.IO.Pipelines.dll
-C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\System.Text.Json.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\ZstdSharp.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\cs\Microsoft.CodeAnalysis.resources.dll
 C:\Users\mrluu\Documents\GitHub\CustomModelDataManager\LuukMuschCustomModelManager\LuukMuschCustomModelManager\bin\Debug\net8.0-windows\de\Microsoft.CodeAnalysis.resources.dll

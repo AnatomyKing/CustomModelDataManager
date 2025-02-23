@@ -18,64 +18,103 @@
             <RowDefinition Height="*" />
             <RowDefinition Height="Auto" />
         </Grid.RowDefinitions>
+
         <!-- Top Bar -->
         <DockPanel Grid.Row="0" Margin="10">
-            <TextBox DockPanel.Dock="Left" Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
-               materialDesign:HintAssist.Hint="Search Custom Models"
-               Style="{StaticResource MaterialDesignOutlinedTextBox}" 
-               Width="300" Margin="0,0,10,0" />
+            <TextBox DockPanel.Dock="Left"
+                     Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}" 
+                     materialDesign:HintAssist.Hint="Search Custom Models"
+                     Style="{StaticResource MaterialDesignOutlinedTextBox}" 
+                     Width="300"
+                     Margin="0,0,10,0" />
+
             <StackPanel DockPanel.Dock="Left" Width="Auto"/>
-            <StackPanel DockPanel.Dock="Right" Orientation="Horizontal" VerticalAlignment="Center" Margin="0,0,20,0">
-                <TextBlock Text="Highest CMD:" 
-                   VerticalAlignment="Center"
-                   Margin="0,0,5,0"
-                   FontSize="14"
-                   Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+            <StackPanel DockPanel.Dock="Right"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Center"
+                        Margin="0,0,20,0">
+
+                <!-- Highest CMD -->
+                <TextBlock Text="Highest CMD:"
+                           VerticalAlignment="Center"
+                           Margin="0,0,5,0"
+                           FontSize="14"
+                           Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                 <Border Background="{DynamicResource PrimaryHueLightBrush}" 
-                CornerRadius="4" 
-                Padding="5,2" 
-                VerticalAlignment="Center">
+                        CornerRadius="4" 
+                        Padding="5,2"
+                        VerticalAlignment="Center">
                     <TextBlock Text="{Binding HighestCustomModelNumber}" 
-                     FontWeight="Bold" 
-                     Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                     FontSize="16" />
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                               FontSize="16" />
+                </Border>
+
+                <!-- Next Available CMD -->
+                <TextBlock Text="Next Avail CMD:"
+                           VerticalAlignment="Center"
+                           Margin="20,0,5,0"
+                           FontSize="14"
+                           Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                <Border Background="{DynamicResource PrimaryHueLightBrush}" 
+                        CornerRadius="4" 
+                        Padding="5,2"
+                        VerticalAlignment="Center">
+                    <TextBlock Text="{Binding NextAvailableCustomModelNumber}"
+                               FontWeight="Bold" 
+                               Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                               FontSize="16" />
                 </Border>
             </StackPanel>
         </DockPanel>
+
         <!-- List of Items -->
         <ListBox Grid.Row="1"
-             ItemsSource="{Binding GroupedCustomModels}"
-             SelectedItem="{Binding SelectedFlattenedItem, Mode=TwoWay}"
-             Margin="10">
+                 ItemsSource="{Binding GroupedCustomModels}"
+                 SelectedItem="{Binding SelectedFlattenedItem, Mode=TwoWay}"
+                 Margin="10">
             <ListBox.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name}"
-                         FontWeight="Bold"
-                         FontSize="16"
-                         Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
-                         Margin="0,5"/>
+                                       FontWeight="Bold"
+                                       FontSize="16"
+                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}"
+                                       Margin="0,5"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
             </ListBox.GroupStyle>
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <materialDesign:Card Padding="10" Margin="5" Background="{DynamicResource PrimaryHueLightBrush}">
+                    <materialDesign:Card Padding="10"
+                                         Margin="5"
+                                         Background="{DynamicResource PrimaryHueLightBrush}">
                         <StackPanel Orientation="Horizontal">
-                            <!-- Display the CMD item's name and number -->
-                            <TextBlock Text="{Binding Value.Name}" FontWeight="Bold" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                            <TextBlock Text=" =" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                            <TextBlock Text="{Binding Value.CustomModelNumber}" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                            <!-- Optionally, display custom variations -->
+                            <!-- Display the CMD Name and number -->
+                            <TextBlock Text="{Binding Value.Name}"
+                                       FontWeight="Bold"
+                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <TextBlock Text=" ="
+                                       Margin="5,0"
+                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                            <TextBlock Text="{Binding Value.CustomModelNumber}"
+                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+
+                            <!-- Show variations (optional) -->
                             <ItemsControl ItemsSource="{Binding Value.CustomVariations}" Margin="10,0,0,0">
                                 <ItemsControl.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="#" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                                            <TextBlock Text="{Binding BlockType.Name}" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
-                                            <TextBlock Text="{Binding Variation}" Margin="5,0" Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                            <TextBlock Text="{Binding BlockType.Name}"
+                                                       Margin="5,0"
+                                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
+                                            <TextBlock Text="{Binding Variation}"
+                                                       Margin="5,0"
+                                                       Foreground="{DynamicResource PrimaryHueDarkForegroundBrush}" />
                                         </StackPanel>
                                     </DataTemplate>
                                 </ItemsControl.ItemTemplate>
@@ -85,12 +124,20 @@
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
-        <!-- Floating Add Button -->
-        <Button Grid.Row="2" Content="+" Command="{Binding AddCommand}" 
-            HorizontalAlignment="Right" VerticalAlignment="Bottom" 
-            Width="50" Height="50" Margin="10" 
-            Style="{StaticResource MaterialDesignFloatingActionButton}" />
+
+        <!-- Add Button -->
+        <Button Grid.Row="2" 
+                Content="+" 
+                Command="{Binding AddCommand}" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom" 
+                Width="50" 
+                Height="50" 
+                Margin="10" 
+                Style="{StaticResource MaterialDesignFloatingActionButton}" />
+
         <!-- DialogHost for Add/Edit -->
-        <materialDesign:DialogHost Identifier="RootDialog" Grid.Row="1" />
+        <materialDesign:DialogHost Identifier="RootDialog"
+                                  Grid.Row="1" />
     </Grid>
 </UserControl>

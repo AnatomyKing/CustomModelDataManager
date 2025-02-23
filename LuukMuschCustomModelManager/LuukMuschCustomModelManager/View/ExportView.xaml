@@ -35,6 +35,10 @@
                 Command="{Binding ExportCommand}"
                 Style="{StaticResource MaterialDesignRaisedButton}"
                 Margin="5"/>
+            <Button Content="Export JSON"
+                        Command="{Binding ExportToJsonCommand}"
+                        Style="{StaticResource MaterialDesignRaisedButton}"
+                        Margin="5"/>
         </StackPanel>
     </Grid>
 </UserControl>

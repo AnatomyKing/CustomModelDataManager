@@ -554,11 +554,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateNewVariationNumber()
         {
-            NewVariationNumber = SelectedBlockType != null
-                ? ((_context.CustomVariations
-                       .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
-                       .Max(cv => (int?)cv.Variation) ?? 0) + 1)
-                : 1;
+            // If nothing is selected, just default to 2
+            if (SelectedBlockType == null)
+            {
+                NewVariationNumber = 2;
+                return;
+            }
+
+            // Get all existing Variation numbers for this BlockType.
+            var usedVariations = _context.CustomVariations
+                .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
+                .Select(cv => cv.Variation)
+                .ToHashSet();  // helps for quick "Contains" checks
+
+            // Start from 2 and go up until we find a free spot
+            int candidate = 2;
+            while (usedVariations.Contains(candidate))
+            {
+                candidate++;
+            }
+
+            NewVariationNumber = candidate;
         }
     }
 }
