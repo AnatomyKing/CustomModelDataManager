@@ -329,7 +329,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     if (ovrdToken is not JObject ovrdObj)
                     {
-                        // If it’s not even an object, preserve
+                        // Keep an empty/new object
                         nonCmdOverrides.Add(new JObject());
                         continue;
                     }
@@ -337,7 +337,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     var predObj = ovrdObj["predicate"] as JObject;
                     if (predObj == null)
                     {
-                        // no "predicate"? Then it's not a CMD override; keep as “non-CMD override”
+                        // No 'predicate'? => Not a CMD override
                         nonCmdOverrides.Add(ovrdObj);
                         continue;
                     }
@@ -345,12 +345,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     var cmdValToken = predObj["custom_model_data"];
                     if (cmdValToken == null)
                     {
-                        // again, no custom_model_data => treat as non-CMD
+                        // Again, no custom_model_data => treat as non-CMD
                         nonCmdOverrides.Add(ovrdObj);
                         continue;
                     }
 
-                    // parse the integer
+                    // Parse the integer
                     int oldCmdNumber;
                     try
                     {
@@ -358,17 +358,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
                     catch
                     {
-                        // if it can’t parse, skip
+                        // If can't parse, skip
                         continue;
                     }
 
-                    // If that CMD # is relevant to one of our items, we keep it
+                    // Does this old CMD exist in the items we are exporting (cmdItemsForParent)?
                     var matchingCmd = cmdItemsForParent
                         .FirstOrDefault(c => c.CustomModelNumber == oldCmdNumber);
+
                     if (matchingCmd == null)
-                        continue; // not a relevant override => drop it.
+                    {
+                        // Not relevant => skip it
+                        continue;
+                    }
 
                     foundCmdNumbersInJson.Add(oldCmdNumber);
+
+                    // *** HERE IS THE IMPORTANT CHANGE: ***
+                    // Overwrite the 'model' property to the *current* ModelPath from the DB item.
+                    ovrdObj["model"] = matchingCmd.ModelPath;
+
+                    // Now retain that override
                     retainedCmdOverrides.Add(ovrdObj);
                 }
 

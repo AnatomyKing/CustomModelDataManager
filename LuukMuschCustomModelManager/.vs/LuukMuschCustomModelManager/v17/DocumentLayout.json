@@ -3,12 +3,12 @@
   "WorkspaceRootPath": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\viewmodel\\exportviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|solutionrelative:luukmuschcustommodelmanager\\view\\exportview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{8A139FDE-FF09-4203-80F6-CC2442D8B11D}|LuukMuschCustomModelManager\\LuukMuschCustomModelManager.csproj|c:\\users\\mrluu\\documents\\github\\custommodeldatamanager\\luukmuschcustommodelmanager\\luukmuschcustommodelmanager\\view\\addeditcmdview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -206,17 +206,21 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
             {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+            },
+            {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "ExportViewModel.cs",
               "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
               "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
               "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
               "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\ExportViewModel.cs",
-              "ViewState": "AgIAAIgAAAAAAAAAAAArwBwAAAAsAAAAAAAAAA==",
+              "ViewState": "AgIAAEYBAAAAAAAAAAAcwFIBAAAVAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-10T11:38:27.289Z",
               "EditorCaption": ""
@@ -231,12 +235,11 @@
               "RelativeToolTip": "LuukMuschCustomModelManager\\ViewModel\\ImportViewModel.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAGEAAAA8AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2025-02-07T15:26:29.949Z",
-              "EditorCaption": ""
+              "WhenOpened": "2025-02-07T15:26:29.949Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "ExportView.xaml",
               "DocumentMoniker": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\ExportView.xaml",
               "RelativeDocumentMoniker": "LuukMuschCustomModelManager\\View\\ExportView.xaml",
@@ -257,10 +260,6 @@
               "ViewState": "AQIAAAMAAAAAAAAAAAAAAAYAAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-12-10T13:23:02.37Z"
-            },
-            {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
             },
             {
               "$type": "Document",
@@ -305,8 +304,7 @@
               "ToolTip": "C:\\Users\\mrluu\\Documents\\GitHub\\CustomModelDataManager\\LuukMuschCustomModelManager\\LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
               "RelativeToolTip": "LuukMuschCustomModelManager\\View\\AddEditCMDView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-12-11T08:12:07.403Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-12-11T08:12:07.403Z"
             },
             {
               "$type": "Document",
