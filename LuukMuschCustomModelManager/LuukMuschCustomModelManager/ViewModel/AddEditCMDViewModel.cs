@@ -14,7 +14,6 @@ using System.Collections;
 using System.ComponentModel;
 
 
-
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
     internal class AddEditCMDViewModel : ObservableObject
@@ -58,7 +57,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             ObservableCollection<BlockType> blockTypes,
             ObservableCollection<ShaderArmorColorInfo> shaderArmorColorInfos,
             AppDbContext context,
-            int newModelNumber,
+            int newModelNumber,      // <-- Now passing "next free" CMD from Dashboard
             bool isFromUnused,
             bool isEdit)
         {
@@ -71,6 +70,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 if (isFromUnused)
                 {
+                    // Reusing an "unused" item from DB
                     _unusedData = customModelData;
                     _originalCustomModelData = customModelData;
                     _useUnused = true;
@@ -79,6 +79,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 }
                 else
                 {
+                    // Brand-new item. We'll use newModelNumber for the CMD
                     _useUnused = false;
                     IsNewItem = true;
                     _originalCustomModelData = new CustomModelData
@@ -97,6 +98,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
             else
             {
+                // Editing an existing item
                 _originalCustomModelData = customModelData;
                 _useUnused = true;
                 IsNewItem = false;
@@ -122,7 +124,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             PreSelectProperties();
 
-            // In edit mode, if the original item was unused then the fields remain read-only.
+            // In edit mode, if original item was "unused", make it read‐only.
             if (!IsAddMode && !_originalCustomModelData.Status)
             {
                 EditedCustomModelData.Status = true;
@@ -136,14 +138,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 if (_unusedData != null)
                 {
-                    // Switch back to using the unused item from DB.
+                    // Switch back to the actual DB item
                     _originalCustomModelData = _unusedData;
                     IsNewItem = false;
                     EditedCustomModelData = CreateEditableCopy(_unusedData, copyCollections: true);
                 }
                 else
                 {
-                    // No unused item exists – create a new entity (treated as new).
+                    // There's no "unused" item to reuse, so we create a new entity
                     _originalCustomModelData = new CustomModelData
                     {
                         CustomModelNumber = _newModelNumber,
@@ -161,8 +163,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
             else
             {
-                // User does not want to reuse an existing unused item.
-                // Create a completely new entity.
+                // Not reusing an existing item -> brand new
                 _originalCustomModelData = new CustomModelData
                 {
                     CustomModelNumber = _newModelNumber,
@@ -367,7 +368,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             SelectedShaderArmorColorInfo = null;
         }
 
-        // If copyCollections is false, join collections will be created empty.
+        // If copyCollections is false, all "join" collections are created empty.
         private CustomModelData CreateEditableCopy(CustomModelData original, bool copyCollections)
         {
             return new CustomModelData
@@ -385,17 +386,17 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void PreSelectProperties()
         {
-            // Clear current selection for a fresh start.
+            // Clear current selections
             SelectedParentItems.Clear();
             foreach (var parent in ParentItems)
             {
                 parent.IsSelected = false;
             }
 
-            // Now preselect the ParentItems that belong to the current item.
+            // Pre-select the ParentItems that belong to the item
             foreach (var parent in EditedCustomModelData.ParentItems)
             {
-                // Skip the behind–the–scenes "Unused" parent (ID==1) if we're used
+                // Skip "Unused" parent if we are using it
                 if (EditedCustomModelData.Status && parent.ParentItemID == 1)
                     continue;
                 parent.IsSelected = true;
@@ -425,7 +426,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateOriginalData()
         {
-            // Copy changes from the edited copy back to the original object.
+            // Copy changes from the Edited copy back into _originalCustomModelData
             _originalCustomModelData.Name = EditedCustomModelData.Name;
             _originalCustomModelData.ModelPath = EditedCustomModelData.ModelPath;
             _originalCustomModelData.CustomModelNumber = EditedCustomModelData.CustomModelNumber;
@@ -433,15 +434,15 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
             if (!_originalCustomModelData.Status)
             {
-                // Turn it into a fully "unused" item.
+                // Turn it into a fully "unused" item
                 StripDataAndRenameUnusedItem();
             }
             else
             {
-                // Ensure the ParentItems collection is loaded so we can modify it.
+                // Make sure the parent items are loaded
                 _context.Entry(_originalCustomModelData).Collection(c => c.ParentItems).Load();
 
-                // Remove any default parent (ID==1) if necessary.
+                // Remove any default parent if needed
                 var defaultParents = _originalCustomModelData.ParentItems
                     .Where(p => p.ParentItemID == 1).ToList();
                 foreach (var p in defaultParents)
@@ -449,13 +450,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     _originalCustomModelData.ParentItems.Remove(p);
                 }
 
-                // Instead of using SelectedParentItems, rebuild the parent relationship by
-                // filtering the full ParentItems list for those that are still checked.
+                // Rebuild the parent relationship from which items are actually checked
                 var updatedParents = ParentItems
                     .Where(p => p.IsSelected && p.ParentItemID != 1)
                     .ToList();
 
-                // Clear and update the parent collection.
                 _originalCustomModelData.ParentItems.Clear();
                 foreach (var parent in updatedParents)
                 {
@@ -473,7 +472,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             _originalCustomModelData.Name = newName;
             _originalCustomModelData.ModelPath = string.Empty;
 
-            // Ensure the ParentItems collection is loaded so that removals are tracked.
             _context.Entry(_originalCustomModelData).Collection(c => c.ParentItems).Load();
             _originalCustomModelData.ParentItems.Clear();
             var defaultParent = _context.ParentItems.FirstOrDefault(p => p.ParentItemID == 1);
@@ -532,14 +530,17 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             {
                 var existingVariation = _originalCustomModelData.CustomVariations
                     .FirstOrDefault(v => v.BlockTypeID == SelectedBlockType.BlockTypeID);
+
                 if (existingVariation != null)
                 {
+                    // Update an existing variation
                     existingVariation.BlockData = NewBlockData;
                     existingVariation.Variation = NewVariationNumber;
                     existingVariation.BlockModelPath = NewBlockModelPath;
                 }
                 else
                 {
+                    // Add a new variation row
                     _originalCustomModelData.CustomVariations.Add(new CustomVariation
                     {
                         BlockData = NewBlockData,
@@ -554,20 +555,20 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         private void UpdateNewVariationNumber()
         {
-            // If nothing is selected, just default to 2
+            // If nothing is selected, just default to Variation=2 in this example
             if (SelectedBlockType == null)
             {
                 NewVariationNumber = 2;
                 return;
             }
 
-            // Get all existing Variation numbers for this BlockType.
+            // Gather used Variation numbers for this block type
             var usedVariations = _context.CustomVariations
                 .Where(cv => cv.BlockTypeID == SelectedBlockType.BlockTypeID)
                 .Select(cv => cv.Variation)
-                .ToHashSet();  // helps for quick "Contains" checks
+                .ToHashSet();
 
-            // Start from 2 and go up until we find a free spot
+            // Start from 2 and go up
             int candidate = 2;
             while (usedVariations.Contains(candidate))
             {

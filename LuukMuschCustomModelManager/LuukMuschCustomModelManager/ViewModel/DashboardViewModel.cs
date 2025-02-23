@@ -22,6 +22,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private bool _isDialogOpen;
         private string _searchText = string.Empty;
         private int _highestCustomModelNumber;
+        private int _nextAvailableCustomModelNumber;
         private CustomModelData? _selectedCustomModelData;
 
         public DashboardViewModel()
@@ -67,6 +68,20 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        // NEW: The next available CMD from 27001 up (no gaps).
+        public int NextAvailableCustomModelNumber
+        {
+            get => _nextAvailableCustomModelNumber;
+            private set
+            {
+                if (_nextAvailableCustomModelNumber != value)
+                {
+                    _nextAvailableCustomModelNumber = value;
+                    OnPropertyChanged();
+                }
+            }
+        }
+
         public CustomModelData? SelectedCustomModelData
         {
             get => _selectedCustomModelData;
@@ -96,8 +111,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         public ICommand AddCommand { get; }
         public ICommand EditCommand { get; }
 
-        void LoadData()
+        private void LoadData()
         {
+            // Load "used" CMD items
             CustomModelDataItems = new ObservableCollection<CustomModelData>(
                 _context.CustomModelDataItems
                     .Where(cmd => cmd.Status)
@@ -107,7 +123,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     .Include(cmd => cmd.BlockTypes).ThenInclude(cmbt => cmbt.BlockType)
                     .ToList());
 
-            // Filter out the unused parent (ID==1) from the ParentItems shown in the dialog.
+            // Filter out the "Unused" parent (ID==1)
             ParentItems = new ObservableCollection<ParentItem>(
                 _context.ParentItems.Where(p => p.ParentItemID != 1).ToList());
 
@@ -136,19 +152,43 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             GroupedCustomModels.SortDescriptions.Add(new SortDescription("Key", ListSortDirection.Ascending));
             GroupedCustomModels.SortDescriptions.Add(new SortDescription("Value.Name", ListSortDirection.Ascending));
 
-            CustomModelDataItems.CollectionChanged += (_, _) => UpdateHighestCustomModelNumber();
+            // Whenever the collection changes, re-check the highest & next-available numbers
+            CustomModelDataItems.CollectionChanged += (_, _) =>
+            {
+                UpdateHighestCustomModelNumber();
+                UpdateNextAvailableCustomModelNumber();
+            };
+
             UpdateHighestCustomModelNumber();
+            UpdateNextAvailableCustomModelNumber();
             FilterData();
         }
 
-        void UpdateHighestCustomModelNumber()
+        private void UpdateHighestCustomModelNumber()
         {
             HighestCustomModelNumber = _context.CustomModelDataItems.Any()
                 ? _context.CustomModelDataItems.Max(x => x.CustomModelNumber)
                 : 0;
         }
 
-        void FilterData()
+        // NEW: Start from 27001, find the first free.
+        private void UpdateNextAvailableCustomModelNumber()
+        {
+            var usedNumbers = _context.CustomModelDataItems
+                .Where(x => x.CustomModelNumber >= 27001)
+                .Select(x => x.CustomModelNumber)
+                .ToHashSet();
+
+            int candidate = 27001;
+            while (usedNumbers.Contains(candidate))
+            {
+                candidate++;
+            }
+
+            NextAvailableCustomModelNumber = candidate;
+        }
+
+        private void FilterData()
         {
             if (GroupedCustomModels == null) return;
 
@@ -172,10 +212,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
 
         /// <summary>
         /// Open the add dialog.
-        /// If an unused item exists in the DB, then by default we pass it in (and set isFromUnused true)
-        /// so that the toggle is on; but the user may toggle it off to create a new record.
+        /// If an unused item exists, we reuse it; else we create brand new with NextAvailableCustomModelNumber.
         /// </summary>
-        async void OpenAddDialog(object? obj)
+        private async void OpenAddDialog(object? obj)
         {
             var unusedItem = _context.CustomModelDataItems
                 .Where(cmd => !cmd.Status)
@@ -186,16 +225,18 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             bool isNew;
             if (unusedItem != null)
             {
+                // We have an "unused" item, let's reuse it
                 newData = unusedItem;
-                // Reset status to used (the user can later uncheck if they want an unused item)
+                // Mark it "used" for now (the user can revert in the dialog if they want)
                 newData.Status = true;
                 isNew = false;
             }
             else
             {
+                // Brand-new, gapless from 27001 up
                 newData = new CustomModelData
                 {
-                    CustomModelNumber = HighestCustomModelNumber + 1,
+                    CustomModelNumber = NextAvailableCustomModelNumber,
                     Status = true,
                     Name = string.Empty,
                     ModelPath = string.Empty,
@@ -207,49 +248,54 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 isNew = true;
             }
 
-            // In add mode, pass isFromUnused = !isNew.
+            // "isFromUnused" is the inverse of isNew
             await OpenDialogAsync(newData, isNew, isEdit: false);
         }
 
-        async void OpenEditDialog(object? obj)
+        private async void OpenEditDialog(object? obj)
         {
             if (SelectedCustomModelData != null)
             {
-                // When editing from dashboard, we force isFromUnused = false.
+                // Editing an existing item from the dashboard => isFromUnused = false
                 await OpenDialogAsync(SelectedCustomModelData, false, isEdit: true);
             }
         }
 
-        bool CanEdit(object? parameter) => SelectedCustomModelData != null;
+        private bool CanEdit(object? parameter) => SelectedCustomModelData != null;
 
-        /// <summary>
-        /// Opens the dialog host.
-        /// After the dialog returns, if the dialog was “saved” (result true) then:
-        /// – if viewModel.IsNewItem is true then we add the new item to the context and our lists;
-        /// – otherwise we update the existing item.
-        /// </summary>
-        async System.Threading.Tasks.Task OpenDialogAsync(CustomModelData customModelData, bool isNew, bool isEdit)
+        private async System.Threading.Tasks.Task OpenDialogAsync(CustomModelData customModelData, bool isNew, bool isEdit)
         {
             if (_isDialogOpen) return;
             _isDialogOpen = true;
 
             try
             {
-                // If editing, force isFromUnused to false.
                 bool isFromUnusedParam = isEdit ? false : !isNew;
-                var viewModel = new AddEditCMDViewModel(customModelData, ParentItems, BlockTypes, ShaderArmorColorInfos, _context, HighestCustomModelNumber + 1, isFromUnused: isFromUnusedParam, isEdit: isEdit);
-                object? result = await DialogHost.Show(viewModel, "RootDialog");
 
+                // Pass the "next free" CMD so the AddEditCMDViewModel can use it if truly new
+                var viewModel = new AddEditCMDViewModel(
+                    customModelData,
+                    ParentItems,
+                    BlockTypes,
+                    ShaderArmorColorInfos,
+                    _context,
+                    NextAvailableCustomModelNumber,   // <--- The crucial difference!
+                    isFromUnusedParam,
+                    isEdit
+                );
+
+                object? result = await DialogHost.Show(viewModel, "RootDialog");
                 if (result is true)
                 {
-                    // Check the viewModel flag to see if a completely new item was created.
+                    // If the user saved:
                     if (viewModel.IsNewItem)
                     {
-                        // Add the new item.
-                        CustomModelData finalItem = viewModel.FinalCustomModelData;
+                        // Actually add the new item to EF + local collections
+                        var finalItem = viewModel.FinalCustomModelData;
                         _context.CustomModelDataItems.Add(finalItem);
                         CustomModelDataItems.Add(finalItem);
-                        if (finalItem.Status) // Only show used items in the dashboard.
+
+                        if (finalItem.Status)
                         {
                             if (finalItem.ParentItems.Any())
                             {
@@ -267,24 +313,25 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
                     else
                     {
-                        // Existing item updated.
+                        // Updated an existing item
                         if (!CustomModelDataItems.Contains(customModelData))
                         {
                             CustomModelDataItems.Add(customModelData);
                         }
+
+                        // Remove old references from FlattenedCustomModelItems
                         for (int i = FlattenedCustomModelItems.Count - 1; i >= 0; i--)
                         {
                             if (FlattenedCustomModelItems[i].Value == customModelData)
                                 FlattenedCustomModelItems.RemoveAt(i);
                         }
+
                         if (customModelData.ParentItems.Any())
                         {
                             foreach (var parent in customModelData.ParentItems)
                             {
                                 if (parent.ParentItemID != 1)
-                                {
                                     FlattenedCustomModelItems.Add(new KeyValuePair<string, CustomModelData>(parent.Name, customModelData));
-                                }
                             }
                         }
                         else
@@ -294,7 +341,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
 
                     _context.SaveChanges();
+
+                    // Update highest & next‐available once again
                     UpdateHighestCustomModelNumber();
+                    UpdateNextAvailableCustomModelNumber();
                     GroupedCustomModels?.Refresh();
                 }
             }

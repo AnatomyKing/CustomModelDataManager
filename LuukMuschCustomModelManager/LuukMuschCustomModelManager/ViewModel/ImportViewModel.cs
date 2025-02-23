@@ -68,6 +68,10 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             { "leather_leggings",       "armor" },
             { "leather_boots",       "armor" },
             { "rabbit_foot",       "items" },
+            { "fishing_rod",       "rod" },
+            { "bow",       "bow" },
+            { "cross_bow",       "bow" },
+            { "shield",       "shield" },
 
             // Add more initial mappings as desired
             };
@@ -78,7 +82,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private static readonly string[] PredefinedSkippedFiles = new[]
         {
             "leather_horse_armor",
-            "player_head"
+            "player_head",
+            "gray_stained_glass_pane",
+            "lime_concrete",
+            "gray_concrete",
+            "cauldron"
+
             // Add more as needed
         };
 
@@ -88,7 +97,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         private readonly ObservableCollection<SkippedParentFile> _skippedParentFiles
             = new ObservableCollection<SkippedParentFile>();
 
-        private string _importFolder = @"C:\Users\mrluu\Downloads\ymlfiles";
+        private string _importFolder = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe\assets\minecraft\models\item";
         private string _blockStatesImportFolder = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe\assets\minecraft\blockstates";
 
         public ImportViewModel()

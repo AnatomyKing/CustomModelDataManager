@@ -13,15 +13,40 @@ using YamlDotNet.Serialization.NamingConventions;
 using YamlDotNet.Serialization;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using System.Collections.ObjectModel;
 
 namespace LuukMuschCustomModelManager.ViewModels.Views
 {
+    /// <summary>
+    /// A small helper model to track each parent name and whether it’s “checked” for JSON export.
+    /// </summary>
+    internal class ParentWhitelistEntry : ObservableObject
+    {
+        private bool _isSelected;
+        public bool IsSelected
+        {
+            get => _isSelected;
+            set { _isSelected = value; OnPropertyChanged(); }
+        }
+
+        public string ParentName { get; set; } = string.Empty;
+    }
+
+
     internal class ExportViewModel : ObservableObject
     {
+        // Default paths – adjust as needed.
         private readonly string _defaultExportPath = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe";
-        private readonly string _defaultJsonExportFolder = @"C:\Users\mrluu\Downloads\parentitems";
+        private readonly string _defaultJsonExportFolder = @"C:\Users\mrluu\AppData\Roaming\.minecraft\resourcepacks\harambe\assets\minecraft\models\item";
+
+        // ---------------------------
+        //  Bound Properties
+        // ---------------------------
 
         private string _exportPath = string.Empty;
+        /// <summary>
+        /// Where the YAML file goes (e.g. “CustomModelDataHarambe.yml”).
+        /// </summary>
         public string ExportPath
         {
             get => _exportPath;
@@ -33,6 +58,9 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
         }
 
         private string _jsonExportFolder = string.Empty;
+        /// <summary>
+        /// Where the .json files are read/written for your item models.
+        /// </summary>
         public string JsonExportFolder
         {
             get => _jsonExportFolder;
@@ -43,17 +71,62 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
         }
 
+        /// <summary>
+        /// The UI uses checkboxes for each discovered parent name.
+        /// Only “IsSelected == true” entries will be exported to JSON.
+        /// </summary>
+        private ObservableCollection<ParentWhitelistEntry> _parentWhitelist = new ObservableCollection<ParentWhitelistEntry>();
+        public ObservableCollection<ParentWhitelistEntry> ParentWhitelist => _parentWhitelist;
+
+        // Commands
         public ICommand ExportCommand { get; }
         public ICommand ExportToJsonCommand { get; }
 
+        // ---------------------------
+        //  Constructor
+        // ---------------------------
+
         public ExportViewModel()
         {
+            // Initialize paths
             ExportPath = _defaultExportPath;
             JsonExportFolder = _defaultJsonExportFolder;
 
+            // Commands
             ExportCommand = new RelayCommand(ExportData);
             ExportToJsonCommand = new RelayCommand(ExportToJson);
+
+            // On creation, load all distinct parent names from the DB into the whitelist
+            LoadParentWhitelistFromDb();
         }
+
+        private void LoadParentWhitelistFromDb()
+        {
+            using var context = new AppDbContext();
+
+            // Gather all distinct parent names in the DB
+            var allParents = context.ParentItems
+                .OrderBy(p => p.Name)
+                .Select(p => p.Name)
+                .Distinct()
+                .ToList();
+
+            _parentWhitelist.Clear();
+            foreach (var pName in allParents)
+            {
+                // By default, let them be un-checked, or you can set IsSelected=true if you like
+                var entry = new ParentWhitelistEntry
+                {
+                    ParentName = pName,
+                    IsSelected = false
+                };
+                _parentWhitelist.Add(entry);
+            }
+        }
+
+        // ---------------------------
+        //  YAML Export
+        // ---------------------------
 
         private void ExportData(object? obj)
         {
@@ -69,8 +142,8 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             var groupedItems = GroupItemsByParentAndType(allItems);
             var exportStructure = new Dictionary<string, object>();
 
-            // Build nested dictionary
-            foreach (var outerGroup in groupedItems) // e.g. "food", "imported"
+            // Build nested dictionary in memory
+            foreach (var outerGroup in groupedItems) // e.g. "food", "imported", etc.
             {
                 var outerMapping = new Dictionary<string, object>();
 
@@ -142,6 +215,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 exportStructure[outerGroup.Key] = outerMapping;
             }
 
+            // Serialize to YAML
             var serializer = new SerializerBuilder()
                 .WithNamingConvention(new CamelCaseNamingConvention())
                 .Build();
@@ -151,15 +225,32 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             // Post-process to insert blank lines when stepping out from deeper indentation
             yamlOutput = InsertCustomBlankLines(yamlOutput);
 
-            System.IO.Directory.CreateDirectory(ExportPath);
-            string filePath = System.IO.Path.Combine(ExportPath, "CustomModelDataHarambe.yml");
-            System.IO.File.WriteAllText(filePath, yamlOutput);
+            Directory.CreateDirectory(ExportPath);
+            string filePath = Path.Combine(ExportPath, "CustomModelDataHarambe.yml");
+            File.WriteAllText(filePath, yamlOutput);
 
             MessageBox.Show($"Export completed!\n\nFile: {filePath}", "Export", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
+        // ---------------------------
+        //  JSON Export
+        // ---------------------------
+
         private void ExportToJson(object? obj)
         {
+            // We only export if “IsSelected == true” in the ParentWhitelist
+            var selectedParents = ParentWhitelist
+                .Where(e => e.IsSelected)
+                .Select(e => e.ParentName)
+                .ToHashSet(StringComparer.OrdinalIgnoreCase);
+
+            if (selectedParents.Count == 0)
+            {
+                MessageBox.Show("No parent items checked in the whitelist. Please select at least one.",
+                    "Export JSON", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
             int updatedJsonFiles = 0;
 
             using var context = new AppDbContext();
@@ -168,14 +259,16 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 .Include(cmd => cmd.ParentItems)
                 .ToList();
 
+            // We'll gather parents that are "whitelisted" (IsSelected=true)
+            // Key: parentName, Value: list of CMDs
             var parentsLookup = new Dictionary<string, List<CustomModelData>>(StringComparer.OrdinalIgnoreCase);
 
-            // Only create JSON for parent.Type = "imported"
             foreach (var cmd in allCmdItems)
             {
                 foreach (var parent in cmd.ParentItems)
                 {
-                    if (!string.Equals(parent.Type, "imported", StringComparison.OrdinalIgnoreCase))
+                    // Only proceed if it’s one of the chosen parents
+                    if (!selectedParents.Contains(parent.Name))
                         continue;
 
                     string parentName = parent.Name;
@@ -186,40 +279,36 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 }
             }
 
+            // Now we do the .json merge/override logic, but only for those whitelisted parents
             foreach (var kvp in parentsLookup)
             {
                 string parentName = kvp.Key;
                 var cmdItemsForParent = kvp.Value
-                    .OrderBy(c => c.CustomModelNumber)
+                    .OrderBy(c => c.CustomModelNumber) // ensure ascending order by CMD
                     .ToList();
 
-                string jsonPath = System.IO.Path.Combine(JsonExportFolder, parentName + ".json");
+                string jsonPath = Path.Combine(JsonExportFolder, parentName + ".json");
 
                 JObject rootObj;
-                bool fileExists = System.IO.File.Exists(jsonPath);
+                bool fileExists = File.Exists(jsonPath);
 
                 if (fileExists)
                 {
-                    var text = System.IO.File.ReadAllText(jsonPath);
+                    var text = File.ReadAllText(jsonPath);
                     try
                     {
                         rootObj = JObject.Parse(text);
                     }
                     catch
                     {
-                        rootObj = new JObject();
+                        // If parse fails, create a fresh root object
+                        rootObj = CreateDefaultJsonRoot(parentName);
                     }
                 }
                 else
                 {
-                    rootObj = new JObject
-                    {
-                        ["parent"] = "item/generated",
-                        ["textures"] = new JObject
-                        {
-                            ["layer0"] = "item/" + parentName
-                        }
-                    };
+                    // If no file, create a basic skeleton
+                    rootObj = CreateDefaultJsonRoot(parentName);
                 }
 
                 if (!(rootObj["overrides"] is JArray oldOverrides))
@@ -228,7 +317,11 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     rootObj["overrides"] = oldOverrides;
                 }
 
+                // We keep “non-CMD overrides” at the top
                 var nonCmdOverrides = new List<JObject>();
+
+                // We keep “existing CMD overrides (that match an item in cmdItemsForParent)”
+                // then we’ll unify them with “new ones” and re-sort them ascending
                 var retainedCmdOverrides = new List<JObject>();
                 var foundCmdNumbersInJson = new HashSet<int>();
 
@@ -236,6 +329,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 {
                     if (ovrdToken is not JObject ovrdObj)
                     {
+                        // If it’s not even an object, preserve
                         nonCmdOverrides.Add(new JObject());
                         continue;
                     }
@@ -243,6 +337,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     var predObj = ovrdObj["predicate"] as JObject;
                     if (predObj == null)
                     {
+                        // no "predicate"? Then it's not a CMD override; keep as “non-CMD override”
                         nonCmdOverrides.Add(ovrdObj);
                         continue;
                     }
@@ -250,10 +345,12 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     var cmdValToken = predObj["custom_model_data"];
                     if (cmdValToken == null)
                     {
+                        // again, no custom_model_data => treat as non-CMD
                         nonCmdOverrides.Add(ovrdObj);
                         continue;
                     }
 
+                    // parse the integer
                     int oldCmdNumber;
                     try
                     {
@@ -261,26 +358,27 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
                     catch
                     {
+                        // if it can’t parse, skip
                         continue;
                     }
 
-                    var matchingCmd = cmdItemsForParent.FirstOrDefault(c => c.CustomModelNumber == oldCmdNumber);
-                    if (matchingCmd == null) continue;
+                    // If that CMD # is relevant to one of our items, we keep it
+                    var matchingCmd = cmdItemsForParent
+                        .FirstOrDefault(c => c.CustomModelNumber == oldCmdNumber);
+                    if (matchingCmd == null)
+                        continue; // not a relevant override => drop it.
 
                     foundCmdNumbersInJson.Add(oldCmdNumber);
                     retainedCmdOverrides.Add(ovrdObj);
                 }
 
-                var newOverrides = new List<JObject>();
-                newOverrides.AddRange(nonCmdOverrides);
-                newOverrides.AddRange(retainedCmdOverrides);
-
-                // Add missing overrides
+                // Next, we add any “new” overrides that weren’t in the file
+                var newlyAddedCmdOverrides = new List<JObject>();
                 foreach (var cmdItem in cmdItemsForParent)
                 {
                     if (!foundCmdNumbersInJson.Contains(cmdItem.CustomModelNumber))
                     {
-                        var newOvrd = new JObject
+                        var newOverrideObj = new JObject
                         {
                             ["predicate"] = new JObject
                             {
@@ -288,17 +386,35 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                             },
                             ["model"] = cmdItem.ModelPath
                         };
-                        newOverrides.Add(newOvrd);
+                        newlyAddedCmdOverrides.Add(newOverrideObj);
                     }
                 }
 
-                rootObj["overrides"] = new JArray(newOverrides);
+                // Combine existing CMD overrides + new ones, then sort them ascending by CMD
+                var allCmdOverrides = retainedCmdOverrides.Concat(newlyAddedCmdOverrides).ToList();
+                allCmdOverrides.Sort((a, b) =>
+                {
+                    int ca = a["predicate"]?["custom_model_data"]?.Value<int>() ?? 0;
+                    int cb = b["predicate"]?["custom_model_data"]?.Value<int>() ?? 0;
+                    return ca.CompareTo(cb); // ascending
+                });
+
+                // Final overrides = “non-CMD overrides” (preserve at top) + sorted CMD overrides
+                var finalOverrides = new List<JObject>();
+                finalOverrides.AddRange(nonCmdOverrides);
+                finalOverrides.AddRange(allCmdOverrides);
+
+                // write it back
+                rootObj["overrides"] = new JArray(finalOverrides);
 
                 // Convert to pretty JSON
                 string prettyJson = rootObj.ToString(Formatting.Indented);
+
+                // Optionally do a custom “one-line override” format
                 string finalJson = ReformatOverrides(prettyJson);
 
-                System.IO.File.WriteAllText(jsonPath, finalJson);
+                Directory.CreateDirectory(JsonExportFolder);
+                File.WriteAllText(jsonPath, finalJson);
                 updatedJsonFiles++;
             }
 
@@ -306,11 +422,74 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 "Export JSON", MessageBoxButton.OK, MessageBoxImage.Information);
         }
 
-        #region --- JSON overrides reformatting (unchanged) ---
+        /// <summary>
+        /// Creates a minimal skeleton JSON object for an item that had no .json file yet.
+        /// </summary>
+        private JObject CreateDefaultJsonRoot(string parentName)
+        {
+            var newRoot = new JObject
+            {
+                ["parent"] = "item/generated",
+                ["textures"] = new JObject
+                {
+                    ["layer0"] = "item/" + parentName
+                },
+                ["overrides"] = new JArray()
+            };
+            return newRoot;
+        }
+
+        // ---------------------------
+        //  Grouping (for YAML)
+        // ---------------------------
+
+        private Dictionary<string, Dictionary<string, List<CustomModelData>>> GroupItemsByParentAndType(IEnumerable<CustomModelData> items)
+        {
+            var groups = new Dictionary<string, Dictionary<string, List<CustomModelData>>>();
+
+            foreach (var item in items)
+            {
+                if (item.ParentItems.Any())
+                {
+                    foreach (var parent in item.ParentItems)
+                    {
+                        string outerKey = parent.Type; // e.g. "food"
+                        string innerKey = parent.Name;  // e.g. "apple"
+
+                        if (!groups.ContainsKey(outerKey))
+                            groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
+
+                        if (!groups[outerKey].ContainsKey(innerKey))
+                            groups[outerKey][innerKey] = new List<CustomModelData>();
+
+                        groups[outerKey][innerKey].Add(item);
+                    }
+                }
+                else
+                {
+                    const string outerKey = "(No Parent)";
+                    const string innerKey = "(No Parent)";
+
+                    if (!groups.ContainsKey(outerKey))
+                        groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
+
+                    if (!groups[outerKey].ContainsKey(innerKey))
+                        groups[outerKey][innerKey] = new List<CustomModelData>();
+
+                    groups[outerKey][innerKey].Add(item);
+                }
+            }
+
+            return groups;
+        }
+
+        // ---------------------------
+        //  Reformatting the “overrides”
+        // ---------------------------
 
         private string ReformatOverrides(string fullIndentedJson)
         {
-            var lines = fullIndentedJson.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
+            var lines = fullIndentedJson.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             var result = new List<string>();
 
             bool inOverridesArray = false;
@@ -426,82 +605,13 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             return singleLine;
         }
 
-        #endregion
+        // ---------------------------
+        //  Custom blank lines in YAML
+        // ---------------------------
 
-        #region --- Grouping ---
-
-        private Dictionary<string, Dictionary<string, List<CustomModelData>>> GroupItemsByParentAndType(IEnumerable<CustomModelData> items)
-        {
-            var groups = new Dictionary<string, Dictionary<string, List<CustomModelData>>>();
-
-            foreach (var item in items)
-            {
-                if (item.ParentItems.Any())
-                {
-                    foreach (var parent in item.ParentItems)
-                    {
-                        string outerKey = parent.Type; // e.g. "food"
-                        string innerKey = parent.Name;  // e.g. "apple"
-
-                        if (!groups.ContainsKey(outerKey))
-                            groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
-
-                        if (!groups[outerKey].ContainsKey(innerKey))
-                            groups[outerKey][innerKey] = new List<CustomModelData>();
-
-                        groups[outerKey][innerKey].Add(item);
-                    }
-                }
-                else
-                {
-                    const string outerKey = "(No Parent)";
-                    const string innerKey = "(No Parent)";
-
-                    if (!groups.ContainsKey(outerKey))
-                        groups[outerKey] = new Dictionary<string, List<CustomModelData>>();
-
-                    if (!groups[outerKey].ContainsKey(innerKey))
-                        groups[outerKey][innerKey] = new List<CustomModelData>();
-
-                    groups[outerKey][innerKey].Add(item);
-                }
-            }
-
-            return groups;
-        }
-
-        #endregion
-
-        #region --- Custom Blank Lines ---
-
-        /// <summary>
-        /// Inserts blank lines when "stepping out" of deeper indentation.
-        /// 
-        /// Rules:
-        ///  - If the next line's indentation is 0 (jumping to a new top-level key), add 2 blank lines.
-        ///  - If the next line's indentation is less than the current line's indentation (but not 0),
-        ///    add 1 blank line.
-        /// 
-        /// This reproduces exactly:
-        /// 
-        /// food:
-        ///   apple:
-        ///     banana:
-        ///       ...
-        /// 
-        ///   melon_slice:
-        ///     fusion_core:
-        ///       ...
-        /// 
-        /// 
-        /// imported:
-        ///   cauldron:
-        ///     cauldron:
-        ///       ...
-        /// </summary>
         private string InsertCustomBlankLines(string yaml)
         {
-            var lines = yaml.Split(new[] { "\r\n", "\n" }, System.StringSplitOptions.None);
+            var lines = yaml.Split(new[] { "\r\n", "\n" }, StringSplitOptions.None);
             var result = new List<string>();
 
             for (int i = 0; i < lines.Length - 1; i++)
@@ -509,14 +619,14 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                 string currentLine = lines[i];
                 result.Add(currentLine);
 
-                // Check indentation difference
+                // Compare indentation with next line
                 int currIndent = CountIndent(currentLine);
                 int nextIndent = CountIndent(lines[i + 1]);
 
                 // If the next line is at a shallower indentation, we've closed a block
                 if (nextIndent < currIndent)
                 {
-                    // If it's top-level (indent=0), we add 2 blank lines
+                    // If it's top-level (indent=0), add 2 blank lines
                     if (nextIndent == 0)
                     {
                         result.Add(string.Empty);
@@ -524,7 +634,7 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
                     }
                     else
                     {
-                        // stepping out to a parent block, add 1 blank line
+                        // stepping out to a parent block => 1 blank line
                         result.Add(string.Empty);
                     }
                 }
@@ -539,9 +649,6 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             return string.Join("\n", result);
         }
 
-        /// <summary>
-        /// Counts how many leading spaces are on a line.
-        /// </summary>
         private int CountIndent(string line)
         {
             int count = 0;
@@ -551,7 +658,5 @@ namespace LuukMuschCustomModelManager.ViewModels.Views
             }
             return count;
         }
-
-        #endregion
     }
 }
